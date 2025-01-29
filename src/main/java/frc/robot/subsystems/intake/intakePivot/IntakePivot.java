@@ -58,7 +58,7 @@ public class IntakePivot extends SubsystemBase{
     @Override
     public void periodic() {
         pivot.updateInputs(inputs);
-        Logger.processInputs("IntakePivot", inputs);
+        Logger.processInputs("Intake/Pivot", inputs);
         disconnectedAlert.set(!inputs.motorConnected);
 
         intakePose = new Pose3d(
@@ -67,16 +67,16 @@ public class IntakePivot extends SubsystemBase{
             0,
             new Rotation3d(0, -pivot.getAngle().in(Radians), 0));
             
-        Logger.recordOutput("IntakePivot/Angle", intakePose);
+        Logger.recordOutput("Intake/Pivot/Angle", intakePose);
         
-        positionVisualizer.setState(getAngle());
-        Logger.recordOutput("IntakePivot/Position", positionVisualizer.mech);
-        Logger.recordOutput("IntakePivot/SetPoint", setPointVisualizer.mech);
+        positionVisualizer.setState(getAngle().in(Radians));
+        Logger.recordOutput("Intake/Pivot/Position", positionVisualizer.mech);
+        Logger.recordOutput("Intake/Pivot/SetPoint", setPointVisualizer.mech);
 
         
         setPointVisualizer.setState(0);
 
-        SmartDashboard.putNumber("IntakePivot Angle", pivot.getAngle().in(Degrees));
+        SmartDashboard.putNumber("Intake Pivot Angle", pivot.getAngle().in(Degrees));
     }
 
     public void setDesiredAngle(Angle angle) {
@@ -89,8 +89,8 @@ public class IntakePivot extends SubsystemBase{
         pivot.stop();
     }
 
-    public double getAngle() {
-        return pivot.getAngle().in(Radians);
+    public Angle getAngle() {
+        return pivot.getAngle();
     }
 
     private final SysIdRoutine sysIdRoutine;

@@ -13,6 +13,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 
@@ -46,6 +47,8 @@ public class AprilTagVision extends SubsystemBase{
             Logger.processInputs("AprilTagVision/OV9281_" + Integer.toString(i), inputs[i]);
         }
 
+        SmartDashboard.putBoolean("Camera Target", false);
+
         // Loop over cameras
         for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
             // Update disconnected alert
@@ -55,7 +58,7 @@ public class AprilTagVision extends SubsystemBase{
             List<Pose3d> tagPoses = new LinkedList<>();
             List<Pose3d> robotPosesAccepted = new LinkedList<>();
             List<Pose3d> robotPosesRejected = new LinkedList<>();
-
+            
             // Add tag poses
             for (int tagId : inputs[cameraIndex].tagIds) {
                 var tagPose = VisionConstants.kTagLayout.getTagPose(tagId);
@@ -69,6 +72,10 @@ public class AprilTagVision extends SubsystemBase{
             tagPoses.toArray(new Pose3d[tagPoses.size()]));
 
             for (var observation : inputs[cameraIndex].poseObservations) {
+                SmartDashboard.putBoolean("Camera Target", true);
+                if (observation.estPose() == null) {
+                    continue;
+                }
                 boolean rejectPose =
                 observation.estPose().targetsUsed.size() == 0 // Must have at least one tag
                     || (observation.tagCount() == 1

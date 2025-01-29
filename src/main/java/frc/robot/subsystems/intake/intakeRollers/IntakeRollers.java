@@ -34,8 +34,8 @@ public class IntakeRollers{
     public void periodic() {
         ioLeft.updateInputs(inputsLeft);
         ioRight.updateInputs(inputsRight);
-        Logger.processInputs("Intake/Left", inputsLeft);
-        Logger.processInputs("Intake/Right", inputsRight);
+        Logger.processInputs("Intake/Rollers/Left", inputsLeft);
+        Logger.processInputs("Intake/Rollers/Right", inputsRight);
         disconnectedAlertLeft.set(!inputsLeft.motorConnected);
         disconnectedAlertRight.set(!inputsRight.motorConnected);
     }

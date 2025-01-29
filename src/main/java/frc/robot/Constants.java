@@ -55,10 +55,12 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
+    public static final double kIntakeDeadband = 0.2;
+
     /* PIVOT */
 
     public static final double kMinIntakeAngleDegrees = 0;
-    public static final double kMaxIntakeAngleDegrees = 0;
+    public static final double kMaxIntakeAngleDegrees = 100;
 
     public static final int kPivotMotorId = 0;
     public static final int kAbsoluteEncoderId = 0;
@@ -96,12 +98,11 @@ public final class Constants {
       pivotMotor_slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
     }
 
-    public static final Angle idleAngle = Degrees.of(0);
-    public static final Angle initialAngle = Degrees.of(0);
+    public static final Angle idleAngle = Degrees.of(70);
+    public static final Angle initialAngle = Degrees.of(10);
     public static final Angle intakeAngle = Degrees.of(0);
-    public static final Angle feedAngle = Degrees.of(0);
-    public static final Angle sourceAngle = Degrees.of(0);
-    public static final Angle shootAngle = Degrees.of(0);
+    public static final Angle feedAngle = Degrees.of(110);
+    public static final Angle shootAngle = Degrees.of(50);
 
     /* PIVOT END ROLLER START */
 

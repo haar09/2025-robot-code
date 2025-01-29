@@ -17,12 +17,12 @@ public class IntakePivotVisualizer implements Sendable, AutoCloseable {
     mech = new LoggedMechanism2d(2, 2, new Color8Bit(169,169,169));
     LoggedMechanismRoot2d chassis =
         mech.getRoot("Chassis", 1-0.125, 0.33);
-    arm = chassis.append(new LoggedMechanismLigament2d("Intake", 0.25, 0, 4, color));
-    arm.append(new LoggedMechanismLigament2d("IntakeEnd", 0.15, 45, 4, color));
+    arm = chassis.append(new LoggedMechanismLigament2d("Intake", -0.3, 0, 4, color));
+    arm.append(new LoggedMechanismLigament2d("IntakeEnd", 0.2, -135, 4, color));
   }
 
   public void setState(double angle) {
-    arm.setAngle(Units.radiansToDegrees(angle));
+    arm.setAngle(-Units.radiansToDegrees(angle));
   }
 
   @Override

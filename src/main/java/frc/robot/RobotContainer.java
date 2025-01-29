@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveWheelCalibration;
 import frc.robot.generated.TunerConstants;
@@ -31,10 +32,12 @@ import frc.robot.subsystems.ObjectDetection;
 import frc.robot.subsystems.apriltagvision.AprilTagVision;
 import frc.robot.subsystems.apriltagvision.RealPhotonVision;
 import frc.robot.subsystems.apriltagvision.SimPhotonVision;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.Intake.IntakeState;
 
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12VoltsMps desired top speed
-  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  private double MaxAngularRate = 1 * Math.PI; // 3/4 of a rotation per second max angular velocity
   private double SlowSpeed = 0.1;
   private double SlowAngularRate = 0.25 * Math.PI;
   private double AngularRate = MaxAngularRate;
@@ -73,7 +76,11 @@ public class RobotContainer {
     .andThen(() -> drive.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1))
     .andThen(() -> robotOriented.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1)));
 
-    joystick.rightTrigger(0.3).onFalse(runOnce(() -> controlMode = 0).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
+    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).whileTrue(intake.setState(IntakeState.FLOOR_INITIAL));
+    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(intake.setState(IntakeState.IDLE));
+
+    //joystick.rightTrigger(IntakeConstants.kIntakeDeadband).whileTrue(intake.setState(IntakeState.SHOOT));
+    //joystick.rightTrigger(IntakeConstants.kIntakeDeadband).onFalse(intake.setState(IntakeState.IDLE));
 
     // HALILI TESTLER
     
@@ -122,10 +129,12 @@ public class RobotContainer {
     }
 
   private LoggedDashboardChooser<Command> autoChooser;
+  private Intake intake;
 
   public RobotContainer() {
     new LEDSubsystem();
     new ObjectDetection();
+    intake = new Intake();
 
     if (Robot.isReal()) {
       new AprilTagVision(drivetrain::addVisionMeasurement,
