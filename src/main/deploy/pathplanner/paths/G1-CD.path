@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8696142553775195,
-        "y": 2.9431487785414983
+        "x": 1.6528253424657535,
+        "y": 2.1993792808219177
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.107472914829532,
-        "y": 2.8661860724840076
+        "x": 2.769617020188244,
+        "y": 2.5945085689126937
       },
       "isLocked": false,
-      "linkedName": "CD Alternative"
+      "linkedName": "G1"
     },
     {
       "anchor": {
-        "x": 4.058600133552968,
-        "y": 2.83295624099105
+        "x": 3.8696142553775195,
+        "y": 2.9431487785414983
       },
       "prevControl": {
-        "x": 3.8218579209065986,
-        "y": 2.9132875845083923
+        "x": 2.859672058431899,
+        "y": 2.5512793863007017
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "D Atis"
+      "linkedName": "CD Alternative"
     }
   ],
   "rotationTargets": [],
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

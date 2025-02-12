@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8696142553775195,
-        "y": 2.9431487785414983
+        "x": 1.5294696827859195,
+        "y": 5.7436421596893545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.107472914829532,
-        "y": 2.8661860724840076
+        "x": 2.535023535373934,
+        "y": 5.4652543715776485
       },
       "isLocked": false,
-      "linkedName": "CD Alternative"
+      "linkedName": "G33"
     },
     {
       "anchor": {
-        "x": 4.058600133552968,
-        "y": 2.83295624099105
+        "x": 3.9147662658902522,
+        "y": 5.13887472384645
       },
       "prevControl": {
-        "x": 3.8218579209065986,
-        "y": 2.9132875845083923
+        "x": 2.6800945295947995,
+        "y": 5.41776395482352
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "D Atis"
+      "linkedName": "KL"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": 29.999999999999996
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": 29.999999999999996
   },
   "reversed": false,
   "folder": null,

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8696142553775195,
-        "y": 2.9431487785414983
+        "x": 7.965749999999999,
+        "y": 4.03475
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.107472914829532,
-        "y": 2.8661860724840076
+        "x": 7.437657950491179,
+        "y": 4.028991007818674
       },
       "isLocked": false,
-      "linkedName": "CD Alternative"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.058600133552968,
-        "y": 2.83295624099105
+        "x": 5.737650860906274,
+        "y": 4.024375085575334
       },
       "prevControl": {
-        "x": 3.8218579209065986,
-        "y": 2.9132875845083923
+        "x": 6.460004841588689,
+        "y": 4.0290336522447845
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "D Atis"
+      "linkedName": "HG"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }
