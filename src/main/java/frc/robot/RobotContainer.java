@@ -32,8 +32,8 @@ import frc.robot.subsystems.ObjectDetection;
 import frc.robot.subsystems.apriltagvision.AprilTagVision;
 import frc.robot.subsystems.apriltagvision.RealPhotonVision;
 import frc.robot.subsystems.apriltagvision.SimPhotonVision;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.Intake.IntakeState;
+import frc.robot.subsystems.superstructure.intake.Intake;
+import frc.robot.subsystems.superstructure.intake.Intake.IntakeState;
 
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12VoltsMps desired top speed
@@ -79,8 +79,8 @@ public class RobotContainer {
     joystick.leftTrigger(IntakeConstants.kIntakeDeadband).whileTrue(intake.setState(IntakeState.FLOOR_INITIAL));
     joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(intake.setState(IntakeState.IDLE));
 
-    //joystick.rightTrigger(IntakeConstants.kIntakeDeadband).whileTrue(intake.setState(IntakeState.SHOOT));
-    //joystick.rightTrigger(IntakeConstants.kIntakeDeadband).onFalse(intake.setState(IntakeState.IDLE));
+    joystick.rightTrigger(IntakeConstants.kIntakeDeadband).whileTrue(intake.setState(IntakeState.ALGAE));
+    joystick.rightTrigger(IntakeConstants.kIntakeDeadband).onFalse(intake.setState(IntakeState.IDLE));
 
     // HALILI TESTLER
     
