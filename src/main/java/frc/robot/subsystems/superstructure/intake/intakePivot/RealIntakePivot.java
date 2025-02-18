@@ -3,6 +3,7 @@ package frc.robot.subsystems.superstructure.intake.intakePivot;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -43,9 +44,21 @@ public class RealIntakePivot implements IntakePivotIO {
 
         pivotMotor.optimizeBusUtilization();
         throughBoreEncoder.setInverted(true);
-
-        resetEncoders();
         positionVoltage = new PositionVoltage(IntakeConstants.idleAngle);
+
+        new Thread (() -> {
+            while (true) {
+                if (throughBoreEncoder.isConnected()) {
+                    try {
+                        Thread.sleep(500);
+                        resetEncoders();
+                        break;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).run();
     }
 
     @Override

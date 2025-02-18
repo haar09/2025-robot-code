@@ -34,16 +34,13 @@ public class RealElevator implements ElevatorIO {
         rightMotorTemp = rightMotorFollower.getDeviceTemp();
         rightMotorSupplyCurrent = rightMotorFollower.getSupplyCurrent();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(250, 
+        BaseStatusSignal.setUpdateFrequencyForAll(50, 
             leftMotorPosition,
             leftMotorVelocity,
             leftMotorVoltage,
             rightMotorPosition,
             rightMotorVelocity,
-            rightMotorVoltage
-        );
-
-        BaseStatusSignal.setUpdateFrequencyForAll(50, 
+            rightMotorVoltage,
             leftMotorTemp,
             leftMotorSupplyCurrent,
             rightMotorTemp,
@@ -52,6 +49,9 @@ public class RealElevator implements ElevatorIO {
 
         leftMotorLeader.optimizeBusUtilization();
         rightMotorFollower.optimizeBusUtilization();
+
+        leftMotorLeader.setPosition(0);
+        rightMotorFollower.setPosition(0);
     }
 
     @Override
@@ -68,8 +68,8 @@ public class RealElevator implements ElevatorIO {
 
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
-        inputs.leftMotorConnected = BaseStatusSignal.refreshAll(leftMotorVelocity, leftMotorVoltage, leftMotorTemp, leftMotorSupplyCurrent).isOK();
-        inputs.rightMotorConnected = BaseStatusSignal.refreshAll(rightMotorVelocity, rightMotorVoltage, rightMotorTemp, rightMotorSupplyCurrent).isOK();
+        inputs.leftMotorConnected = BaseStatusSignal.refreshAll(leftMotorPosition, leftMotorVelocity, leftMotorVoltage, leftMotorTemp, leftMotorSupplyCurrent).isOK();
+        inputs.rightMotorConnected = BaseStatusSignal.refreshAll(rightMotorPosition, rightMotorVelocity, rightMotorVoltage, rightMotorTemp, rightMotorSupplyCurrent).isOK();
 
         inputs.leftPositionRotations = leftMotorPosition.getValueAsDouble();
         inputs.leftVelocityRotationsPerSecond = leftMotorVelocity.getValueAsDouble();
@@ -89,5 +89,6 @@ public class RealElevator implements ElevatorIO {
     @Override
     public void setSysIdVoltage(Voltage volts){
         leftMotorLeader.setControl(voltageOut.withOutput(volts));
+        rightMotorFollower.setControl(new Follower(leftMotorLeader.getDeviceID(), true));
     }
 }

@@ -9,7 +9,6 @@ import static edu.wpi.first.units.Units.Volts;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -19,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.util.ModifiedSignalLogger;
 import frc.robot.Robot;
 
 public class Elevator extends SubsystemBase{
@@ -40,11 +40,11 @@ public class Elevator extends SubsystemBase{
         this.disconnectedAlertLeft = new Alert("Elevator Left is disconnected.", AlertType.kWarning);
         this.disconnectedAlertRight = new Alert("Elevator Right is disconnected.", AlertType.kWarning);
         sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(Volts.of(4.5).per(Second),        // Use default ramp rate (1 V/s)
+        new SysIdRoutine.Config(null,        // Use default ramp rate (1 V/s)
         Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
-        Seconds.of(1.2),        // Use default timeout (10 s)
+        null,        // Use default timeout (10 s)
         // Log state with SignalLogger class
-        state -> SignalLogger.writeString("SysIdElevator_State", state.toString())
+        ModifiedSignalLogger.logState()
         ),
         new SysIdRoutine.Mechanism(
             volts-> io.setSysIdVoltage(volts),
@@ -61,6 +61,7 @@ public class Elevator extends SubsystemBase{
         Logger.processInputs("Elevator", inputs);
         disconnectedAlertLeft.set(!inputs.leftMotorConnected);
         disconnectedAlertRight.set(!inputs.rightMotorConnected);
+        Logger.recordOutput("Elevator/HeightCM", getElevatorPosition().in(Centimeters));
         Logger.recordOutput("Elevator/Position", elevatorPositionVisualizer.mechanism);    
     }
 
@@ -73,7 +74,7 @@ public class Elevator extends SubsystemBase{
     }
 
     public void setPosition(Distance height) {
-        io.setPosition(height.div(3.386).in(Centimeters));
+        io.setPosition(height.in(Centimeters)/ElevatorConstants.kElevatorRotToCm);
         elevatorPositionVisualizer.setState(height.in(Meters));
         lastDesiredPosition = height;
     }

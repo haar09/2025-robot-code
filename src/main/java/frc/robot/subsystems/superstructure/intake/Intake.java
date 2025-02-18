@@ -24,7 +24,8 @@ public class Intake extends SubsystemBase{
         FLOOR_INTAKE,
         FEED,
         SHOOT,
-        ALGAE
+        ALGAE,
+        ELEVATOR
     }
 
     public IntakeState state = IntakeState.IDLE;
@@ -74,8 +75,15 @@ public class Intake extends SubsystemBase{
                     intakeRollers.setOutputPercentage(0, 0);
                 }
                 break;
+            case ELEVATOR:
+                intakePivot.setDesiredAngle(IntakeConstants.elevatorAngle);
+                intakeRollers.setOutputPercentage(0, 0);
         }
         SmartDashboard.putString("Intake State", state.toString());
+    }
+
+    public boolean isAtDesiredAngle(){
+        return intakePivot.isAtDesiredAngle();
     }
 
     public Command setState(IntakeState state) {

@@ -1,5 +1,9 @@
 package frc.robot.subsystems.superstructure;
 
+import static edu.wpi.first.units.Units.Centimeters;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.superstructure.deployer.Deployer;
@@ -59,16 +63,18 @@ public class StateManager extends SubsystemBase{
                 elevator.setPosition(ElevatorConstants.IDLE);
                 break;
             case L2:
-                intake.state = IntakeState.ALGAE;
-                deployer.state = DeployerState.IDLE;
-                elevator.setPosition(ElevatorConstants.CORAL_L2_HEIGHT);
-                if (elevator.isAtSetpoint()) {
+                //intake.state = IntakeState.ELEVATOR;
+                //deployer.state = DeployerState.IDLE;
+                //if (intake.isAtDesiredAngle()){
+                elevator.setPosition(Centimeters.of(SmartDashboard.getNumber("asansoryukseklik", 0)));
+                //}
+                /*if (elevator.isAtSetpoint()) {
                     intake.state = IntakeState.IDLE;
                     deployer.state = DeployerState.SHOOT_RIGHT;
-                }
+                }*/
                 break;
             case L3:
-                intake.state = IntakeState.SHOOT;
+                intake.state = IntakeState.ELEVATOR;
                 deployer.state = DeployerState.IDLE;
                 elevator.setPosition(ElevatorConstants.CORAL_L3_HEIGHT);
                 if (elevator.isAtSetpoint()) {
@@ -77,5 +83,9 @@ public class StateManager extends SubsystemBase{
                 }
             break;
         }
+    }
+
+    public Command setStateCommand(State state) {
+        return startEnd(() -> this.state = state, () -> this.state = State.IDLE).withName("StateManager "+state.toString());
     }
 }

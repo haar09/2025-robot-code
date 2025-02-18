@@ -74,14 +74,16 @@ public final class Constants {
     public static final int kPivotMotorId = 13;
     public static final int kAbsoluteEncoderId = 6;
 
-    public static final double kAbsoluteEncoderOffset = -4;
+    public static final double kAbsoluteEncoderOffset = 6;
     public static final TalonFXConfiguration pivotMotorConfig = new TalonFXConfiguration();
 
     static  {
       pivotMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
       pivotMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-      pivotMotorConfig.CurrentLimits.SupplyCurrentLimit = 60;
+      pivotMotorConfig.CurrentLimits.SupplyCurrentLimit = 30;
       pivotMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+      pivotMotorConfig.CurrentLimits.StatorCurrentLimit = 40;
+      pivotMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
       pivotMotorConfig.Feedback.SensorToMechanismRatio = 66;
     }
 
@@ -102,12 +104,13 @@ public final class Constants {
 
     public static final Angle kAngleTolerance = Degrees.of(0.7);
 
-    public static final Angle idleAngle = Degrees.of(114);
-    public static final Angle initialAngle = Degrees.of(18);
-    public static final Angle intakeAngle = Degrees.of(0);
+    public static final Angle idleAngle = Degrees.of(113);
+    public static final Angle initialAngle = Degrees.of(11.5);
+    public static final Angle intakeAngle = Degrees.of(1);
     public static final Angle feedAngle = Degrees.of(0);
     public static final Angle shootAngle = Degrees.of(0);
-    public static final Angle algaeAngle = Degrees.of(0);
+    public static final Angle algaeAngle = Degrees.of(70);
+    public static final Angle elevatorAngle = Degrees.of(86);
 
     /* PIVOT END ROLLER START */
 
@@ -139,28 +142,28 @@ public final class Constants {
 
     static {
       elevatorMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-      elevatorMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+      elevatorMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
       elevatorMotorConfig.CurrentLimits.SupplyCurrentLimit = 60;
       elevatorMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-      elevatorMotorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-      elevatorMotorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 31;
-      elevatorMotorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-      elevatorMotorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
+      elevatorMotorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+      elevatorMotorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 32;
+      elevatorMotorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+      elevatorMotorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 1;
 
       elevatorMotorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
 
-      elevatorMotorConfig.Slot0.kG = 0;
-      elevatorMotorConfig.Slot0.kS = 0; // Add 0.25 V output to overcome static friction
-      elevatorMotorConfig.Slot0.kV = 0; // A velocity target of 1 rps results in 0.12 V output
-      elevatorMotorConfig.Slot0.kA = 0; // An acceleration of 1 rps/s requires 0.01 V output
-      elevatorMotorConfig.Slot0.kP = 0; // An error of 1 rps results in 0.11 V output
+      elevatorMotorConfig.Slot0.kG = 0.30;
+      elevatorMotorConfig.Slot0.kS = 0.12054; // Add 0.25 V output to overcome static friction
+      elevatorMotorConfig.Slot0.kV = 0.1207; // A velocity target of 1 rps results in 0.12 V output
+      elevatorMotorConfig.Slot0.kA = 0.010167; // An acceleration of 1 rps/s requires 0.01 V output
+      elevatorMotorConfig.Slot0.kP = 0.18549; // An error of 1 rps results in 0.11 V output
       elevatorMotorConfig.Slot0.kI = 0; // no output for integrated error
       elevatorMotorConfig.Slot0.kD = 0; // no output for error derivative 
-      elevatorMotorConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
+      elevatorMotorConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
       
-      elevatorMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 400;
-      elevatorMotorConfig.MotionMagic.MotionMagicAcceleration = 1100;
+      elevatorMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 0.8;
+      elevatorMotorConfig.MotionMagic.MotionMagicAcceleration = 0.8;
     }
 
     public static final Distance IDLE = Centimeters.of(0);
@@ -168,7 +171,7 @@ public final class Constants {
     public static final Distance CORAL_L3_HEIGHT = Centimeters.of(0);
     public static final Distance INTAKE_HEIGHT = Centimeters.of(0);
     
-    public static final Distance kDistanceTolerance = Centimeters.of(0.015);
+    public static final Distance kDistanceTolerance = Centimeters.of(0.5);
   
     public static final Distance MAX_HEIGHT = Centimeters.of(53);
   }

@@ -33,6 +33,8 @@ import frc.robot.subsystems.ObjectDetection;
 import frc.robot.subsystems.apriltagvision.AprilTagVision;
 import frc.robot.subsystems.apriltagvision.RealPhotonVision;
 import frc.robot.subsystems.apriltagvision.SimPhotonVision;
+import frc.robot.subsystems.superstructure.StateManager;
+import frc.robot.subsystems.superstructure.StateManager.State;
 import frc.robot.subsystems.superstructure.deployer.Deployer;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.intake.Intake;
@@ -65,7 +67,8 @@ public class RobotContainer {
   private void configureBindings() {
     updateControlStyle();
 
-    joystick.y().onTrue(runOnce(() -> elevator.setPosition(Meters.of(SmartDashboard.getNumber("asansoryukseklik", 0)))));
+    joystick.y().onTrue(stateManager.setStateCommand(State.L2));
+    joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.leftBumper().onTrue(runOnce(() -> controlMode = 1).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
     joystick.leftBumper().onFalse(runOnce(() -> controlMode = 0).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
@@ -85,10 +88,10 @@ public class RobotContainer {
 
     // HALILI TESTLER
     
-    joystick.pov(0).whileTrue(intake.intakePivot.sysIdQuasistatic(Direction.kForward));
-    joystick.pov(90).whileTrue(intake.intakePivot.sysIdQuasistatic(Direction.kReverse));
-    joystick.pov(180).whileTrue(intake.intakePivot.sysIdDynamic(Direction.kForward));
-    joystick.pov(270).whileTrue(intake.intakePivot.sysIdDynamic(Direction.kReverse));
+    joystick.pov(0).whileTrue(elevator.sysIdQuasistatic(Direction.kForward));
+    joystick.pov(90).whileTrue(elevator.sysIdQuasistatic(Direction.kReverse));
+    joystick.pov(180).whileTrue(elevator.sysIdDynamic(Direction.kForward));
+    joystick.pov(270).whileTrue(elevator.sysIdDynamic(Direction.kReverse));
     //joystick.back().whileTrue(new SwerveWheelCalibration(drivetrain));
     // HALILI TESTLER BİTİŞ
 
@@ -133,6 +136,7 @@ public class RobotContainer {
   private Intake intake;
   private Elevator elevator;
   private Deployer deployer;
+  private StateManager stateManager;
 
   public RobotContainer() {
     new LEDSubsystem();
@@ -140,6 +144,7 @@ public class RobotContainer {
     intake = new Intake();
     elevator = Elevator.create();
     deployer = new Deployer(drivetrain);
+    stateManager = new StateManager(deployer, intake, elevator);
 
     if (Robot.isReal()) {
       new AprilTagVision(drivetrain::addVisionMeasurement,
