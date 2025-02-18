@@ -15,12 +15,14 @@ public class RealDeployerRollers implements DeployerRollersIO {
     public RealDeployerRollers() {
         rollerMotor.setNeutralMode(NeutralModeValue.Coast);
 
+        rollerMotor.getConfigurator().apply(DeployerConstants.deployerMotorConfig);
+
         rollerMotorVelocity = rollerMotor.getVelocity();
         rollerMotorVoltage = rollerMotor.getMotorVoltage();
         rollerMotorTemp = rollerMotor.getDeviceTemp();
         rollerMotorSupplyCurrent = rollerMotor.getSupplyCurrent();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(250, rollerMotorVelocity, rollerMotorVoltage, rollerMotorTemp, rollerMotorSupplyCurrent);
+        BaseStatusSignal.setUpdateFrequencyForAll(50, rollerMotorVelocity, rollerMotorVoltage, rollerMotorTemp, rollerMotorSupplyCurrent);
         rollerMotor.optimizeBusUtilization();
     }
 

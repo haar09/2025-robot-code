@@ -1,6 +1,6 @@
 package frc.robot.subsystems.superstructure.intake.intakePivot;
 
-
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -36,15 +36,16 @@ public class RealIntakePivot implements IntakePivotIO {
             pivotMotorVoltage
         );
 
-        BaseStatusSignal.setUpdateFrequencyForAll(100,
+        BaseStatusSignal.setUpdateFrequencyForAll(50,
             pivotMotorTemp,
             pivotMotorSupplyCurrent
         );
 
         pivotMotor.optimizeBusUtilization();
-        resetEncoders();
+        throughBoreEncoder.setInverted(true);
 
-        positionVoltage = new PositionVoltage(getAbsolutePosition());
+        resetEncoders();
+        positionVoltage = new PositionVoltage(IntakeConstants.idleAngle);
     }
 
     @Override
@@ -54,15 +55,15 @@ public class RealIntakePivot implements IntakePivotIO {
 
     @Override
     public Angle getAngle(){
-        return pivotMotor.getPosition().getValue();
+        return pivotMotor.getPosition().getValue()/*.div(IntakeConstants.kTotalRatio)*/;
     }
 
     public Angle getAbsolutePosition(){
-        return Rotations.of(throughBoreEncoder.get());
+        return Rotations.of(throughBoreEncoder.get()/IntakeConstants.kEncoderToPivot).plus(Degrees.of(IntakeConstants.kAbsoluteEncoderOffset));
     }
 
     public void resetEncoders(){
-       pivotMotor.setPosition(getAbsolutePosition(), 1);
+       pivotMotor.setPosition(getAbsolutePosition(), 1).toString();
     }
 
     
@@ -77,7 +78,7 @@ public class RealIntakePivot implements IntakePivotIO {
         inputs.absoluteEncoderConnected = throughBoreEncoder.isConnected();
 
         inputs.positionRads = getAngle().in(Radians);
-        inputs.absoluteEncoderPositionRads = getAbsolutePosition().in(Radians);
+        inputs.absoluteEncoderPositionRots = throughBoreEncoder.get();
         inputs.velocityRotsPerSec = pivotMotorVelocity.getValueAsDouble();
         inputs.appliedVolts = pivotMotorVoltage.getValueAsDouble();
         inputs.supplyCurrentAmps = pivotMotorSupplyCurrent.getValueAsDouble();

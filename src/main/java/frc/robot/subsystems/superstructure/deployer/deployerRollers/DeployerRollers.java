@@ -9,7 +9,7 @@ import frc.robot.Robot;
 public class DeployerRollers{
     private final DeployerRollersIO io;
     private final DeployerRollersIOInputsAutoLogged inputs = new DeployerRollersIOInputsAutoLogged();
-    private final Alert disconnectedAlert;
+    private final Alert disconnectedAlert, tooHotAlert;
 
     public static DeployerRollers create() {
         if (Robot.isReal()) {
@@ -23,12 +23,14 @@ public class DeployerRollers{
     public DeployerRollers(DeployerRollersIO io) {
         this.io = io;
         this.disconnectedAlert = new Alert("Deployer Rollers are disconnected.", AlertType.kWarning);
+        this.tooHotAlert = new Alert("Deployer Rollers ARE TOO HOT.", AlertType.kError);
     }
 
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Deployer/Rollers", inputs);
         disconnectedAlert.set(!inputs.motorConnected);
+        tooHotAlert.set(inputs.tempCelcius > 70);
     }
 
     public void setOutputPercentage(double percentage) {

@@ -4,10 +4,9 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Meters;
 
-import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -20,7 +19,9 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 
@@ -30,12 +31,12 @@ public final class Constants {
     public static final double kRobotWeight = 0;
     public static final double kMOI = 0;
 
-    public static final double kMaxSpeedMetersPerSecond = 4.5;
+    public static final double kMaxSpeedCentimetersPerSecond = 4.5;
     public static final double kPXYController = 10;
     public static final double kPThetaController = 7;
 
     public static final PathConstraints kPathConstraints = new PathConstraints(
-      kMaxSpeedMetersPerSecond, 3, Math.toRadians(540), Math.toRadians(720));
+      kMaxSpeedCentimetersPerSecond, 3, Math.toRadians(540), Math.toRadians(720));
   }
 
   public static class VisionConstants {
@@ -51,11 +52,14 @@ public final class Constants {
     public static final AprilTagFieldLayout kTagLayout =
                 AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
-    public static double linearStdDevBaseline = 0.02; // Meters
+    public static double linearStdDevBaseline = 0.02; // Centimeters
     public static double angularStdDevBaseline = 0.06; // Radians
 
     public static final double kMaxAmbiguity = 0.3;
     public static final double kMaxZError = 0.75;
+
+    public static final Translation2d kReefCenter =
+        new Translation2d(Units.inchesToMeters(176.746), kTagLayout.getFieldWidth() / 2.0);
   }
 
   public static class IntakeConstants {
@@ -63,28 +67,22 @@ public final class Constants {
 
     /* PIVOT */
 
-    public static final double kMinIntakeAngleDegrees = 0;
-    public static final double kMaxIntakeAngleDegrees = 100;
+    public static final double kMotorToEncoder = 22;
+    public static final double kEncoderToPivot = 3;
+    public static final double kTotalRatio = kMotorToEncoder * kEncoderToPivot;
 
-    public static final int kPivotMotorId = 0;
-    public static final int kAbsoluteEncoderId = 0;
+    public static final int kPivotMotorId = 13;
+    public static final int kAbsoluteEncoderId = 6;
 
-    public static final double kAbsoluteEncoderOffset = 0;
-    public static final boolean kPivotMotorReversed = true;
+    public static final double kAbsoluteEncoderOffset = -4;
     public static final TalonFXConfiguration pivotMotorConfig = new TalonFXConfiguration();
 
     static  {
       pivotMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+      pivotMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
       pivotMotorConfig.CurrentLimits.SupplyCurrentLimit = 60;
       pivotMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    }
-
-    private static final FeedbackConfigs pivotMotor_feedbackConfigs;
-
-    static {
-      pivotMotor_feedbackConfigs = pivotMotorConfig.Feedback;
-      pivotMotor_feedbackConfigs.RotorToSensorRatio = 22;
-      pivotMotor_feedbackConfigs.SensorToMechanismRatio = 3;
+      pivotMotorConfig.Feedback.SensorToMechanismRatio = 66;
     }
 
     // set slot 0 gains
@@ -92,59 +90,65 @@ public final class Constants {
 
     static {
       pivotMotor_slot0Configs = pivotMotorConfig.Slot0;
-      pivotMotor_slot0Configs.kS = 0; // Add 0.25 V output to overcome static friction
-      pivotMotor_slot0Configs.kV = 0; // A velocity target of 1 rps results in 0.12 V output
-      pivotMotor_slot0Configs.kA = 0; // An acceleration of 1 rps/s requires 0.01 V output
-      pivotMotor_slot0Configs.kP = 0; // An error of 1 rps results in 0.11 V output
+      pivotMotor_slot0Configs.kS = 0.4037; // Add 0.25 V output to overcome static friction
+      pivotMotor_slot0Configs.kV = 5.7123; // A velocity target of 1 rps results in 0.12 V output
+      pivotMotor_slot0Configs.kA = 0.12063; // An acceleration of 1 rps/s requires 0.01 V output
+      pivotMotor_slot0Configs.kG = 0.15074;
+      pivotMotor_slot0Configs.kP = 50.305; // An error of 1 rps results in 0.11 V output
       pivotMotor_slot0Configs.kI = 0; // no output for integrated error
-      pivotMotor_slot0Configs.kD = 0; // no output for error derivative 
+      pivotMotor_slot0Configs.kD = 5.682; // no output for error derivative 
       pivotMotor_slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
     }
 
     public static final Angle kAngleTolerance = Degrees.of(0.7);
 
-    public static final Angle idleAngle = Degrees.of(70);
-    public static final Angle initialAngle = Degrees.of(10);
+    public static final Angle idleAngle = Degrees.of(114);
+    public static final Angle initialAngle = Degrees.of(18);
     public static final Angle intakeAngle = Degrees.of(0);
-    public static final Angle feedAngle = Degrees.of(110);
-    public static final Angle shootAngle = Degrees.of(50);
-    public static final Angle algaeAngle = Degrees.of(40);
+    public static final Angle feedAngle = Degrees.of(0);
+    public static final Angle shootAngle = Degrees.of(0);
+    public static final Angle algaeAngle = Degrees.of(0);
 
     /* PIVOT END ROLLER START */
 
-    public static final int kRollerLeftMotorId = 0;
-    public static final int kRollerRightMotorId = 0; 
+    public static final int kRollerLeftMotorId = 11;
+    public static final int kRollerRightMotorId = 12; 
     
     public static final boolean kRollerLeftMotorReversed = false;
     public static final boolean kRollerRightMotorReversed = false;
-
-    public static final double kRollerLeftMotorSpeed = 0;
-    public static final double kRollerRightMotorSpeed = 0;
-
   }
 
   public static class DeployerConstants{
-    public static final int kRollersMotorId = 0;
-    public static final int kOmnisMotorId = 0;
+    public static final int kRollersMotorId = 22;
+    public static final int kOmnisMotorId = 23;
+
+    public static TalonFXConfiguration deployerMotorConfig = new TalonFXConfiguration();
+
+    static {
+      deployerMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+  }
   }
 
   public static class ElevatorConstants{
-    public static final int kLeftMotorId = 0;
-    public static final int kRightMotorId = 0;
+    public static final double kElevatorRotToCm = 1.693;
+
+    public static final int kLeftMotorId = 20;
+    public static final int kRightMotorId = 21;
 
     public static TalonFXConfiguration elevatorMotorConfig = new TalonFXConfiguration();
 
     static {
       elevatorMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-      elevatorMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // tunelanacak
+      elevatorMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+      elevatorMotorConfig.CurrentLimits.SupplyCurrentLimit = 60;
+      elevatorMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
       elevatorMotorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-      elevatorMotorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Meters.of(0).in(Meters);
+      elevatorMotorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 31;
       elevatorMotorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-      elevatorMotorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Meters.of(0).in(Meters);
+      elevatorMotorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
 
       elevatorMotorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
-      elevatorMotorConfig.Feedback.SensorToMechanismRatio = 29.5253842;
 
       elevatorMotorConfig.Slot0.kG = 0;
       elevatorMotorConfig.Slot0.kS = 0; // Add 0.25 V output to overcome static friction
@@ -159,13 +163,13 @@ public final class Constants {
       elevatorMotorConfig.MotionMagic.MotionMagicAcceleration = 1100;
     }
 
-    public static final Distance CORAL_L2_HEIGHT = Meters.of(0);
-    public static final Distance CORAL_L3_HEIGHT = Meters.of(0);
-    public static final Distance CORAL_L4_HEIGHT = Meters.of(0);
-    public static final Distance INTAKE_HEIGHT = Meters.of(0);
+    public static final Distance IDLE = Centimeters.of(0);
+    public static final Distance CORAL_L2_HEIGHT = Centimeters.of(0);
+    public static final Distance CORAL_L3_HEIGHT = Centimeters.of(0);
+    public static final Distance INTAKE_HEIGHT = Centimeters.of(0);
     
-    public static final Distance kDistanceTolerance = Meters.of(0.015);
+    public static final Distance kDistanceTolerance = Centimeters.of(0.015);
   
-    public static final Distance MAX_HEIGHT = Meters.of(0);
+    public static final Distance MAX_HEIGHT = Centimeters.of(53);
   }
 } 

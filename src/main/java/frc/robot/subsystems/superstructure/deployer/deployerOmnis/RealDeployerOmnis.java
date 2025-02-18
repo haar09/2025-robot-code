@@ -20,7 +20,7 @@ public class RealDeployerOmnis implements DeployerOmnisIO {
         omniMotorTemp = omniMotor.getDeviceTemp();
         omniMotorSupplyCurrent = omniMotor.getSupplyCurrent();
 
-        BaseStatusSignal.setUpdateFrequencyForAll(250, omniMotorVelocity, omniMotorVoltage, omniMotorTemp, omniMotorSupplyCurrent);
+        BaseStatusSignal.setUpdateFrequencyForAll(50, omniMotorVelocity, omniMotorVoltage, omniMotorTemp, omniMotorSupplyCurrent);
         omniMotor.optimizeBusUtilization();
     }
 

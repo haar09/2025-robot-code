@@ -8,7 +8,7 @@ import frc.robot.subsystems.superstructure.intake.intakePivot.IntakePivot;
 import frc.robot.subsystems.superstructure.intake.intakeRollers.IntakeRollers;
 
 public class Intake extends SubsystemBase{
-    private final IntakePivot intakePivot;
+    public final IntakePivot intakePivot;
     private final IntakeRollers intakeRollers;
     private final IntakeBeamBreak intakeBeamBreak;
 
@@ -44,32 +44,32 @@ public class Intake extends SubsystemBase{
                     break;
                 }
                 intakePivot.setDesiredAngle(IntakeConstants.initialAngle);
-                intakeRollers.setOutputPercentage(0.4, 0.4);   
+                intakeRollers.setOutputPercentage(-0.4,-0.4);   
                 break;
             case FLOOR_INTAKE:
                 if (intakeBeamBreak.upper_value) {
-                    state = IntakeState.FEED;
+                    state = IntakeState.IDLE;
                     break;
                 }
                 intakePivot.setDesiredAngle(IntakeConstants.intakeAngle);
-                intakeRollers.setOutputPercentage(0.4, 0.4);
+                intakeRollers.setOutputPercentage(-0.4, -0.4);
                 break;
             case FEED:
                 intakePivot.setDesiredAngle(IntakeConstants.feedAngle); 
                 if (intakePivot.isAtDesiredAngle()) {
-                    intakeRollers.setOutputPercentage(0.4, 0.4);
+                    intakeRollers.setOutputPercentage(-0.4, -0.4);
                 } else {
                     intakeRollers.setOutputPercentage(0, 0);
                 }
                 break;
             case ALGAE:
                 intakePivot.setDesiredAngle(IntakeConstants.algaeAngle);
-                intakeRollers.setOutputPercentage(0.4, 0.4); 
+                intakeRollers.setOutputPercentage(0, 0.4); 
                 break;
             case SHOOT:
                 intakePivot.setDesiredAngle(IntakeConstants.shootAngle);
                 if  (intakePivot.isAtDesiredAngle()) {
-                    intakeRollers.setOutputPercentage(-0.9, -0.9);
+                    intakeRollers.setOutputPercentage(0.9, 0.9);
                 } else {
                     intakeRollers.setOutputPercentage(0, 0);
                 }

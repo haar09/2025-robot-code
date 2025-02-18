@@ -2,14 +2,11 @@ package frc.robot.subsystems.superstructure.intake.intakePivot;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.SignalLogger;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -21,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.util.ModifiedSignalLogger;
 
 public class IntakePivot extends SubsystemBase{
     private final IntakePivotIO pivot;
@@ -41,11 +39,11 @@ public class IntakePivot extends SubsystemBase{
         this.pivot = pivot;
         this.disconnectedAlert = new Alert("IntakePivot is disconnected.", AlertType.kWarning);
         sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(Volts.of(0.5).per(Second),        // Use default ramp rate (1 V/s)
-        Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
-        null,        // Use default timeout (10 s)
+        new SysIdRoutine.Config(null,        // Use default ramp rate (1 V/s)
+        Volts.of(1.7), // Reduce dynamic step voltage to 4 V to prevent brownout
+        Seconds.of(2),        // Use default timeout (10 s)
         // Log state with SignalLogger class
-        state -> SignalLogger.writeString("SysIdArm_State", state.toString())
+        ModifiedSignalLogger.logState()
         ),
         new SysIdRoutine.Mechanism(
             volts-> pivot.setSysIdVoltage(volts),
@@ -77,21 +75,17 @@ public class IntakePivot extends SubsystemBase{
         
         setPointVisualizer.setState(0);
 
-        SmartDashboard.putNumber("Intake Pivot Angle", pivot.getAngle().in(Degrees));
+        SmartDashboard.putNumber("Intake Pivot Angle", getAngle().in(Degrees));
     }
 
     public void setDesiredAngle(Angle angle) {
-        if (angle.in(Degrees) < IntakeConstants.kMinIntakeAngleDegrees || angle.in(Degrees) > IntakeConstants.kMaxIntakeAngleDegrees) {
-            System.out.println("Intake angle out of bounds: " + angle.in(Degrees));
-            angle = Degrees.of(MathUtil.clamp(angle.in(Degrees), IntakeConstants.kMinIntakeAngleDegrees, IntakeConstants.kMaxIntakeAngleDegrees));
-        }
         pivot.setDesiredAngle(angle);
         setPointVisualizer.setState(angle.in(Radians));
         desiredAngle = angle;
     }
 
     public boolean isAtDesiredAngle() {
-        return (pivot.getAngle().isNear(desiredAngle, IntakeConstants.kAngleTolerance));
+        return (getAngle().isNear(desiredAngle, IntakeConstants.kAngleTolerance));
     }
 
     public void stop() {

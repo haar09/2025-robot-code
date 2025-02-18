@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 
@@ -32,6 +33,8 @@ import frc.robot.subsystems.ObjectDetection;
 import frc.robot.subsystems.apriltagvision.AprilTagVision;
 import frc.robot.subsystems.apriltagvision.RealPhotonVision;
 import frc.robot.subsystems.apriltagvision.SimPhotonVision;
+import frc.robot.subsystems.superstructure.deployer.Deployer;
+import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.intake.Intake;
 import frc.robot.subsystems.superstructure.intake.Intake.IntakeState;
 
@@ -56,15 +59,13 @@ public class RobotContainer {
       .withDeadband(MaxSpeed * 0.1)
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want r-centric driving in open loop
 
-  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-
   private final Telemetry logger = new Telemetry(drivetrain.getState());
   private Supplier<SwerveRequest> controlStyle;
 
   private void configureBindings() {
     updateControlStyle();
 
-    joystick.y().whileTrue(drivetrain.applyRequest(() -> brake).withName("Swerve Brake"));
+    joystick.y().onTrue(runOnce(() -> elevator.setPosition(Meters.of(SmartDashboard.getNumber("asansoryukseklik", 0)))));
 
     joystick.leftBumper().onTrue(runOnce(() -> controlMode = 1).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
     joystick.leftBumper().onFalse(runOnce(() -> controlMode = 0).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
@@ -84,11 +85,11 @@ public class RobotContainer {
 
     // HALILI TESTLER
     
-    joystick.pov(0).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-    joystick.pov(90).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-    joystick.pov(180).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-    joystick.pov(270).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-    joystick.back().whileTrue(new SwerveWheelCalibration(drivetrain));
+    joystick.pov(0).whileTrue(intake.intakePivot.sysIdQuasistatic(Direction.kForward));
+    joystick.pov(90).whileTrue(intake.intakePivot.sysIdQuasistatic(Direction.kReverse));
+    joystick.pov(180).whileTrue(intake.intakePivot.sysIdDynamic(Direction.kForward));
+    joystick.pov(270).whileTrue(intake.intakePivot.sysIdDynamic(Direction.kReverse));
+    //joystick.back().whileTrue(new SwerveWheelCalibration(drivetrain));
     // HALILI TESTLER BİTİŞ
 
 
@@ -130,11 +131,15 @@ public class RobotContainer {
 
   private LoggedDashboardChooser<Command> autoChooser;
   private Intake intake;
+  private Elevator elevator;
+  private Deployer deployer;
 
   public RobotContainer() {
     new LEDSubsystem();
     new ObjectDetection();
     intake = new Intake();
+    elevator = Elevator.create();
+    deployer = new Deployer(drivetrain);
 
     if (Robot.isReal()) {
       new AprilTagVision(drivetrain::addVisionMeasurement,
