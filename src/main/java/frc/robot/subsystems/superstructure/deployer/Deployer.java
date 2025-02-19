@@ -1,38 +1,28 @@
 package frc.robot.subsystems.superstructure.deployer;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.FieldConstants;
-import frc.robot.GlobalVariables;
-import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.superstructure.deployer.deployerOmnis.DeployerOmnis;
 import frc.robot.subsystems.superstructure.deployer.deployerRollers.DeployerRollers;
-import frc.robot.util.AllianceFlipUtil;
 
 public class Deployer extends  SubsystemBase {
     private final DeployerOmnis deployerOmnis;
     private final DeployerRollers deployerRollers;
     private final DeployerBeamBreak deployerBeamBreak;
 
-    private final CommandSwerveDrivetrain drivetrain;
-
     private double startTime = 0;
 
-    public Deployer(CommandSwerveDrivetrain drivetrain){
+    public Deployer(){
         this.deployerOmnis = DeployerOmnis.create();
         this.deployerRollers = DeployerRollers.create();
         this.deployerBeamBreak = new DeployerBeamBreak();
-        this.drivetrain = drivetrain;
     }
 
     public enum DeployerState {
         IDLE,
         CENTER,
         SHOOT_RIGHT,
-        SHOOT_LEFT,
-        AUTO_SHOOT
+        SHOOT_LEFT
     }
 
     public DeployerState state = DeployerState.IDLE;
@@ -41,7 +31,6 @@ public class Deployer extends  SubsystemBase {
     public void periodic() {
         deployerOmnis.periodic();
         deployerRollers.periodic();
-        calculateReefSide();
         switch (state) {
             case IDLE:
                 deployerOmnis.stop();
@@ -78,20 +67,7 @@ public class Deployer extends  SubsystemBase {
                     deployerRollers.setOutputPercentage(0.65);
                 }
                 break;
-            case AUTO_SHOOT:
-                if (GlobalVariables.getInstance().alliance == Alliance.Blue) {
-                } else {
-                    setState(DeployerState.SHOOT_RIGHT);
-                }
-                break;
         }
-    }
-
-    private double reefAngle = 0;
-    private double targetAngle = 0;
-
-    public void calculateReefSide() {
-        //drivetrain.getState().Pose.nearest(FieldConstants.Reef.centerFaces);
     }
 
     public void setState(DeployerState state) {

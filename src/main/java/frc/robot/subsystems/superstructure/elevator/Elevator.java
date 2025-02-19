@@ -2,7 +2,6 @@ package frc.robot.subsystems.superstructure.elevator;
 
 import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -40,9 +39,9 @@ public class Elevator extends SubsystemBase{
         this.disconnectedAlertLeft = new Alert("Elevator Left is disconnected.", AlertType.kWarning);
         this.disconnectedAlertRight = new Alert("Elevator Right is disconnected.", AlertType.kWarning);
         sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(null,        // Use default ramp rate (1 V/s)
-        Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
-        null,        // Use default timeout (10 s)
+        new SysIdRoutine.Config(Volts.of(0.5).div(Seconds.of(1)),        // Use default ramp rate (1 V/s)
+        Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
+        Seconds.of(3),        // Use default timeout (10 s)
         // Log state with SignalLogger class
         ModifiedSignalLogger.logState()
         ),

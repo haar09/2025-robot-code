@@ -1,6 +1,7 @@
 package frc.robot.subsystems.superstructure.intake;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
@@ -65,7 +66,7 @@ public class Intake extends SubsystemBase{
                 break;
             case ALGAE:
                 intakePivot.setDesiredAngle(IntakeConstants.algaeAngle);
-                intakeRollers.setOutputPercentage(0, 0.4); 
+                intakeRollers.setOutputPercentage(0, 0.6); 
                 break;
             case SHOOT:
                 intakePivot.setDesiredAngle(IntakeConstants.shootAngle);
@@ -79,7 +80,7 @@ public class Intake extends SubsystemBase{
                 intakePivot.setDesiredAngle(IntakeConstants.elevatorAngle);
                 intakeRollers.setOutputPercentage(0, 0);
         }
-        SmartDashboard.putString("Intake State", state.toString());
+        Logger.recordOutput("Intake/State", state.toString());
     }
 
     public boolean isAtDesiredAngle(){

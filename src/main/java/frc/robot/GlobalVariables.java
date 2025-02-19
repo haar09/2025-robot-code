@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class GlobalVariables {
     private static GlobalVariables instance = new GlobalVariables();
     
-    public double speakerDistance;
-
     public DriverStation.Alliance alliance;
 
     private GlobalVariables() {

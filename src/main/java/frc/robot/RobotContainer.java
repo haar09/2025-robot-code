@@ -67,8 +67,8 @@ public class RobotContainer {
   private void configureBindings() {
     updateControlStyle();
 
-    joystick.y().onTrue(stateManager.setStateCommand(State.L2));
-    joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
+    joystick.y().onTrue(runOnce(() -> stateManager.calculateDeployerSide()));
+    //joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.leftBumper().onTrue(runOnce(() -> controlMode = 1).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
     joystick.leftBumper().onFalse(runOnce(() -> controlMode = 0).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
@@ -143,8 +143,8 @@ public class RobotContainer {
     new ObjectDetection();
     intake = new Intake();
     elevator = Elevator.create();
-    deployer = new Deployer(drivetrain);
-    stateManager = new StateManager(deployer, intake, elevator);
+    deployer = new Deployer();
+    stateManager = new StateManager(deployer, intake, elevator, drivetrain);
 
     if (Robot.isReal()) {
       new AprilTagVision(drivetrain::addVisionMeasurement,

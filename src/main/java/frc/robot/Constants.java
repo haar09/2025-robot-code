@@ -157,13 +157,13 @@ public final class Constants {
       elevatorMotorConfig.Slot0.kS = 0.12054; // Add 0.25 V output to overcome static friction
       elevatorMotorConfig.Slot0.kV = 0.1207; // A velocity target of 1 rps results in 0.12 V output
       elevatorMotorConfig.Slot0.kA = 0.010167; // An acceleration of 1 rps/s requires 0.01 V output
-      elevatorMotorConfig.Slot0.kP = 0.18549; // An error of 1 rps results in 0.11 V output
+      elevatorMotorConfig.Slot0.kP = 0.3; // An error of 1 rps results in 0.11 V output
       elevatorMotorConfig.Slot0.kI = 0; // no output for integrated error
       elevatorMotorConfig.Slot0.kD = 0; // no output for error derivative 
       elevatorMotorConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
       
-      elevatorMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 0.8;
-      elevatorMotorConfig.MotionMagic.MotionMagicAcceleration = 0.8;
+      elevatorMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 100;
+      elevatorMotorConfig.MotionMagic.MotionMagicAcceleration = 300;
     }
 
     public static final Distance IDLE = Centimeters.of(0);
