@@ -20,12 +20,12 @@ public class IntakeBeamBreak extends SubsystemBase{
 
   @Override
   public void periodic() {
-      upper_value = !m_beamBreak.get();
-      //upper_value = SmartDashboard.getBoolean("upper", false);
+      //upper_value = !m_beamBreak.get();
+      upper_value = SmartDashboard.getBoolean("upper", false);
       Logger.recordOutput("Intake/Beam Break/Upper Beam", upper_value);
 
-      lower_value = !lower_beambreak.get();
-      //lower_value = SmartDashboard.getBoolean("lower", false);
+      //lower_value = !lower_beambreak.get();
+      lower_value = SmartDashboard.getBoolean("lower", false);
       Logger.recordOutput("Intake/Beam Break/Lower Beam", lower_value);
   }   
 }

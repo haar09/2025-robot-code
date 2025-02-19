@@ -8,7 +8,6 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
-import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 
@@ -17,6 +16,8 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,7 +39,6 @@ import frc.robot.subsystems.superstructure.StateManager.State;
 import frc.robot.subsystems.superstructure.deployer.Deployer;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.intake.Intake;
-import frc.robot.subsystems.superstructure.intake.Intake.IntakeState;
 
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12VoltsMps desired top speed
@@ -67,8 +67,13 @@ public class RobotContainer {
   private void configureBindings() {
     updateControlStyle();
 
-    joystick.y().onTrue(runOnce(() -> stateManager.calculateDeployerSide()));
-    //joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
+    joystick.y().onTrue(stateManager.setStateCommand(State.L2));
+    joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
+
+    joystick.a().onTrue(stateManager.setStateCommand(State.FEED));
+    joystick.a().onFalse(stateManager.setStateCommand(State.IDLE));
+
+    joystick.b().onTrue(runOnce(() ->drivetrain.resetPose(new Pose2d(14.318, 4, new Rotation2d(180)))));
 
     joystick.leftBumper().onTrue(runOnce(() -> controlMode = 1).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
     joystick.leftBumper().onFalse(runOnce(() -> controlMode = 0).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
@@ -80,18 +85,18 @@ public class RobotContainer {
     .andThen(() -> drive.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1))
     .andThen(() -> robotOriented.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1)));
 
-    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).whileTrue(intake.setState(IntakeState.FLOOR_INITIAL));
-    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(intake.setState(IntakeState.IDLE));
+    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).whileTrue(stateManager.setStateCommand(State.CORAL_INTAKE));
+    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(stateManager.setStateCommand(State.IDLE));
 
-    joystick.rightTrigger(IntakeConstants.kIntakeDeadband).whileTrue(intake.setState(IntakeState.ALGAE));
-    joystick.rightTrigger(IntakeConstants.kIntakeDeadband).onFalse(intake.setState(IntakeState.IDLE));
+    joystick.rightTrigger(IntakeConstants.kIntakeDeadband).whileTrue(stateManager.setStateCommand(State.ALGAE_INTAKE));
+    joystick.rightTrigger(IntakeConstants.kIntakeDeadband).onFalse(stateManager.setStateCommand(State.IDLE));
 
     // HALILI TESTLER
     
-    joystick.pov(0).whileTrue(elevator.sysIdQuasistatic(Direction.kForward));
-    joystick.pov(90).whileTrue(elevator.sysIdQuasistatic(Direction.kReverse));
-    joystick.pov(180).whileTrue(elevator.sysIdDynamic(Direction.kForward));
-    joystick.pov(270).whileTrue(elevator.sysIdDynamic(Direction.kReverse));
+    joystick.pov(0).whileTrue(intake.intakePivot.sysIdQuasistatic(Direction.kForward));
+    joystick.pov(90).whileTrue(intake.intakePivot.sysIdQuasistatic(Direction.kReverse));
+    joystick.pov(180).whileTrue(intake.intakePivot.sysIdDynamic(Direction.kForward));
+    joystick.pov(270).whileTrue(intake.intakePivot.sysIdDynamic(Direction.kReverse));
     //joystick.back().whileTrue(new SwerveWheelCalibration(drivetrain));
     // HALILI TESTLER BİTİŞ
 

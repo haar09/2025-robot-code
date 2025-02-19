@@ -5,7 +5,7 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.Angle;
@@ -16,7 +16,7 @@ import frc.robot.Constants.IntakeConstants;
 public class RealIntakePivot implements IntakePivotIO {
     
     private final TalonFX pivotMotor = new TalonFX(IntakeConstants.kPivotMotorId);
-    private final PositionVoltage positionVoltage;
+    private final MotionMagicVoltage positionVoltage;
     private final BaseStatusSignal
     pivotMotorPosition, pivotMotorVelocity, pivotMotorVoltage, pivotMotorTemp, pivotMotorSupplyCurrent;
 
@@ -31,7 +31,7 @@ public class RealIntakePivot implements IntakePivotIO {
         pivotMotorTemp = pivotMotor.getDeviceTemp();
         pivotMotorSupplyCurrent = pivotMotor.getSupplyCurrent();
         
-        BaseStatusSignal.setUpdateFrequencyForAll(250,
+        BaseStatusSignal.setUpdateFrequencyForAll(50,
             pivotMotorPosition,
             pivotMotorVelocity,
             pivotMotorVoltage
@@ -44,7 +44,7 @@ public class RealIntakePivot implements IntakePivotIO {
 
         pivotMotor.optimizeBusUtilization();
         throughBoreEncoder.setInverted(true);
-        positionVoltage = new PositionVoltage(IntakeConstants.idleAngle);
+        positionVoltage = new MotionMagicVoltage(IntakeConstants.idleAngle);
 
         new Thread (() -> {
             while (true) {

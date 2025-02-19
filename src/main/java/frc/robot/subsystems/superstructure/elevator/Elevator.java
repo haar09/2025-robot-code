@@ -75,7 +75,7 @@ public class Elevator extends SubsystemBase{
     public void setPosition(Distance height) {
         io.setPosition(height.in(Centimeters)/ElevatorConstants.kElevatorRotToCm);
         elevatorPositionVisualizer.setState(height.in(Meters));
-        lastDesiredPosition = height;
+        lastDesiredPosition = height.copy();
     }
 
     public void stop() {

@@ -59,7 +59,7 @@ public class Intake extends SubsystemBase{
             case FEED:
                 intakePivot.setDesiredAngle(IntakeConstants.feedAngle); 
                 if (intakePivot.isAtDesiredAngle()) {
-                    intakeRollers.setOutputPercentage(-0.4, -0.4);
+                    intakeRollers.setOutputPercentage(-0.3, 0);
                 } else {
                     intakeRollers.setOutputPercentage(0, 0);
                 }
@@ -85,6 +85,10 @@ public class Intake extends SubsystemBase{
 
     public boolean isAtDesiredAngle(){
         return intakePivot.isAtDesiredAngle();
+    }
+
+    public boolean elevatorClearance(){
+        return intakePivot.getAngle().lte(IntakeConstants.elevatorAngle);
     }
 
     public Command setState(IntakeState state) {

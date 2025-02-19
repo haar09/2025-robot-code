@@ -92,22 +92,25 @@ public final class Constants {
 
     static {
       pivotMotor_slot0Configs = pivotMotorConfig.Slot0;
-      pivotMotor_slot0Configs.kS = 0.4037; // Add 0.25 V output to overcome static friction
-      pivotMotor_slot0Configs.kV = 5.7123; // A velocity target of 1 rps results in 0.12 V output
-      pivotMotor_slot0Configs.kA = 0.12063; // An acceleration of 1 rps/s requires 0.01 V output
-      pivotMotor_slot0Configs.kG = 0.15074;
-      pivotMotor_slot0Configs.kP = 50.305; // An error of 1 rps results in 0.11 V output
+      pivotMotor_slot0Configs.kS = 0.099758; // Add 0.25 V output to overcome static friction
+      pivotMotor_slot0Configs.kV = 7.8535; // A velocity target of 1 rps results in 0.12 V output
+      pivotMotor_slot0Configs.kA = 0.6769; // An acceleration of 1 rps/s requires 0.01 V output
+      pivotMotor_slot0Configs.kG = 0.30035;
+      pivotMotor_slot0Configs.kP = 46.651; // An error of 1 rps results in 0.11 V output
       pivotMotor_slot0Configs.kI = 0; // no output for integrated error
-      pivotMotor_slot0Configs.kD = 5.682; // no output for error derivative 
+      pivotMotor_slot0Configs.kD = 8.1903; // no output for error derivative 
       pivotMotor_slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
+
+      pivotMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 5;
+      pivotMotorConfig.MotionMagic.MotionMagicAcceleration = 7;
     }
 
-    public static final Angle kAngleTolerance = Degrees.of(0.7);
+    public static final Angle kAngleTolerance = Degrees.of(3);
 
     public static final Angle idleAngle = Degrees.of(113);
-    public static final Angle initialAngle = Degrees.of(11.5);
+    public static final Angle initialAngle = Degrees.of(13);
     public static final Angle intakeAngle = Degrees.of(1);
-    public static final Angle feedAngle = Degrees.of(0);
+    public static final Angle feedAngle = Degrees.of(113);
     public static final Angle shootAngle = Degrees.of(0);
     public static final Angle algaeAngle = Degrees.of(70);
     public static final Angle elevatorAngle = Degrees.of(86);
@@ -146,32 +149,29 @@ public final class Constants {
       elevatorMotorConfig.CurrentLimits.SupplyCurrentLimit = 60;
       elevatorMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-      elevatorMotorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
-      elevatorMotorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 32;
-      elevatorMotorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
-      elevatorMotorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 1;
-
       elevatorMotorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
 
-      elevatorMotorConfig.Slot0.kG = 0.30;
-      elevatorMotorConfig.Slot0.kS = 0.12054; // Add 0.25 V output to overcome static friction
-      elevatorMotorConfig.Slot0.kV = 0.1207; // A velocity target of 1 rps results in 0.12 V output
+      //0.038 öbürü 0.019 
+      //x=0.0285 y=0.0095
+      elevatorMotorConfig.Slot0.kG = 0.285;
+      elevatorMotorConfig.Slot0.kS = 0.095; // Add 0.25 V output to overcome static friction
+      elevatorMotorConfig.Slot0.kV = 0.16; // A velocity target of 1 rps results in 0.12 V output
       elevatorMotorConfig.Slot0.kA = 0.010167; // An acceleration of 1 rps/s requires 0.01 V output
-      elevatorMotorConfig.Slot0.kP = 0.3; // An error of 1 rps results in 0.11 V output
+      elevatorMotorConfig.Slot0.kP = 0.2; // An error of 1 rps results in 0.11 V output
       elevatorMotorConfig.Slot0.kI = 0; // no output for integrated error
       elevatorMotorConfig.Slot0.kD = 0; // no output for error derivative 
       elevatorMotorConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
       
-      elevatorMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 100;
-      elevatorMotorConfig.MotionMagic.MotionMagicAcceleration = 300;
+      elevatorMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 200;
+      elevatorMotorConfig.MotionMagic.MotionMagicAcceleration = 275;
     }
 
-    public static final Distance IDLE = Centimeters.of(0);
+    public static final Distance IDLE = Centimeters.of(1);
     public static final Distance CORAL_L2_HEIGHT = Centimeters.of(0);
     public static final Distance CORAL_L3_HEIGHT = Centimeters.of(0);
-    public static final Distance INTAKE_HEIGHT = Centimeters.of(0);
+    public static final Distance INTAKE_HEIGHT = Centimeters.of(3);
     
-    public static final Distance kDistanceTolerance = Centimeters.of(0.5);
+    public static final Distance kDistanceTolerance = Centimeters.of(1.5);
   
     public static final Distance MAX_HEIGHT = Centimeters.of(53);
   }

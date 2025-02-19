@@ -50,14 +50,18 @@ public class StateManager extends SubsystemBase{
     public void periodic() {
         switch (state) {
             case IDLE:
-                intake.state = IntakeState.IDLE;
-                deployer.state = DeployerState.IDLE;
-                elevator.setPosition(ElevatorConstants.IDLE);
+            deployer.setState(DeployerState.IDLE);
+            elevator.setPosition(ElevatorConstants.IDLE);
+                if (elevator.isAtSetpoint()) {
+                    intake.state = IntakeState.IDLE;
+                }
                 break;
             case CORAL_INTAKE:
                 intake.state = IntakeState.FLOOR_INITIAL;
                 deployer.setState(DeployerState.IDLE);
-                elevator.setPosition(ElevatorConstants.IDLE);
+                if (intake.elevatorClearance()){
+                    elevator.setPosition(ElevatorConstants.IDLE);
+                }
                 break;
             case ALGAE_INTAKE:
                 intake.state = IntakeState.ALGAE;
@@ -65,29 +69,33 @@ public class StateManager extends SubsystemBase{
                 elevator.setPosition(ElevatorConstants.IDLE);
                 break;
             case FEED:
-                intake.state = IntakeState.FEED;
                 deployer.setState(DeployerState.CENTER);
                 elevator.setPosition(ElevatorConstants.INTAKE_HEIGHT);
+                if (elevator.isAtSetpoint()) {
+                    intake.state = IntakeState.FEED;
+                }
                 break;
             case L1:
-                intake.state = IntakeState.SHOOT;
                 deployer.setState(DeployerState.IDLE);
                 elevator.setPosition(ElevatorConstants.IDLE);
+                if (elevator.isAtSetpoint()) {
+                    intake.state = IntakeState.SHOOT;
+                }
                 break;
             case L2:
-                //intake.state = IntakeState.ELEVATOR;
-                //deployer.state = DeployerState.IDLE;
-                //if (intake.isAtDesiredAngle()){
+                deployer.setState(DeployerState.IDLE); 
+                intake.state = IntakeState.ELEVATOR;
+                if (intake.elevatorClearance()){
                 elevator.setPosition(Centimeters.of(SmartDashboard.getNumber("asansoryukseklik", 0)));
-                //}
-                /*if (elevator.isAtSetpoint()) {
-                    intake.state = IntakeState.IDLE;
-                    deployer.state = calculateDeployerSide();
-                }*/
+                deployer.setState(DeployerState.CENTER);
+                if (elevator.isAtSetpoint()) {
+                    deployer.setState(calculateDeployerSide());;
+                }
+            }
                 break;
             case L3:
                 intake.state = IntakeState.ELEVATOR;
-                deployer.state = DeployerState.IDLE;
+                deployer.setState(DeployerState.IDLE);
                 elevator.setPosition(ElevatorConstants.CORAL_L3_HEIGHT);
                 if (elevator.isAtSetpoint()) {
                     intake.state = IntakeState.IDLE;
