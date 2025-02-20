@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.path.PathConstraints;
 
@@ -114,5 +115,14 @@ public final class Constants {
 
     public static final double kRollerLeftMotorSpeed = 0;
     public static final double kRollerRightMotorSpeed = 0;
+  }
+
+  public static class ClimbConstants{
+    public static final int kClimbMotorId = 1;
+    public static final TalonFXConfiguration climbMotorConfig = new TalonFXConfiguration();
+    static {
+      climbMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+      climbMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    }
   }
 } 
