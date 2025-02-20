@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Ust-KL"
+            "pathName": "Copy of Asagi - CD"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "KL-K 2"
+            "pathName": "CD-D"
           }
         },
         {
@@ -31,13 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "K-G3"
+            "pathName": "D - Source"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "G3-L"
+            "pathName": "Source - C"
           }
         },
         {
@@ -49,13 +49,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L-G2"
+            "pathName": "C - Source"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Source - AB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae Removal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AB-B Alternative"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B-G2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "CD Start",
   "choreoAuto": false
 }

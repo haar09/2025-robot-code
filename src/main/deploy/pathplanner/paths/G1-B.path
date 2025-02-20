@@ -3,42 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7295774647887314,
-        "y": 3.018749999999999
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 3.337764890318964,
-        "y": 2.842555000393886
-      },
-      "isLocked": false,
-      "linkedName": "C Atis"
-    },
-    {
-      "anchor": {
         "x": 1.6528253424657535,
         "y": 2.1993792808219177
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.8592332434347645,
+        "y": 2.368207072624526
+      },
+      "isLocked": false,
+      "linkedName": "G13"
+    },
+    {
+      "anchor": {
+        "x": 3.245061872572839,
+        "y": 3.849868308916231
+      },
       "prevControl": {
-        "x": 2.146893658004773,
-        "y": 2.4144831900547348
+        "x": 2.904812677019536,
+        "y": 3.5568883015807824
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "G13"
+      "linkedName": "B Atis Alternative"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake",
-      "waypointRelativePos": 0.7966101694915247,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.2,
     "maxAcceleration": 9.0,
@@ -49,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,

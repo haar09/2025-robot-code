@@ -31,13 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "K-Source"
+            "pathName": "K-G3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source-L2"
+            "pathName": "G3-L"
           }
         },
         {
@@ -49,55 +49,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L-Source"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Source-AB"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Algae Removal"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "AB-A"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A-G3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "G3-B"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3"
+            "pathName": "L-G2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "üst olup çöpe giden babayiğitler",
   "choreoAuto": false
 }

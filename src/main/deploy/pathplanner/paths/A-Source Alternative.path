@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7295774647887314,
-        "y": 3.018749999999999
+        "x": 3.2439207969726294,
+        "y": 4.179190169827501
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.337764890318964,
-        "y": 2.842555000393886
+        "x": 3.4194571525206734,
+        "y": 4.001181777101453
       },
       "isLocked": false,
-      "linkedName": "C Atis"
+      "linkedName": "A alternative"
     },
     {
       "anchor": {
-        "x": 1.6528253424657535,
-        "y": 2.1993792808219177
+        "x": 1.272349158473996,
+        "y": 1.2869009262932547
       },
       "prevControl": {
-        "x": 2.146893658004773,
-        "y": 2.4144831900547348
+        "x": 1.077705736963741,
+        "y": 1.1300126269756152
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "G13"
+      "linkedName": "Source yakin"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.7966101694915247,
+      "waypointRelativePos": 0.5932203389830496,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -49,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": 55.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

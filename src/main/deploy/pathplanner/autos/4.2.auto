@@ -31,13 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D-G1"
+            "pathName": "D - Source"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "G1-C"
+            "pathName": "Source - C"
           }
         },
         {
@@ -49,49 +49,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "G1C-G2"
+            "pathName": "C - Source"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "G2-AB"
+            "pathName": "Alternative Source - A"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Algae Removal"
+            "name": "L2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "AB-B Alternative"
+            "pathName": "A-Source Alternative"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source-B Alternative"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "L3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "B-G3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "G3-C"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3"
+            "name": "L2"
           }
         }
       ]

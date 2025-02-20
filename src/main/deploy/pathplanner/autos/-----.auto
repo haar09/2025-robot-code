@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Ust-KL"
+            "pathName": "Mid H"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "KL-K 2"
+            "pathName": "HG-H"
           }
         },
         {
@@ -31,31 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "K-Source"
+            "pathName": "H-Source"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source-L2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L-Source"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Source-A"
+            "pathName": "Source-J"
           }
         },
         {
@@ -67,13 +49,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "A-G3"
+            "pathName": "J-G3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "G3-B"
+            "pathName": "G3-KL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae Removal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "KL-L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L-G22"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G2-A"
           }
         },
         {
@@ -86,6 +98,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "üst olup çöpe giden babayiğitler",
   "choreoAuto": false
 }

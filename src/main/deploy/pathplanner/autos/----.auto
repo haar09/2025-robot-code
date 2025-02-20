@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Asagi - CD"
+            "pathName": "Ust-KL"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CD-D"
+            "pathName": "KL-K 2"
           }
         },
         {
@@ -31,13 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D - Source"
+            "pathName": "K-Source"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source - C"
+            "pathName": "Source-L2"
           }
         },
         {
@@ -49,13 +49,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C - Source"
+            "pathName": "L-Source"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source - AB"
+            "pathName": "Source-AB"
           }
         },
         {
@@ -67,7 +67,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "AB-B"
+            "pathName": "AB-A"
           }
         },
         {
@@ -79,13 +79,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "B - Source"
+            "pathName": "A-G3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source - A"
+            "pathName": "G3-B"
           }
         },
         {
@@ -98,6 +98,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "üst olup çöpe giden babayiğitler",
   "choreoAuto": false
 }
