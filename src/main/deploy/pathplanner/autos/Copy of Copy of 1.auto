@@ -37,6 +37,24 @@
         {
           "type": "path",
           "data": {
+            "pathName": "AltAltSource-F"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "F-AltAltSource"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "AltaltSource-E"
           }
         },
@@ -55,37 +73,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "G1-CD"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Algae Removal"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CD-C"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C-G2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "G2-B"
+            "pathName": "G1-B"
           }
         },
         {
