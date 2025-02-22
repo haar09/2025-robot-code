@@ -53,18 +53,18 @@ public class StateManager extends SubsystemBase{
             deployer.setState(DeployerState.IDLE);
             elevator.setPosition(ElevatorConstants.IDLE);
                 if (elevator.isAtSetpoint()) {
-                    intake.state = IntakeState.IDLE;
+                    intake.setState(IntakeState.IDLE);
                 }
                 break;
             case CORAL_INTAKE:
-                intake.state = IntakeState.FLOOR_INITIAL;
+                intake.setStateifNotBusy(IntakeState.FLOOR_INITIAL);
                 deployer.setState(DeployerState.IDLE);
                 if (intake.elevatorClearance()){
                     elevator.setPosition(ElevatorConstants.IDLE);
                 }
                 break;
             case ALGAE_INTAKE:
-                intake.state = IntakeState.ALGAE;
+                intake.setState(IntakeState.ALGAE);
                 deployer.setState(DeployerState.IDLE);
                 elevator.setPosition(ElevatorConstants.IDLE);
                 break;
@@ -72,19 +72,17 @@ public class StateManager extends SubsystemBase{
                 deployer.setState(DeployerState.CENTER);
                 elevator.setPosition(ElevatorConstants.INTAKE_HEIGHT);
                 if (elevator.isAtSetpoint()) {
-                    intake.state = IntakeState.FEED;
+                    intake.setState(IntakeState.FEED);
                 }
                 break;
             case L1:
                 deployer.setState(DeployerState.IDLE);
                 elevator.setPosition(ElevatorConstants.IDLE);
-                if (elevator.isAtSetpoint()) {
-                    intake.state = IntakeState.SHOOT;
-                }
+                intake.setState(IntakeState.SHOOT);
                 break;
             case L2:
                 deployer.setState(DeployerState.IDLE); 
-                intake.state = IntakeState.ELEVATOR;
+                intake.setState(IntakeState.ELEVATOR);
                 if (intake.elevatorClearance()){
                 elevator.setPosition(Centimeters.of(SmartDashboard.getNumber("asansoryukseklik", 0)));
                 deployer.setState(DeployerState.CENTER);
@@ -94,11 +92,11 @@ public class StateManager extends SubsystemBase{
             }
                 break;
             case L3:
-                intake.state = IntakeState.ELEVATOR;
+                intake.setState(IntakeState.ELEVATOR);
                 deployer.setState(DeployerState.IDLE);
                 elevator.setPosition(ElevatorConstants.CORAL_L3_HEIGHT);
                 if (elevator.isAtSetpoint()) {
-                    intake.state = IntakeState.IDLE;
+                    intake.setState(IntakeState.IDLE);
                     deployer.state = calculateDeployerSide();
                 }
             break;

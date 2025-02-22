@@ -8,6 +8,8 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -44,7 +46,10 @@ public class RealIntakePivot implements IntakePivotIO {
 
         pivotMotor.optimizeBusUtilization();
         throughBoreEncoder.setInverted(true);
+        throughBoreEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
+        throughBoreEncoder.setAssumedFrequency(975.6);
         positionVoltage = new MotionMagicVoltage(IntakeConstants.idleAngle);
+        resetEncoders();
 
         new Thread (() -> {
             while (true) {
@@ -71,15 +76,22 @@ public class RealIntakePivot implements IntakePivotIO {
         return pivotMotor.getPosition().getValue()/*.div(IntakeConstants.kTotalRatio)*/;
     }
 
+    @Override
     public Angle getAbsolutePosition(){
         return Rotations.of(throughBoreEncoder.get()/IntakeConstants.kEncoderToPivot).plus(Degrees.of(IntakeConstants.kAbsoluteEncoderOffset));
     }
 
+    @Override
     public void resetEncoders(){
        pivotMotor.setPosition(getAbsolutePosition(), 1).toString();
+       //pivotMotor.setPosition(IntakeConstants.idleAngle.in(Rotations));
     }
 
-    
+    @Override
+    public void setNeutralMode(NeutralModeValue neutralModeValue){
+        pivotMotor.setNeutralMode(neutralModeValue);
+    }
+
     @Override
     public void stop(){
         pivotMotor.set(0);
@@ -87,7 +99,7 @@ public class RealIntakePivot implements IntakePivotIO {
 
     @Override
     public void updateInputs(IntakePivotIOInputs inputs){
-        inputs.motorConnected = BaseStatusSignal.refreshAll(pivotMotorVelocity, pivotMotorVoltage, pivotMotorTemp, pivotMotorSupplyCurrent).isOK();
+        inputs.motorConnected = BaseStatusSignal.refreshAll(pivotMotorPosition, pivotMotorVelocity, pivotMotorVoltage, pivotMotorTemp, pivotMotorSupplyCurrent).isOK();
         inputs.absoluteEncoderConnected = throughBoreEncoder.isConnected();
 
         inputs.positionRads = getAngle().in(Radians);

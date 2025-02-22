@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -16,17 +17,15 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.NetworkButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.commands.SwerveWheelCalibration;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.LEDSubsystem;
@@ -67,13 +66,16 @@ public class RobotContainer {
   private void configureBindings() {
     updateControlStyle();
 
+    new NetworkButton("SmartDashboard", "Reset Pigeon").onTrue(drivetrain.resetPigeon());
+ 
     joystick.y().onTrue(stateManager.setStateCommand(State.L2));
     joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.a().onTrue(stateManager.setStateCommand(State.FEED));
     joystick.a().onFalse(stateManager.setStateCommand(State.IDLE));
 
-    joystick.b().onTrue(runOnce(() ->drivetrain.resetPose(new Pose2d(14.318, 4, new Rotation2d(180)))));
+    joystick.b().onTrue(stateManager.setStateCommand(State.L1));
+    joystick.b().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.leftBumper().onTrue(runOnce(() -> controlMode = 1).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
     joystick.leftBumper().onFalse(runOnce(() -> controlMode = 0).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
@@ -188,6 +190,11 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    if (autoChooser.getSendableChooser().getSelected() != "None") {
+      if (SmartDashboard.getBoolean("Flip Horizontally", false)) {
+        return new PathPlannerAuto(autoChooser.getSendableChooser().getSelected(), true);
+      }
+    }
     return autoChooser.get();
   }
 }

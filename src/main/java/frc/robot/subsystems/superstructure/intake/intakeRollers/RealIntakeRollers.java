@@ -9,7 +9,7 @@ public class RealIntakeRollers implements IntakeRollersIO {
     private final NEO rollerMotor;
 
     public RealIntakeRollers(int motorId, boolean reversed) {
-        rollerMotor = new NEO(motorId, reversed, IdleMode.kCoast);
+        rollerMotor = new NEO(motorId, reversed, IdleMode.kBrake);
     }
 
     @Override

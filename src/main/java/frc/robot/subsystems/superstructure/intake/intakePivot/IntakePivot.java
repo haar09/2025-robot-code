@@ -5,7 +5,10 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Alert;
@@ -29,8 +32,6 @@ public class IntakePivot extends SubsystemBase{
     private final IntakePivotVisualizer positionVisualizer = new IntakePivotVisualizer(new Color8Bit(255, 0, 0));
     private final IntakePivotVisualizer setPointVisualizer = new IntakePivotVisualizer(new Color8Bit(0, 0, 255));
 
-    private Angle desiredAngle;
-
     public static IntakePivot create() {
         return new IntakePivot(Robot.isReal() ? new RealIntakePivot() : new NoIntakePivot());
     }
@@ -51,7 +52,8 @@ public class IntakePivot extends SubsystemBase{
             this
         )
         );
-        desiredAngle = IntakeConstants.idleAngle;
+        setPointVisualizer.setState(0);
+        lastDesiredAngle = IntakeConstants.idleAngle;
     }
 
     @Override
@@ -71,21 +73,29 @@ public class IntakePivot extends SubsystemBase{
         positionVisualizer.setState(getAngle().in(Radians));
         Logger.recordOutput("Intake/Pivot/Position", positionVisualizer.mech);
         Logger.recordOutput("Intake/Pivot/SetPoint", setPointVisualizer.mech);
-
-        
-        setPointVisualizer.setState(0);
-
         SmartDashboard.putNumber("Intake Pivot Angle", getAngle().in(Degrees));
+        Logger.recordOutput("Intake/Pivot/Last Desired Angle", lastDesiredAngle.in(Degrees));
     }
+
+    private Angle lastDesiredAngle;
 
     public void setDesiredAngle(Angle angle) {
         pivot.setDesiredAngle(angle);
         setPointVisualizer.setState(angle.in(Radians));
-        desiredAngle = angle;
+        lastDesiredAngle = angle.copy();
     }
 
+    @AutoLogOutput
     public boolean isAtDesiredAngle() {
-        return (getAngle().isNear(desiredAngle, IntakeConstants.kAngleTolerance));
+        return getAngle().isNear(lastDesiredAngle, IntakeConstants.kAngleTolerance);
+    }
+
+    public void setCoast() {
+        pivot.setNeutralMode(NeutralModeValue.Coast);
+    }
+
+    public void setBrake() {
+        pivot.setNeutralMode(NeutralModeValue.Brake);
     }
 
     public void stop() {
@@ -94,6 +104,15 @@ public class IntakePivot extends SubsystemBase{
 
     public Angle getAngle() {
         return pivot.getAngle();
+    }
+
+    public void resetEncoders(){
+        //Logger.recordOutput("absolutencoder", pivot.getAbsolutePosition().in(Degrees));
+        pivot.resetEncoders();
+    }
+
+    public double getVelocity() {
+        return inputs.velocityRotsPerSec;
     }
 
     private final SysIdRoutine sysIdRoutine;

@@ -20,11 +20,11 @@ public class DeployerBeamBreak extends SubsystemBase{
 
   @Override
   public void periodic() {
-      left_value = !left_beamBreak.get();
+      left_value = left_beamBreak.get();
       //left_value = SmartDashboard.getBoolean("left", false);
       Logger.recordOutput("Deployer/Beam Break/Left Beam", left_value);
 
-      right_value = !right_beamBreak.get();
+      right_value = right_beamBreak.get();
       //right_value = SmartDashboard.getBoolean("right", false);
       Logger.recordOutput("Deployer/Beam Break/Right Beam", right_value);
 
