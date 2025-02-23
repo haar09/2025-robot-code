@@ -1,7 +1,6 @@
 package frc.robot.subsystems.superstructure.intake.intakePivot;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -68,7 +67,12 @@ public class RealIntakePivot implements IntakePivotIO {
 
     @Override
     public void setDesiredAngle(Angle angle){
-        pivotMotor.setControl(positionVoltage.withPosition(angle));
+        pivotMotor.setControl(positionVoltage.withPosition(angle).withSlot(1));
+    }
+
+    @Override
+    public void setSlowAngle(Angle angle){
+        pivotMotor.setControl(positionVoltage.withPosition(angle).withSlot(0));
     }
 
     @Override
@@ -102,8 +106,8 @@ public class RealIntakePivot implements IntakePivotIO {
         inputs.motorConnected = BaseStatusSignal.refreshAll(pivotMotorPosition, pivotMotorVelocity, pivotMotorVoltage, pivotMotorTemp, pivotMotorSupplyCurrent).isOK();
         inputs.absoluteEncoderConnected = throughBoreEncoder.isConnected();
 
-        inputs.positionRads = getAngle().in(Radians);
-        inputs.absoluteEncoderPositionRots = throughBoreEncoder.get();
+        inputs.positionRots = getAngle().in(Rotations);
+        inputs.absoluteEncoderPositionRots = getAbsolutePosition().in(Rotations);
         inputs.velocityRotsPerSec = pivotMotorVelocity.getValueAsDouble();
         inputs.appliedVolts = pivotMotorVoltage.getValueAsDouble();
         inputs.supplyCurrentAmps = pivotMotorSupplyCurrent.getValueAsDouble();

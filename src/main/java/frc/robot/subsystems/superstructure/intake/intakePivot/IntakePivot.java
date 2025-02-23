@@ -85,6 +85,12 @@ public class IntakePivot extends SubsystemBase{
         lastDesiredAngle = angle.copy();
     }
 
+    public void setSlowAngle(Angle angle) {
+        pivot.setSlowAngle(angle);
+        setPointVisualizer.setState(angle.in(Radians));
+        lastDesiredAngle = angle.copy();
+    }
+
     @AutoLogOutput
     public boolean isAtDesiredAngle() {
         return getAngle().isNear(lastDesiredAngle, IntakeConstants.kAngleTolerance);
@@ -104,6 +110,10 @@ public class IntakePivot extends SubsystemBase{
 
     public Angle getAngle() {
         return pivot.getAngle();
+    }
+
+    public Angle getAbsoluteAngle(){
+        return pivot.getAbsolutePosition();
     }
 
     public void resetEncoders(){

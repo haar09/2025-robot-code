@@ -10,6 +10,7 @@ public class IntakeBeamBreak extends SubsystemBase{
   private final DigitalInput m_beamBreak, lower_beambreak;
   public boolean upper_value;
   public boolean lower_value = false;
+  //private Debouncer debouncer = new Debouncer(0.04);
 
   public IntakeBeamBreak() {
     m_beamBreak = new DigitalInput(2);

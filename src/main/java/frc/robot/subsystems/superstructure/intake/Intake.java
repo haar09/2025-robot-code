@@ -1,8 +1,9 @@
 package frc.robot.subsystems.superstructure.intake;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,7 +22,7 @@ public class Intake extends SubsystemBase{
         this.intakeBeamBreak = new IntakeBeamBreak();
         intakePivot.resetEncoders();
 
-        new Trigger(() -> intakePivot.getAngle().isNear(IntakeConstants.idleAngle, IntakeConstants.kAngleTolerance) && state == IntakeState.IDLE).toggleOnTrue(runOnce(() -> intakePivot.resetEncoders()));
+        new Trigger(() -> intakePivot.getAngle().in(Degrees) > 40 && intakePivot.getVelocity() < 0.3).toggleOnTrue(runOnce(() -> intakePivot.resetEncoders()));
     }
 
     public enum IntakeState {
@@ -31,22 +32,20 @@ public class Intake extends SubsystemBase{
         FEED,
         SHOOT,
         ALGAE,
-        ELEVATOR
+        ELEVATOR,
+        BEFORE_FEED
     }
 
     public IntakeState state = IntakeState.IDLE;
 
     private boolean hasSeen = false;
-    private double timer = Timer.getFPGATimestamp();
 
     @Override
     public void periodic() {
         intakePivot.periodic();
         intakeRollers.periodic();
-        Logger.recordOutput("Intake/Timer", Timer.getFPGATimestamp() - timer);
         switch (state) {
             case IDLE:
-                timer = Timer.getFPGATimestamp();
                 intakePivot.setBrake();
                 intakePivot.setDesiredAngle(IntakeConstants.idleAngle);
                 intakeRollers.stop();
@@ -59,7 +58,6 @@ public class Intake extends SubsystemBase{
                 if (intakeBeamBreak.lower_value || hasSeen) {
                     state = IntakeState.FLOOR_INTAKE;
                     hasSeen = true;
-                    timer = Timer.getFPGATimestamp();
                     break;
                 }
                 if (intakeBeamBreak.upper_value) {
@@ -67,19 +65,25 @@ public class Intake extends SubsystemBase{
                     break;
                 }
                 intakePivot.setDesiredAngle(IntakeConstants.initialAngle);
-                intakeRollers.setOutputPercentage(-0.4,-0.1);   
+                intakeRollers.setOutputPercentage(-0.4,-0.2);   
                 break;
             case FLOOR_INTAKE:
-                /*if (intakeBeamBreak.upper_value) {
+                if (intakeBeamBreak.upper_value) {
+                    state = IntakeState.BEFORE_FEED;
+                    hasSeen = false;
+                    break;
+                }
+                intakePivot.setDesiredAngle(IntakeConstants.intakeAngle);
+                intakeRollers.setOutputPercentage(-0.17, -0.13);
+                /*if (intakePivot.isAtDesiredAngle() && Timer.getFPGATimestamp() - timer > 0.3) {
                     state = IntakeState.IDLE;
                     break;
                 }*/
-                intakePivot.setDesiredAngle(IntakeConstants.intakeAngle);
-                intakeRollers.setOutputPercentage(-0.12,-0.12);
-                if (intakePivot.isAtDesiredAngle() && Timer.getFPGATimestamp() - timer > 0.3) {
-                    state = IntakeState.IDLE;
-                    break;
-                }
+                break;
+            case BEFORE_FEED:
+                intakeRollers.setOutputPercentage(0, 0);
+                intakePivot.setBrake();
+                intakePivot.setSlowAngle(IntakeConstants.idleAngle);
                 break;
             case FEED:
                 intakePivot.setBrake();
@@ -91,6 +95,7 @@ public class Intake extends SubsystemBase{
                 }
                 break;
             case ALGAE:
+                intakePivot.setCoast();
                 intakePivot.setDesiredAngle(IntakeConstants.algaeAngle);
                 intakeRollers.setOutputPercentage(0, 0.6); 
                 break;
@@ -104,6 +109,7 @@ public class Intake extends SubsystemBase{
                 }
                 break;
             case ELEVATOR:
+                intakePivot.setBrake();
                 intakePivot.setDesiredAngle(IntakeConstants.elevatorAngle);
                 intakeRollers.setOutputPercentage(0, 0);
         }
@@ -123,10 +129,11 @@ public class Intake extends SubsystemBase{
     }
 
     public void setStateifNotBusy(IntakeState state) {
-        if (intakeBeamBreak.lower_value) {
+        if (intakeBeamBreak.upper_value) {
             return;
         }
         if (this.state == IntakeState.IDLE) {
+            intakePivot.resetEncoders();
             this.state = state;
         }
     }

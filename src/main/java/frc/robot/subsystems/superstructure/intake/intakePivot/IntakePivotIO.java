@@ -8,6 +8,7 @@ import edu.wpi.first.units.measure.Voltage;
 
 public interface IntakePivotIO {
     public void setDesiredAngle(Angle angle);
+    public void setSlowAngle(Angle angle);
     public void stop();
     public Angle getAngle();
     public void setNeutralMode(NeutralModeValue neutralModeValue);
@@ -20,7 +21,7 @@ public interface IntakePivotIO {
     class IntakePivotIOInputs {
         public boolean motorConnected = true;
 
-        public double positionRads = 0.0;
+        public double positionRots = 0.0;
         public double absoluteEncoderPositionRots = 0.0;
         public double velocityRotsPerSec = 0.0;
         public double appliedVolts = 0.0;

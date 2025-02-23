@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.Degrees;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -74,45 +75,56 @@ public final class Constants {
     public static final int kPivotMotorId = 13;
     public static final int kAbsoluteEncoderId = 3;
 
-    public static final double kAbsoluteEncoderOffset = 12;
+    public static final double kAbsoluteEncoderOffset = 10;
     public static final TalonFXConfiguration pivotMotorConfig = new TalonFXConfiguration();
 
     static  {
       pivotMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
       pivotMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-      pivotMotorConfig.CurrentLimits.SupplyCurrentLimit = 70;
+      pivotMotorConfig.CurrentLimits.SupplyCurrentLimit = 35;
       pivotMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-      pivotMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
+      pivotMotorConfig.CurrentLimits.StatorCurrentLimit = 60;
       pivotMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
       pivotMotorConfig.Feedback.SensorToMechanismRatio = 66;
     }
 
     // set slot 0 gains
     private static final Slot0Configs pivotMotor_slot0Configs;
+    private static final Slot1Configs pivotMotor_slot1Configs;
 
     static {
       pivotMotor_slot0Configs = pivotMotorConfig.Slot0;
       pivotMotor_slot0Configs.kS = 0.099758; // Add 0.25 V output to overcome static friction
-      pivotMotor_slot0Configs.kV = 8; // A velocity target of 1 rps results in 0.12 V output
-      pivotMotor_slot0Configs.kA = 0.6769; // An acceleration of 1 rps/s requires 0.01 V output
+      pivotMotor_slot0Configs.kV = 1; // A velocity target of 1 rps results in 0.12 V output
+      pivotMotor_slot0Configs.kA = 0.02; // An acceleration of 1 rps/s requires 0.01 V output
       pivotMotor_slot0Configs.kG = 0.30035;
-      pivotMotor_slot0Configs.kP = 41; // An error of 1 rps results in 0.11 V output
+      pivotMotor_slot0Configs.kP = 25; // An error of 1 rps results in 0.11 V output
       pivotMotor_slot0Configs.kI = 0; // no output for integrated error
-      pivotMotor_slot0Configs.kD = 8.1903; // no output for error derivative 
+      pivotMotor_slot0Configs.kD = 2; // no output for error derivative 
       pivotMotor_slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
 
-      pivotMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 5;
-      pivotMotorConfig.MotionMagic.MotionMagicAcceleration = 7;
+      pivotMotor_slot1Configs = pivotMotorConfig.Slot1;
+      pivotMotor_slot1Configs.kS = 0.099758; // Add 0.25 V output to overcome static friction
+      pivotMotor_slot1Configs.kV = 8; // A velocity target of 1 rps results in 0.12 V output
+      pivotMotor_slot1Configs.kA = 0.6769; // An acceleration of 1 rps/s requires 0.01 V output
+      pivotMotor_slot1Configs.kG = 0.30035;
+      pivotMotor_slot1Configs.kP = 41; // An error of 1 rps results in 0.11 V output
+      pivotMotor_slot1Configs.kI = 0; // no output for integrated error
+      pivotMotor_slot1Configs.kD = 8.1903; // no output for error derivative 
+      pivotMotor_slot1Configs.GravityType = GravityTypeValue.Arm_Cosine;
+
+      pivotMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 3;
+      pivotMotorConfig.MotionMagic.MotionMagicAcceleration = 5;
     }
 
     public static final Angle kAngleTolerance = Degrees.of(4);
 
     public static final Angle idleAngle = Degrees.of(113);
-    public static final Angle initialAngle = Degrees.of(17);
-    public static final Angle intakeAngle = Degrees.of(5);
+    public static final Angle initialAngle = Degrees.of(16.2);
+    public static final Angle intakeAngle = Degrees.of(-0.45);
     public static final Angle feedAngle = Degrees.of(113);
     public static final Angle shootAngle = Degrees.of(100);
-    public static final Angle algaeAngle = Degrees.of(70);
+    public static final Angle algaeAngle = Degrees.of(79);
     public static final Angle elevatorAngle = Degrees.of(86);
 
     /* PIVOT END ROLLER START */
@@ -166,7 +178,8 @@ public final class Constants {
       elevatorMotorConfig.MotionMagic.MotionMagicAcceleration = 275;
     }
 
-    public static final Distance IDLE = Centimeters.of(1);
+    //public static final Distance IDLE = Centimeters.of(1);
+    public static final Distance IDLE = Centimeters.of(0);
     public static final Distance CORAL_L2_HEIGHT = Centimeters.of(0);
     public static final Distance CORAL_L3_HEIGHT = Centimeters.of(0);
     public static final Distance INTAKE_HEIGHT = Centimeters.of(3);
