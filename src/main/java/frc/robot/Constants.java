@@ -7,8 +7,6 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.Degrees;
 
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -75,7 +73,7 @@ public final class Constants {
     public static final int kPivotMotorId = 13;
     public static final int kAbsoluteEncoderId = 3;
 
-    public static final double kAbsoluteEncoderOffset = 10;
+    public static final double kAbsoluteEncoderOffset = 12;
     public static final TalonFXConfiguration pivotMotorConfig = new TalonFXConfiguration();
 
     static  {
@@ -88,12 +86,8 @@ public final class Constants {
       pivotMotorConfig.Feedback.SensorToMechanismRatio = 66;
     }
 
-    // set slot 0 gains
-    private static final Slot0Configs pivotMotor_slot0Configs;
-    private static final Slot1Configs pivotMotor_slot1Configs;
-
-    static {
-      pivotMotor_slot0Configs = pivotMotorConfig.Slot0;
+    public static class MotionProfileConstants {
+      /*pivotMotor_slot0Configs = pivotMotorConfig.Slot0;
       pivotMotor_slot0Configs.kS = 0.099758; // Add 0.25 V output to overcome static friction
       pivotMotor_slot0Configs.kV = 1; // A velocity target of 1 rps results in 0.12 V output
       pivotMotor_slot0Configs.kA = 0.02; // An acceleration of 1 rps/s requires 0.01 V output
@@ -101,27 +95,22 @@ public final class Constants {
       pivotMotor_slot0Configs.kP = 25; // An error of 1 rps results in 0.11 V output
       pivotMotor_slot0Configs.kI = 0; // no output for integrated error
       pivotMotor_slot0Configs.kD = 2; // no output for error derivative 
-      pivotMotor_slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
+      pivotMotor_slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;*/
 
-      pivotMotor_slot1Configs = pivotMotorConfig.Slot1;
-      pivotMotor_slot1Configs.kS = 0.099758; // Add 0.25 V output to overcome static friction
-      pivotMotor_slot1Configs.kV = 8; // A velocity target of 1 rps results in 0.12 V output
-      pivotMotor_slot1Configs.kA = 0.6769; // An acceleration of 1 rps/s requires 0.01 V output
-      pivotMotor_slot1Configs.kG = 0.30035;
-      pivotMotor_slot1Configs.kP = 41; // An error of 1 rps results in 0.11 V output
-      pivotMotor_slot1Configs.kI = 0; // no output for integrated error
-      pivotMotor_slot1Configs.kD = 8.1903; // no output for error derivative 
-      pivotMotor_slot1Configs.GravityType = GravityTypeValue.Arm_Cosine;
-
-      pivotMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 3;
-      pivotMotorConfig.MotionMagic.MotionMagicAcceleration = 5;
+      public static final double kS = 0; // Add 0.25 V output to overcome static friction
+      public static final double kV = 0.0038; // A velocity target of 1 rps results in 0.12 V output
+      public static final double kA = 0.0002; // An acceleration of 1 rps/s requires 0.01 V output
+      public static final double kG = 0.30035;
+      public static final double kP = 0.16; // An error of 1 rps results in 0.11 V output
+      public static final double kI = 0; // no output for integrated error
+      public static final double kD = 0.004; // no output for error derivative 
     }
 
-    public static final Angle kAngleTolerance = Degrees.of(4);
+    public static final Angle kAngleTolerance = Degrees.of(3);
 
     public static final Angle idleAngle = Degrees.of(113);
-    public static final Angle initialAngle = Degrees.of(16.2);
-    public static final Angle intakeAngle = Degrees.of(-0.45);
+    public static final Angle initialAngle = Degrees.of(15.8);
+    public static final Angle intakeAngle = Degrees.of(-1.5);
     public static final Angle feedAngle = Degrees.of(113);
     public static final Angle shootAngle = Degrees.of(100);
     public static final Angle algaeAngle = Degrees.of(79);

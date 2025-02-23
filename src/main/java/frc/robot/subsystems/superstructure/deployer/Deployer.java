@@ -44,10 +44,10 @@ public class Deployer extends  SubsystemBase {
                     break;
                 }
                 if (deployerBeamBreak.left_value && !deployerBeamBreak.right_value) {
-                    deployerRollers.setOutputPercentage(0.1);
+                    deployerRollers.setOutputPercentage(0.05);
                 }
                 if (!deployerBeamBreak.left_value && deployerBeamBreak.right_value) {
-                    deployerRollers.setOutputPercentage(-0.1);
+                    deployerRollers.setOutputPercentage(-0.05);
                 }
                 break;
             case SHOOT_RIGHT:

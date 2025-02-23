@@ -41,7 +41,7 @@ import frc.robot.subsystems.superstructure.intake.Intake;
 
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12VoltsMps desired top speed
-  private double MaxAngularRate = 1 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
   private double SlowSpeed = 0.1;
   private double SlowAngularRate = 0.25 * Math.PI;
   private double AngularRate = MaxAngularRate;

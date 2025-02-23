@@ -23,6 +23,7 @@ public interface IntakePivotIO {
 
         public double positionRots = 0.0;
         public double absoluteEncoderPositionRots = 0.0;
+        public double quadratureEncoderPositionRots = 0.0;
         public double velocityRotsPerSec = 0.0;
         public double appliedVolts = 0.0;
         public double supplyCurrentAmps = 0.0;

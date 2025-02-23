@@ -2,7 +2,6 @@ package frc.robot.subsystems.superstructure.intake.intakePivot;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -21,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.util.ModifiedSignalLogger;
+import frc.robot.util.SysId;
 
 public class IntakePivot extends SubsystemBase{
     private final IntakePivotIO pivot;
@@ -39,19 +38,11 @@ public class IntakePivot extends SubsystemBase{
     public IntakePivot(IntakePivotIO pivot) {
         this.pivot = pivot;
         this.disconnectedAlert = new Alert("IntakePivot is disconnected.", AlertType.kWarning);
-        sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(null,        // Use default ramp rate (1 V/s)
-        Volts.of(1.7), // Reduce dynamic step voltage to 4 V to prevent brownout
-        Seconds.of(2),        // Use default timeout (10 s)
-        // Log state with SignalLogger class
-        ModifiedSignalLogger.logState()
-        ),
-        new SysIdRoutine.Mechanism(
-            volts-> pivot.setSysIdVoltage(volts),
-            null,
-            this
-        )
-        );
+
+        sysIdRoutine = SysId.getRoutine(1, 1.4, 2.5, "Intake",
+        volts -> pivot.setSysIdVoltage(Volts.of(volts)), ()-> pivot.getAngle().in(Degrees), 
+        () -> inputs.velocityRotsPerSec*360, ()-> inputs.appliedVolts, this);
+
         setPointVisualizer.setState(0);
         lastDesiredAngle = IntakeConstants.idleAngle;
     }
@@ -114,11 +105,6 @@ public class IntakePivot extends SubsystemBase{
 
     public Angle getAbsoluteAngle(){
         return pivot.getAbsolutePosition();
-    }
-
-    public void resetEncoders(){
-        //Logger.recordOutput("absolutencoder", pivot.getAbsolutePosition().in(Degrees));
-        pivot.resetEncoders();
     }
 
     public double getVelocity() {

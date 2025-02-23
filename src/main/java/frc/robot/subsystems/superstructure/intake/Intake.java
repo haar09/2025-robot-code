@@ -1,12 +1,9 @@
 package frc.robot.subsystems.superstructure.intake;
 
-import static edu.wpi.first.units.Units.Degrees;
-
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.superstructure.intake.intakePivot.IntakePivot;
 import frc.robot.subsystems.superstructure.intake.intakeRollers.IntakeRollers;
@@ -20,9 +17,6 @@ public class Intake extends SubsystemBase{
         this.intakePivot = IntakePivot.create();
         this.intakeRollers = IntakeRollers.create();
         this.intakeBeamBreak = new IntakeBeamBreak();
-        intakePivot.resetEncoders();
-
-        new Trigger(() -> intakePivot.getAngle().in(Degrees) > 40 && intakePivot.getVelocity() < 0.3).toggleOnTrue(runOnce(() -> intakePivot.resetEncoders()));
     }
 
     public enum IntakeState {
@@ -39,6 +33,7 @@ public class Intake extends SubsystemBase{
     public IntakeState state = IntakeState.IDLE;
 
     private boolean hasSeen = false;
+    //private Debouncer debouncer = new Debouncer(0.05);
 
     @Override
     public void periodic() {
@@ -65,16 +60,16 @@ public class Intake extends SubsystemBase{
                     break;
                 }
                 intakePivot.setDesiredAngle(IntakeConstants.initialAngle);
-                intakeRollers.setOutputPercentage(-0.4,-0.2);   
+                intakeRollers.setOutputPercentage(-0.3,-0.2);   
                 break;
             case FLOOR_INTAKE:
-                if (intakeBeamBreak.upper_value) {
+                if (intakeBeamBreak.upper_value/* && intakePivot.getAngle().in(Degrees) < 1.5*/) {
                     state = IntakeState.BEFORE_FEED;
                     hasSeen = false;
                     break;
                 }
                 intakePivot.setDesiredAngle(IntakeConstants.intakeAngle);
-                intakeRollers.setOutputPercentage(-0.17, -0.13);
+                intakeRollers.setOutputPercentage(-0.086, -0.086);
                 /*if (intakePivot.isAtDesiredAngle() && Timer.getFPGATimestamp() - timer > 0.3) {
                     state = IntakeState.IDLE;
                     break;
@@ -133,7 +128,6 @@ public class Intake extends SubsystemBase{
             return;
         }
         if (this.state == IntakeState.IDLE) {
-            intakePivot.resetEncoders();
             this.state = state;
         }
     }
