@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -16,17 +17,20 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.NetworkButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.commands.SwerveWheelCalibration;
+import frc.robot.FieldConstants.ReefLevel;
+import frc.robot.commands.AutoBranchandShootL1;
+import frc.robot.commands.AutoBranchandShootL23;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.LEDSubsystem;
@@ -39,10 +43,11 @@ import frc.robot.subsystems.superstructure.StateManager.State;
 import frc.robot.subsystems.superstructure.deployer.Deployer;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.intake.Intake;
+import frc.robot.util.NetworkTablesAgent;
 
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12VoltsMps desired top speed
-  private double MaxAngularRate = 1 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
   private double SlowSpeed = 0.1;
   private double SlowAngularRate = 0.25 * Math.PI;
   private double AngularRate = MaxAngularRate;
@@ -67,13 +72,16 @@ public class RobotContainer {
   private void configureBindings() {
     updateControlStyle();
 
-    joystick.y().onTrue(stateManager.setStateCommand(State.L2));
+    new NetworkButton("SmartDashboard", "Reset Pigeon").onTrue(drivetrain.resetPigeon());
+ 
+    joystick.y().onTrue(stateManager.setStateCommand(State.TEST));
     joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.a().onTrue(stateManager.setStateCommand(State.FEED));
     joystick.a().onFalse(stateManager.setStateCommand(State.IDLE));
 
-    joystick.b().onTrue(runOnce(() ->drivetrain.resetPose(new Pose2d(14.318, 4, new Rotation2d(180)))));
+    joystick.b().onTrue(stateManager.setStateCommand(State.L1));
+    joystick.b().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.leftBumper().onTrue(runOnce(() -> controlMode = 1).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
     joystick.leftBumper().onFalse(runOnce(() -> controlMode = 0).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
@@ -135,6 +143,30 @@ public class RobotContainer {
       }
     });
   
+   new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N") && networkTablesAgent.triggerValue.get() == 1)
+   .whileTrue(new AutoBranchandShootL1(networkTablesAgent, drivetrain));
+
+   new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N") && networkTablesAgent.triggerValue.get() != 1)
+   .whileTrue(new AutoBranchandShootL23(networkTablesAgent, drivetrain));
+
+    new NetworkButton("Arduino", "Override")
+      .onTrue(new InstantCommand(() -> {
+          double trigger = networkTablesAgent.triggerValue.get();
+          switch ((int) trigger) {
+              case 1:
+                  stateManager.setStateCommand(StateManager.State.L1).schedule();
+                  break;
+              case 2:
+                  stateManager.setStateCommand(StateManager.State.L2_RIGHT).schedule();
+                  break;
+              case 3:
+                  stateManager.setStateCommand(StateManager.State.L3_RIGHT).schedule();
+                  break;
+              default:
+              break;
+          }
+      }));
+    
     }
 
   private LoggedDashboardChooser<Command> autoChooser;
@@ -142,6 +174,7 @@ public class RobotContainer {
   private Elevator elevator;
   private Deployer deployer;
   private StateManager stateManager;
+  private NetworkTablesAgent networkTablesAgent;
 
   public RobotContainer() {
     new LEDSubsystem();
@@ -149,7 +182,8 @@ public class RobotContainer {
     intake = new Intake();
     elevator = Elevator.create();
     deployer = new Deployer();
-    stateManager = new StateManager(deployer, intake, elevator, drivetrain);
+    stateManager = new StateManager(deployer, intake, elevator);
+    networkTablesAgent = new NetworkTablesAgent();
 
     if (Robot.isReal()) {
       new AprilTagVision(drivetrain::addVisionMeasurement,
@@ -164,6 +198,9 @@ public class RobotContainer {
     configureBindings();
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    for (int i = 0; i < FieldConstants.Reef.scoringPositions2d.size(); i++) {
+      Logger.recordOutput("scoring" + i, FieldConstants.Reef.scoringPositions2d.get(i).get(ReefLevel.L23));
+  }
   }
 
   private void updateControlStyle() {
@@ -188,6 +225,11 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    if (autoChooser.getSendableChooser().getSelected() != "None") {
+      if (SmartDashboard.getBoolean("Flip Horizontally", false)) {
+        return new PathPlannerAuto(autoChooser.getSendableChooser().getSelected(), true);
+      }
+    }
     return autoChooser.get();
   }
 }

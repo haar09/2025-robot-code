@@ -26,10 +26,13 @@ public class Intake extends SubsystemBase{
         FEED,
         SHOOT,
         ALGAE,
-        ELEVATOR
+        ELEVATOR,
+        BEFORE_FEED
     }
 
     public IntakeState state = IntakeState.IDLE;
+
+    private boolean hasSeen = false;
 
     @Override
     public void periodic() {
@@ -37,26 +40,43 @@ public class Intake extends SubsystemBase{
         intakeRollers.periodic();
         switch (state) {
             case IDLE:
+                intakePivot.setBrake();
                 intakePivot.setDesiredAngle(IntakeConstants.idleAngle);
                 intakeRollers.stop();
+                if (intakePivot.isAtDesiredAngle()) {
+                    hasSeen = false;
+                }
                 break;
             case FLOOR_INITIAL:
-                if (intakeBeamBreak.lower_value || intakeBeamBreak.upper_value) {
+                intakePivot.setCoast();
+                if (intakeBeamBreak.lower_value || hasSeen) {
                     state = IntakeState.FLOOR_INTAKE;
+                    hasSeen = true;
                     break;
                 }
-                intakePivot.setDesiredAngle(IntakeConstants.initialAngle);
-                intakeRollers.setOutputPercentage(-0.4,-0.4);   
-                break;
-            case FLOOR_INTAKE:
                 if (intakeBeamBreak.upper_value) {
                     state = IntakeState.IDLE;
                     break;
                 }
+                intakePivot.setDesiredAngle(IntakeConstants.initialAngle);
+                intakeRollers.setOutputPercentage(-0.4,-0.2);   
+                break;
+            case FLOOR_INTAKE:
+                if (intakeBeamBreak.upper_value) {
+                    state = IntakeState.BEFORE_FEED;
+                    hasSeen = false;
+                    break;
+                }
                 intakePivot.setDesiredAngle(IntakeConstants.intakeAngle);
-                intakeRollers.setOutputPercentage(-0.4, -0.4);
+                intakeRollers.setOutputPercentage(-0.1, -0.09);
+                break;
+            case BEFORE_FEED:
+                intakeRollers.setOutputPercentage(0, 0);
+                intakePivot.setBrake();
+                intakePivot.setSlowAngle(IntakeConstants.idleAngle);
                 break;
             case FEED:
+                intakePivot.setBrake();
                 intakePivot.setDesiredAngle(IntakeConstants.feedAngle); 
                 if (intakePivot.isAtDesiredAngle()) {
                     intakeRollers.setOutputPercentage(-0.3, 0);
@@ -65,10 +85,12 @@ public class Intake extends SubsystemBase{
                 }
                 break;
             case ALGAE:
+                intakePivot.setCoast();
                 intakePivot.setDesiredAngle(IntakeConstants.algaeAngle);
                 intakeRollers.setOutputPercentage(0, 0.6); 
                 break;
             case SHOOT:
+                intakePivot.setBrake();
                 intakePivot.setDesiredAngle(IntakeConstants.shootAngle);
                 if  (intakePivot.isAtDesiredAngle()) {
                     intakeRollers.setOutputPercentage(0.9, 0.9);
@@ -77,6 +99,7 @@ public class Intake extends SubsystemBase{
                 }
                 break;
             case ELEVATOR:
+                intakePivot.setBrake();
                 intakePivot.setDesiredAngle(IntakeConstants.elevatorAngle);
                 intakeRollers.setOutputPercentage(0, 0);
         }
@@ -91,7 +114,20 @@ public class Intake extends SubsystemBase{
         return intakePivot.getAngle().lte(IntakeConstants.elevatorAngle);
     }
 
-    public Command setState(IntakeState state) {
+    public Command setStatecCommand(IntakeState state) {
         return runOnce(() -> this.state = state).withName("Intake "+state.toString());
+    }
+
+    public void setStateifNotBusy(IntakeState state) {
+        if (intakeBeamBreak.upper_value) {
+            return;
+        }
+        if (this.state == IntakeState.IDLE) {
+            this.state = state;
+        }
+    }
+
+    public void setState(IntakeState state) {
+        this.state = state;
     }
 }

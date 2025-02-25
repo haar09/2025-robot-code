@@ -96,6 +96,8 @@ public class Robot extends LoggedRobot {
                 }
             });
 
+    SmartDashboard.putBoolean("Flip Horizontally", false);
+
     m_robotContainer = new RobotContainer();
   }
 

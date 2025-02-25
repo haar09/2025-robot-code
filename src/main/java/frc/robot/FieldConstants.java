@@ -68,9 +68,9 @@ public class FieldConstants {
 
     public static final Pose2d[] centerFaces =
         new Pose2d[6]; // Starting facing the driver station in clockwise order
-    public static final List<Map<ReefLevel, Pose3d>> branchPositions =
-        new ArrayList<>(); // Starting at the right branch facing the driver station in clockwise
-    public static final List<Map<ReefLevel, Pose2d>> branchPositions2d = new ArrayList<>();
+    public static final List<Map<ReefLevel, Pose3d>> scoringPositions =
+        new ArrayList<>(); // Starting at the right scoring facing the driver station in clockwise
+    public static final List<Map<ReefLevel, Pose2d>> scoringPositions2d = new ArrayList<>();
 
     static {
       // Initialize faces
@@ -82,7 +82,7 @@ public class FieldConstants {
       centerFaces[4] = aprilTagLayout.getTagPose(22).get().toPose2d();
       centerFaces[5] = aprilTagLayout.getTagPose(17).get().toPose2d();
 
-      // Initialize branch positions
+      // Initialize scoring positions 11.5cm
       for (int face = 0; face < 6; face++) {
         Map<ReefLevel, Pose3d> fillRight = new HashMap<>();
         Map<ReefLevel, Pose3d> fillLeft = new HashMap<>();
@@ -90,47 +90,47 @@ public class FieldConstants {
         Map<ReefLevel, Pose2d> fillLeft2d = new HashMap<>();
         for (var level : ReefLevel.values()) {
           Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
-          double adjustX = Units.inchesToMeters(30.738);
+          double adjustX = level.xModifier;
           double adjustY = Units.inchesToMeters(6.469);
 
-          var rightBranchPose =
+          var rightScoringPose =
               new Pose3d(
                   new Translation3d(
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, adjustY+level.yModifier, new Rotation2d()))
                           .getX(),
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, adjustY+level.yModifier, new Rotation2d()))
                           .getY(),
-                      level.height),
+                      0),
                   new Rotation3d(
                       0,
-                      Units.degreesToRadians(level.pitch),
-                      poseDirection.getRotation().getRadians()));
-          var leftBranchPose =
+                      0,
+                      poseDirection.getRotation().getRadians()+Units.degreesToRadians(level.angleModifier)));
+          var leftScoringPose =
               new Pose3d(
                   new Translation3d(
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, -adjustY+level.yModifier, new Rotation2d()))
                           .getX(),
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, -adjustY+level.yModifier, new Rotation2d()))
                           .getY(),
-                      level.height),
+                      0),
                   new Rotation3d(
                       0,
-                      Units.degreesToRadians(level.pitch),
-                      poseDirection.getRotation().getRadians()));
+                      0,
+                      poseDirection.getRotation().getRadians()+Units.degreesToRadians(level.angleModifier)));
 
-          fillRight.put(level, rightBranchPose);
-          fillLeft.put(level, leftBranchPose);
-          fillRight2d.put(level, rightBranchPose.toPose2d());
-          fillLeft2d.put(level, leftBranchPose.toPose2d());
+          fillRight.put(level, rightScoringPose);
+          fillLeft.put(level, leftScoringPose);
+          fillRight2d.put(level, rightScoringPose.toPose2d());
+          fillLeft2d.put(level, leftScoringPose.toPose2d());
         }
-        branchPositions.add(fillRight);
-        branchPositions.add(fillLeft);
-        branchPositions2d.add(fillRight2d);
-        branchPositions2d.add(fillLeft2d);
+        scoringPositions.add(fillRight);
+        scoringPositions.add(fillLeft);
+        scoringPositions2d.add(fillRight2d);
+        scoringPositions2d.add(fillLeft2d);
       }
     }
   }
@@ -147,31 +147,31 @@ public class FieldConstants {
   }
 
   public enum ReefLevel {
-    L1(Units.inchesToMeters(25.0), 0),
-    L2(Units.inchesToMeters(31.875 - Math.cos(Math.toRadians(35.0)) * 0.625), -35),
-    L3(Units.inchesToMeters(47.625 - Math.cos(Math.toRadians(35.0)) * 0.625), -35),
-    L4(Units.inchesToMeters(72), -90);
+    L1(-0.7, 0, 0),
+    L23(-1, -0.1, 90);
 
-    ReefLevel(double height, double pitch) {
-      this.height = height;
-      this.pitch = pitch; // Degrees
+    ReefLevel(double xModifier, double yModifier, double angleModifier) {
+      this.xModifier = xModifier;
+      this.yModifier = yModifier; // Degrees
+      this.angleModifier = angleModifier;
     }
 
     public static ReefLevel fromLevel(int level) {
       return Arrays.stream(values())
           .filter(height -> height.ordinal() == level)
           .findFirst()
-          .orElse(L4);
+          .orElse(L23);
     }
 
-    public final double height;
-    public final double pitch;
+    public final double xModifier;
+    public final double yModifier;
+    public final double angleModifier;
   }
 
   public static final double aprilTagWidth = Units.inchesToMeters(6.50);
   public static final int aprilTagCount = 22;
 
-  public record CoralObjective(int branchId, ReefLevel reefLevel) {}
+  public record CoralObjective(int scoringId, ReefLevel reefLevel) {}
 
   public record AlgaeObjective(int id) {}
 }

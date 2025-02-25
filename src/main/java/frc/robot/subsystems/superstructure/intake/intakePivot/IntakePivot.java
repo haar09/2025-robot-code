@@ -2,10 +2,12 @@ package frc.robot.subsystems.superstructure.intake.intakePivot;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Alert;
@@ -18,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.util.ModifiedSignalLogger;
+import frc.robot.util.SysId;
 
 public class IntakePivot extends SubsystemBase{
     private final IntakePivotIO pivot;
@@ -29,8 +31,6 @@ public class IntakePivot extends SubsystemBase{
     private final IntakePivotVisualizer positionVisualizer = new IntakePivotVisualizer(new Color8Bit(255, 0, 0));
     private final IntakePivotVisualizer setPointVisualizer = new IntakePivotVisualizer(new Color8Bit(0, 0, 255));
 
-    private Angle desiredAngle;
-
     public static IntakePivot create() {
         return new IntakePivot(Robot.isReal() ? new RealIntakePivot() : new NoIntakePivot());
     }
@@ -38,20 +38,13 @@ public class IntakePivot extends SubsystemBase{
     public IntakePivot(IntakePivotIO pivot) {
         this.pivot = pivot;
         this.disconnectedAlert = new Alert("IntakePivot is disconnected.", AlertType.kWarning);
-        sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(null,        // Use default ramp rate (1 V/s)
-        Volts.of(1.7), // Reduce dynamic step voltage to 4 V to prevent brownout
-        Seconds.of(2),        // Use default timeout (10 s)
-        // Log state with SignalLogger class
-        ModifiedSignalLogger.logState()
-        ),
-        new SysIdRoutine.Mechanism(
-            volts-> pivot.setSysIdVoltage(volts),
-            null,
-            this
-        )
-        );
-        desiredAngle = IntakeConstants.idleAngle;
+
+        sysIdRoutine = SysId.getRoutine(1, 1.4, 2.5, "Intake",
+        volts -> pivot.setSysIdVoltage(Volts.of(volts)), ()-> pivot.getAngle().in(Degrees), 
+        () -> inputs.velocityRotsPerSec*360, ()-> inputs.appliedVolts, this);
+
+        setPointVisualizer.setState(0);
+        lastDesiredAngle = IntakeConstants.idleAngle;
     }
 
     @Override
@@ -71,21 +64,35 @@ public class IntakePivot extends SubsystemBase{
         positionVisualizer.setState(getAngle().in(Radians));
         Logger.recordOutput("Intake/Pivot/Position", positionVisualizer.mech);
         Logger.recordOutput("Intake/Pivot/SetPoint", setPointVisualizer.mech);
-
-        
-        setPointVisualizer.setState(0);
-
         SmartDashboard.putNumber("Intake Pivot Angle", getAngle().in(Degrees));
+        Logger.recordOutput("Intake/Pivot/Last Desired Angle", lastDesiredAngle.in(Degrees));
     }
+
+    private Angle lastDesiredAngle;
 
     public void setDesiredAngle(Angle angle) {
         pivot.setDesiredAngle(angle);
         setPointVisualizer.setState(angle.in(Radians));
-        desiredAngle = angle;
+        lastDesiredAngle = angle.copy();
     }
 
+    public void setSlowAngle(Angle angle) {
+        pivot.setSlowAngle(angle);
+        setPointVisualizer.setState(angle.in(Radians));
+        lastDesiredAngle = angle.copy();
+    }
+
+    @AutoLogOutput
     public boolean isAtDesiredAngle() {
-        return (getAngle().isNear(desiredAngle, IntakeConstants.kAngleTolerance));
+        return getAngle().isNear(lastDesiredAngle, IntakeConstants.kAngleTolerance);
+    }
+
+    public void setCoast() {
+        pivot.setNeutralMode(NeutralModeValue.Coast);
+    }
+
+    public void setBrake() {
+        pivot.setNeutralMode(NeutralModeValue.Brake);
     }
 
     public void stop() {
@@ -94,6 +101,14 @@ public class IntakePivot extends SubsystemBase{
 
     public Angle getAngle() {
         return pivot.getAngle();
+    }
+
+    public Angle getAbsoluteAngle(){
+        return pivot.getAbsolutePosition();
+    }
+
+    public double getVelocity() {
+        return inputs.velocityRotsPerSec;
     }
 
     private final SysIdRoutine sysIdRoutine;

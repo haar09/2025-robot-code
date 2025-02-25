@@ -2,37 +2,25 @@ package frc.robot.subsystems.superstructure;
 
 import static edu.wpi.first.units.Units.Centimeters;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.FieldConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.superstructure.deployer.Deployer;
 import frc.robot.subsystems.superstructure.deployer.Deployer.DeployerState;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.intake.Intake;
 import frc.robot.subsystems.superstructure.intake.Intake.IntakeState;
-import frc.robot.util.AllianceFlipUtil;
 
 public class StateManager extends SubsystemBase{
     private final Deployer deployer;
     private final Intake intake;
     private final Elevator elevator;
-    private final CommandSwerveDrivetrain drivetrain;
 
-    public StateManager(Deployer deployer, Intake intake, Elevator elevator, CommandSwerveDrivetrain drivetrain){
+    public StateManager(Deployer deployer, Intake intake, Elevator elevator){
         this.deployer = deployer;
         this.intake = intake;
         this.elevator = elevator;
-        this.drivetrain = drivetrain;
-        SmartDashboard.putData("Field2", field2d);
     }
 
     public enum State {
@@ -41,8 +29,11 @@ public class StateManager extends SubsystemBase{
         ALGAE_INTAKE,
         FEED,
         L1,
-        L2,
-        L3
+        L2_RIGHT,
+        L2_LEFT,
+        L3_RIGHT,
+        L3_LEFT,
+        TEST
     }
     public State state = State.IDLE;
 
@@ -53,18 +44,18 @@ public class StateManager extends SubsystemBase{
             deployer.setState(DeployerState.IDLE);
             elevator.setPosition(ElevatorConstants.IDLE);
                 if (elevator.isAtSetpoint()) {
-                    intake.state = IntakeState.IDLE;
+                    intake.setState(IntakeState.IDLE);
                 }
                 break;
             case CORAL_INTAKE:
-                intake.state = IntakeState.FLOOR_INITIAL;
+                intake.setStateifNotBusy(IntakeState.FLOOR_INITIAL);
                 deployer.setState(DeployerState.IDLE);
                 if (intake.elevatorClearance()){
                     elevator.setPosition(ElevatorConstants.IDLE);
                 }
                 break;
             case ALGAE_INTAKE:
-                intake.state = IntakeState.ALGAE;
+                intake.setState(IntakeState.ALGAE);
                 deployer.setState(DeployerState.IDLE);
                 elevator.setPosition(ElevatorConstants.IDLE);
                 break;
@@ -72,54 +63,72 @@ public class StateManager extends SubsystemBase{
                 deployer.setState(DeployerState.CENTER);
                 elevator.setPosition(ElevatorConstants.INTAKE_HEIGHT);
                 if (elevator.isAtSetpoint()) {
-                    intake.state = IntakeState.FEED;
+                    intake.setState(IntakeState.FEED);
                 }
                 break;
             case L1:
                 deployer.setState(DeployerState.IDLE);
                 elevator.setPosition(ElevatorConstants.IDLE);
-                if (elevator.isAtSetpoint()) {
-                    intake.state = IntakeState.SHOOT;
-                }
+                intake.setState(IntakeState.SHOOT);
                 break;
-            case L2:
+            case L2_RIGHT:
                 deployer.setState(DeployerState.IDLE); 
-                intake.state = IntakeState.ELEVATOR;
+                intake.setState(IntakeState.ELEVATOR);
                 if (intake.elevatorClearance()){
-                elevator.setPosition(Centimeters.of(SmartDashboard.getNumber("asansoryukseklik", 0)));
+                elevator.setPosition(ElevatorConstants.CORAL_L2_HEIGHT);
                 deployer.setState(DeployerState.CENTER);
                 if (elevator.isAtSetpoint()) {
-                    deployer.setState(calculateDeployerSide());;
+                    deployer.setState(DeployerState.SHOOT_RIGHT);
                 }
             }
                 break;
-            case L3:
-                intake.state = IntakeState.ELEVATOR;
-                deployer.setState(DeployerState.IDLE);
-                elevator.setPosition(ElevatorConstants.CORAL_L3_HEIGHT);
+            case L2_LEFT:
+                deployer.setState(DeployerState.IDLE); 
+                intake.setState(IntakeState.ELEVATOR);
+                if (intake.elevatorClearance()){
+                elevator.setPosition(ElevatorConstants.CORAL_L2_HEIGHT);
+                deployer.setState(DeployerState.CENTER);
                 if (elevator.isAtSetpoint()) {
-                    intake.state = IntakeState.IDLE;
-                    deployer.state = calculateDeployerSide();
+                    deployer.setState(DeployerState.SHOOT_LEFT);
                 }
+            }
+                break;
+            case L3_RIGHT:
+                deployer.setState(DeployerState.IDLE); 
+                intake.setState(IntakeState.ELEVATOR);
+                if (intake.elevatorClearance()){
+                elevator.setPosition(ElevatorConstants.CORAL_L2_HEIGHT);
+                deployer.setState(DeployerState.CENTER);
+                if (elevator.isAtSetpoint()) {
+                    deployer.setState(DeployerState.SHOOT_RIGHT);
+                }
+            }
             break;
+            case L3_LEFT:
+                deployer.setState(DeployerState.IDLE); 
+                intake.setState(IntakeState.ELEVATOR);
+                if (intake.elevatorClearance()){
+                elevator.setPosition(ElevatorConstants.CORAL_L2_HEIGHT);
+                deployer.setState(DeployerState.CENTER);
+                if (elevator.isAtSetpoint()) {
+                    deployer.setState(DeployerState.SHOOT_LEFT);
+                }
+            }
+            break;
+            case TEST:
+                deployer.setState(DeployerState.IDLE); 
+                intake.setState(IntakeState.ELEVATOR);
+                if (intake.elevatorClearance()){
+                    elevator.setPosition(Centimeters.of(SmartDashboard.getNumber("asansoryukseklik", 0))); 
+                    deployer.setState(DeployerState.CENTER);
+                if (elevator.isAtSetpoint()) {
+                    deployer.setState(DeployerState.SHOOT_RIGHT);
+                }
+                }
+                break;   
         }
     }
 
-    private final Field2d field2d = new Field2d();
-
-    public DeployerState calculateDeployerSide() {
-        List<Pose2d> flippedCenterFaces = Arrays.stream(FieldConstants.Reef.centerFaces)
-            .map(AllianceFlipUtil::apply)
-            .collect(Collectors.toList());
-
-        if ((drivetrain.getState().Pose.getRotation().getDegrees() 
-        - drivetrain.getState().Pose.nearest(flippedCenterFaces).getRotation().getDegrees() 
-        + 360) % 360 > 180 || SmartDashboard.getString("Arduino/Branch", "Z") == "O"){
-            return DeployerState.SHOOT_RIGHT;
-        } else {
-            return DeployerState.SHOOT_LEFT;
-        }
-    }
     public Command setStateCommand(State state) {
         return startEnd(() -> this.state = state, () -> this.state = State.IDLE).withName("StateManager "+state.toString());
     }
