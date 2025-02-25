@@ -13,7 +13,7 @@ public class IntakeBeamBreak extends SubsystemBase{
   //private Debouncer debouncer = new Debouncer(0.04);
 
   public IntakeBeamBreak() {
-    m_beamBreak = new DigitalInput(2);
+    m_beamBreak = new DigitalInput(1);
     lower_beambreak = new DigitalInput(0);
     SmartDashboard.putBoolean("upper", false);
     SmartDashboard.putBoolean("lower", false);

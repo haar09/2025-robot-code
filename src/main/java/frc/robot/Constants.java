@@ -71,7 +71,7 @@ public final class Constants {
     public static final double kTotalRatio = kMotorToEncoder * kEncoderToPivot;
 
     public static final int kPivotMotorId = 13;
-    public static final int kAbsoluteEncoderId = 3;
+    public static final int kAbsoluteEncoderId = 4;
 
     public static final double kAbsoluteEncoderOffset = 12;
     public static final TalonFXConfiguration pivotMotorConfig = new TalonFXConfiguration();
@@ -113,7 +113,7 @@ public final class Constants {
     public static final Angle intakeAngle = Degrees.of(-1.5);
     public static final Angle feedAngle = Degrees.of(113);
     public static final Angle shootAngle = Degrees.of(100);
-    public static final Angle algaeAngle = Degrees.of(79);
+    public static final Angle algaeAngle = Degrees.of(76);
     public static final Angle elevatorAngle = Degrees.of(86);
 
     /* PIVOT END ROLLER START */

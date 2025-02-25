@@ -30,8 +30,8 @@ public class Deployer extends  SubsystemBase {
         deployerRollers.periodic();
         switch (state) {
             case IDLE:
-                deployerOmnis.stop();
-                deployerRollers.stop();
+                deployerOmnis.setOutputPercentage(0);
+                deployerRollers.setOutputPercentage(0);
                 break;
             case CENTER: 
                 deployerOmnis.setOutputPercentage(0.2);
@@ -40,14 +40,15 @@ public class Deployer extends  SubsystemBase {
                     break;
                 }
                 if (deployerBeamBreak.left_value && deployerBeamBreak.right_value) {
+                    deployerRollers.setOutputPercentage(0);
                     state = DeployerState.IDLE;
                     break;
                 }
                 if (deployerBeamBreak.left_value && !deployerBeamBreak.right_value) {
-                    deployerRollers.setOutputPercentage(0.05);
+                    deployerRollers.setOutputPercentage(0.07);
                 }
                 if (!deployerBeamBreak.left_value && deployerBeamBreak.right_value) {
-                    deployerRollers.setOutputPercentage(-0.05);
+                    deployerRollers.setOutputPercentage(-0.07);
                 }
                 break;
             case SHOOT_RIGHT:

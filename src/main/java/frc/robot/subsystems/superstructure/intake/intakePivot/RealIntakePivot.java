@@ -15,6 +15,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeConstants.MotionProfileConstants;
@@ -26,7 +27,7 @@ public class RealIntakePivot implements IntakePivotIO {
     pivotMotorPosition, pivotMotorVelocity, pivotMotorVoltage, pivotMotorTemp, pivotMotorSupplyCurrent;
 
     private final DutyCycleEncoder throughBoreEncoder = new DutyCycleEncoder(IntakeConstants.kAbsoluteEncoderId);
-    private final Encoder throughBoreQuadrature =  new Encoder(7,8, false, EncodingType.k4X);
+    private final Encoder throughBoreQuadrature =  new Encoder(5,6, false, EncodingType.k4X);
 
     private Controller controller;
 
@@ -56,6 +57,7 @@ public class RealIntakePivot implements IntakePivotIO {
         resetEncoders();
 
         new Thread (() -> {
+            var time = Timer.getFPGATimestamp();
             while (true) {
                 if (throughBoreEncoder.isConnected()) {
                     try {
@@ -65,6 +67,8 @@ public class RealIntakePivot implements IntakePivotIO {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                } else if (Timer.getFPGATimestamp() - time > 5){
+                    break;
                 }
             }
         }).run();

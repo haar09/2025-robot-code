@@ -21,11 +21,16 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.NetworkButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.FieldConstants.ReefLevel;
+import frc.robot.commands.AutoBranchandShootL1;
+import frc.robot.commands.AutoBranchandShootL23;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.LEDSubsystem;
@@ -38,6 +43,7 @@ import frc.robot.subsystems.superstructure.StateManager.State;
 import frc.robot.subsystems.superstructure.deployer.Deployer;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.intake.Intake;
+import frc.robot.util.NetworkTablesAgent;
 
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12VoltsMps desired top speed
@@ -68,7 +74,7 @@ public class RobotContainer {
 
     new NetworkButton("SmartDashboard", "Reset Pigeon").onTrue(drivetrain.resetPigeon());
  
-    joystick.y().onTrue(stateManager.setStateCommand(State.L2));
+    joystick.y().onTrue(stateManager.setStateCommand(State.TEST));
     joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.a().onTrue(stateManager.setStateCommand(State.FEED));
@@ -137,6 +143,30 @@ public class RobotContainer {
       }
     });
   
+   new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N") && networkTablesAgent.triggerValue.get() == 1)
+   .whileTrue(new AutoBranchandShootL1(networkTablesAgent, drivetrain));
+
+   new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N") && networkTablesAgent.triggerValue.get() != 1)
+   .whileTrue(new AutoBranchandShootL23(networkTablesAgent, drivetrain));
+
+    new NetworkButton("Arduino", "Override")
+      .onTrue(new InstantCommand(() -> {
+          double trigger = networkTablesAgent.triggerValue.get();
+          switch ((int) trigger) {
+              case 1:
+                  stateManager.setStateCommand(StateManager.State.L1).schedule();
+                  break;
+              case 2:
+                  stateManager.setStateCommand(StateManager.State.L2_RIGHT).schedule();
+                  break;
+              case 3:
+                  stateManager.setStateCommand(StateManager.State.L3_RIGHT).schedule();
+                  break;
+              default:
+              break;
+          }
+      }));
+    
     }
 
   private LoggedDashboardChooser<Command> autoChooser;
@@ -144,6 +174,7 @@ public class RobotContainer {
   private Elevator elevator;
   private Deployer deployer;
   private StateManager stateManager;
+  private NetworkTablesAgent networkTablesAgent;
 
   public RobotContainer() {
     new LEDSubsystem();
@@ -151,7 +182,8 @@ public class RobotContainer {
     intake = new Intake();
     elevator = Elevator.create();
     deployer = new Deployer();
-    stateManager = new StateManager(deployer, intake, elevator, drivetrain);
+    stateManager = new StateManager(deployer, intake, elevator);
+    networkTablesAgent = new NetworkTablesAgent();
 
     if (Robot.isReal()) {
       new AprilTagVision(drivetrain::addVisionMeasurement,
@@ -166,6 +198,9 @@ public class RobotContainer {
     configureBindings();
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    for (int i = 0; i < FieldConstants.Reef.scoringPositions2d.size(); i++) {
+      Logger.recordOutput("scoring" + i, FieldConstants.Reef.scoringPositions2d.get(i).get(ReefLevel.L23));
+  }
   }
 
   private void updateControlStyle() {

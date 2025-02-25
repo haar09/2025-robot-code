@@ -12,8 +12,8 @@ public class DeployerBeamBreak extends SubsystemBase{
   public boolean right_value = false;
 
   public DeployerBeamBreak() {
-    left_beamBreak = new DigitalInput(4);
-    right_beamBreak = new DigitalInput(5);
+    left_beamBreak = new DigitalInput(3);
+    right_beamBreak = new DigitalInput(2);
     SmartDashboard.putBoolean("left", false);
     SmartDashboard.putBoolean("right", false);
   }

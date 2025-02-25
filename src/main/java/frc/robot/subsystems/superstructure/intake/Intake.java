@@ -33,7 +33,6 @@ public class Intake extends SubsystemBase{
     public IntakeState state = IntakeState.IDLE;
 
     private boolean hasSeen = false;
-    //private Debouncer debouncer = new Debouncer(0.05);
 
     @Override
     public void periodic() {
@@ -60,20 +59,16 @@ public class Intake extends SubsystemBase{
                     break;
                 }
                 intakePivot.setDesiredAngle(IntakeConstants.initialAngle);
-                intakeRollers.setOutputPercentage(-0.3,-0.2);   
+                intakeRollers.setOutputPercentage(-0.4,-0.2);   
                 break;
             case FLOOR_INTAKE:
-                if (intakeBeamBreak.upper_value/* && intakePivot.getAngle().in(Degrees) < 1.5*/) {
+                if (intakeBeamBreak.upper_value) {
                     state = IntakeState.BEFORE_FEED;
                     hasSeen = false;
                     break;
                 }
                 intakePivot.setDesiredAngle(IntakeConstants.intakeAngle);
-                intakeRollers.setOutputPercentage(-0.086, -0.086);
-                /*if (intakePivot.isAtDesiredAngle() && Timer.getFPGATimestamp() - timer > 0.3) {
-                    state = IntakeState.IDLE;
-                    break;
-                }*/
+                intakeRollers.setOutputPercentage(-0.1, -0.09);
                 break;
             case BEFORE_FEED:
                 intakeRollers.setOutputPercentage(0, 0);
