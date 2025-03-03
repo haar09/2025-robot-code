@@ -23,33 +23,45 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import frc.robot.util.LoggedTunableNumber;
 
 public final class Constants {
-  
+  public static final class Robotconstants {
+    public static final boolean kTuningMode = true;
+  }
+
   public static final class AutoConstants {
     public static final double kRobotWeight = 0;
     public static final double kMOI = 0;
 
-    public static final double kMaxSpeedCentimetersPerSecond = 4.5;
-    public static final double kPXYController = 10;
-    public static final double kPThetaController = 7;
+    public static final double kMaxSpeedMetersPerSecond = 4.5;
+    public static final double kPXYController = 15;
+    public static final double kPThetaController = 12;
 
     public static final PathConstraints kPathConstraints = new PathConstraints(
-      kMaxSpeedCentimetersPerSecond, 3, Math.toRadians(540), Math.toRadians(720));
+      kMaxSpeedMetersPerSecond, 3, Math.toRadians(540), Math.toRadians(720));
   }
 
   public static class VisionConstants {
     public static final Transform3d kRobotToCam1 = //OV9281 001
-                new Transform3d(new Translation3d(0.035, 0.221, 0.260435),
+                new Transform3d(new Translation3d(0.035, 0.21743, 0.415225),
                                 new Rotation3d(0, Math.toRadians(9.9), Math.toRadians(90))
                                 );
     public static final Transform3d kRobotToCam2 = //OV9281 002
-                new Transform3d(new Translation3d(0.035, -0.221, 0),
+                new Transform3d(new Translation3d(0.035, -0.21743, 0.415225),
+                                new Rotation3d(0, Math.toRadians(9.9), Math.toRadians(-90))
+                                );
+    public static final Transform3d kRobotToCam3 = //OV9281 003
+                new Transform3d(new Translation3d(0.231514, -0.274479, 0.189142),
+                                new Rotation3d(0, Math.toRadians(9.9), Math.toRadians(-90))
+                                );
+    public static final Transform3d kRobotToCam4 = //OV9281 004
+                new Transform3d(new Translation3d(0.231514, 0.274479, 0.189142),
                                 new Rotation3d(0, Math.toRadians(9.9), Math.toRadians(-90))
                                 );
 
     public static final AprilTagFieldLayout kTagLayout =
-                AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+                AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
     public static double linearStdDevBaseline = 0.02; // Centimeters
     public static double angularStdDevBaseline = 0.06; // Radians
@@ -109,11 +121,11 @@ public final class Constants {
     public static final Angle kAngleTolerance = Degrees.of(3);
 
     public static final Angle idleAngle = Degrees.of(113);
-    public static final Angle initialAngle = Degrees.of(15.8);
+    public static final Angle initialAngle = Degrees.of(16.2);
     public static final Angle intakeAngle = Degrees.of(-1.5);
     public static final Angle feedAngle = Degrees.of(113);
     public static final Angle shootAngle = Degrees.of(100);
-    public static final Angle algaeAngle = Degrees.of(76);
+    public static final Angle algaeAngle = Degrees.of(73);
     public static final Angle elevatorAngle = Degrees.of(86);
 
     /* PIVOT END ROLLER START */
@@ -156,22 +168,21 @@ public final class Constants {
       //x=0.0285 y=0.0095
       elevatorMotorConfig.Slot0.kG = 0.285;
       elevatorMotorConfig.Slot0.kS = 0.095; // Add 0.25 V output to overcome static friction
-      elevatorMotorConfig.Slot0.kV = 0.16; // A velocity target of 1 rps results in 0.12 V output
+      elevatorMotorConfig.Slot0.kV = 0.155; // A velocity target of 1 rps results in 0.12 V output
       elevatorMotorConfig.Slot0.kA = 0.009; // An acceleration of 1 rps/s requires 0.01 V output
-      elevatorMotorConfig.Slot0.kP = 0.2; // An error of 1 rps results in 0.11 V output
+      elevatorMotorConfig.Slot0.kP = 0.63; // An error of 1 rps results in 0.11 V output
       elevatorMotorConfig.Slot0.kI = 0; // no output for integrated error
       elevatorMotorConfig.Slot0.kD = 0; // no output for error derivative 
       elevatorMotorConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
       
-      elevatorMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 200;
-      elevatorMotorConfig.MotionMagic.MotionMagicAcceleration = 275;
+      elevatorMotorConfig.MotionMagic.MotionMagicCruiseVelocity = 350;
+      elevatorMotorConfig.MotionMagic.MotionMagicAcceleration = 325;
     }
 
-    //public static final Distance IDLE = Centimeters.of(1);
-    public static final Distance IDLE = Centimeters.of(0);
-    public static final Distance CORAL_L2_HEIGHT = Centimeters.of(0);
-    public static final Distance CORAL_L3_HEIGHT = Centimeters.of(0);
-    public static final Distance INTAKE_HEIGHT = Centimeters.of(3);
+    public static final LoggedTunableNumber IDLE = new LoggedTunableNumber("Elevator/Idle", 0);
+    public static final LoggedTunableNumber CORAL_L2_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L2_HEIGHT", 0);
+    public static final LoggedTunableNumber CORAL_L3_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L3_HEIGHT", 0);
+    public static final LoggedTunableNumber INTAKE_HEIGHT = new LoggedTunableNumber("Elevator/INTAKE_HEIGHT", 3);
     
     public static final Distance kDistanceTolerance = Centimeters.of(1.5);
   

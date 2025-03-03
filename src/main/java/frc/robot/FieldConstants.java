@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.util.AllianceFlipUtil;
 
 import java.util.*;
 
@@ -102,7 +103,7 @@ public class FieldConstants {
                       poseDirection
                           .transformBy(new Transform2d(adjustX, adjustY+level.yModifier, new Rotation2d()))
                           .getY(),
-                      0),
+                      1),
                   new Rotation3d(
                       0,
                       0,
@@ -116,7 +117,7 @@ public class FieldConstants {
                       poseDirection
                           .transformBy(new Transform2d(adjustX, -adjustY+level.yModifier, new Rotation2d()))
                           .getY(),
-                      0),
+                      1),
                   new Rotation3d(
                       0,
                       0,
@@ -147,8 +148,8 @@ public class FieldConstants {
   }
 
   public enum ReefLevel {
-    L1(-0.7, 0, 0),
-    L23(-1, -0.1, 90);
+    L1(1, 0, 0),
+    L23(1, 0, -90);
 
     ReefLevel(double xModifier, double yModifier, double angleModifier) {
       this.xModifier = xModifier;
@@ -166,6 +167,23 @@ public class FieldConstants {
     public final double xModifier;
     public final double yModifier;
     public final double angleModifier;
+  }
+
+  public static int findClosestReefside(Pose2d currentPose) {
+    currentPose = AllianceFlipUtil.apply(currentPose);
+    double minDistance = Double.MAX_VALUE;
+    int closestIndex = -1;
+    for (int i = 0; i < Reef.centerFaces.length; i++) {
+      Pose2d candidate = Reef.centerFaces[i];
+      if (candidate != null) {
+        double distance = currentPose.getTranslation().getDistance(candidate.getTranslation());
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = i;
+        }
+      }
+    }
+    return closestIndex;
   }
 
   public static final double aprilTagWidth = Units.inchesToMeters(6.50);

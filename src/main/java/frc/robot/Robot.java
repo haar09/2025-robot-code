@@ -97,7 +97,7 @@ public class Robot extends LoggedRobot {
             });
 
     SmartDashboard.putBoolean("Flip Horizontally", false);
-
+    SmartDashboard.putBoolean("Reset Pigeon", false);
     m_robotContainer = new RobotContainer();
   }
 

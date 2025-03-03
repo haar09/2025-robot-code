@@ -45,26 +45,26 @@ public class Deployer extends  SubsystemBase {
                     break;
                 }
                 if (deployerBeamBreak.left_value && !deployerBeamBreak.right_value) {
-                    deployerRollers.setOutputPercentage(0.07);
+                    deployerRollers.setOutputPercentage(0.08);
                 }
                 if (!deployerBeamBreak.left_value && deployerBeamBreak.right_value) {
-                    deployerRollers.setOutputPercentage(-0.07);
+                    deployerRollers.setOutputPercentage(-0.08);
                 }
                 break;
             case SHOOT_RIGHT:
-                deployerOmnis.stop();
-                if (deployerBeamBreak.left_value) {
-                    deployerRollers.setOutputPercentage(0.1);
-                } else {
-                    deployerRollers.setOutputPercentage(-0.9);
-                }
-                break;
-            case SHOOT_LEFT:
                 deployerOmnis.stop();
                 if (deployerBeamBreak.right_value) {
                     deployerRollers.setOutputPercentage(-0.1);
                 } else {
                     deployerRollers.setOutputPercentage(0.9);
+                }
+                break;
+            case SHOOT_LEFT:
+                deployerOmnis.stop();
+                if (deployerBeamBreak.left_value) {
+                    deployerRollers.setOutputPercentage(0.1);
+                } else {
+                    deployerRollers.setOutputPercentage(-0.9);
                 }
                 break;
         }

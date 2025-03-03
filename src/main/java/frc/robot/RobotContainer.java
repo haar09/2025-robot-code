@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,12 +26,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.NetworkButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.commands.AutoBranchandShootL1;
 import frc.robot.commands.AutoBranchandShootL23;
+import frc.robot.commands.DpadBranchandShootL23;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.LEDSubsystem;
@@ -72,10 +72,10 @@ public class RobotContainer {
   private void configureBindings() {
     updateControlStyle();
 
-    new NetworkButton("SmartDashboard", "Reset Pigeon").onTrue(drivetrain.resetPigeon());
+    new NetworkButton(NetworkTableInstance.getDefault().getTable("SmartDashboard"), "Reset Pigeon").onTrue(drivetrain.resetPigeon());
  
-    joystick.y().onTrue(stateManager.setStateCommand(State.TEST));
-    joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
+    joystick.x().onTrue(stateManager.setStateCommand(State.TEST));
+    joystick.x().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.a().onTrue(stateManager.setStateCommand(State.FEED));
     joystick.a().onFalse(stateManager.setStateCommand(State.IDLE));
@@ -99,12 +99,15 @@ public class RobotContainer {
     joystick.rightTrigger(IntakeConstants.kIntakeDeadband).whileTrue(stateManager.setStateCommand(State.ALGAE_INTAKE));
     joystick.rightTrigger(IntakeConstants.kIntakeDeadband).onFalse(stateManager.setStateCommand(State.IDLE));
 
+    joystick.povRight().whileTrue(new DpadBranchandShootL23(false, drivetrain, stateManager, operator));
+    joystick.povLeft().whileTrue(new DpadBranchandShootL23(true, drivetrain, stateManager, operator));
+
     // HALILI TESTLER
     
-    joystick.pov(0).whileTrue(intake.intakePivot.sysIdQuasistatic(Direction.kForward));
+    /*joystick.pov(0).whileTrue(intake.intakePivot.sysIdQuasistatic(Direction.kForward));
     joystick.pov(90).whileTrue(intake.intakePivot.sysIdQuasistatic(Direction.kReverse));
     joystick.pov(180).whileTrue(intake.intakePivot.sysIdDynamic(Direction.kForward));
-    joystick.pov(270).whileTrue(intake.intakePivot.sysIdDynamic(Direction.kReverse));
+    joystick.pov(270).whileTrue(intake.intakePivot.sysIdDynamic(Direction.kReverse));*/
     //joystick.back().whileTrue(new SwerveWheelCalibration(drivetrain));
     // HALILI TESTLER BİTİŞ
 
@@ -144,13 +147,13 @@ public class RobotContainer {
     });
   
    new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N") && networkTablesAgent.triggerValue.get() == 1)
-   .whileTrue(new AutoBranchandShootL1(networkTablesAgent, drivetrain));
+   .whileTrue(new AutoBranchandShootL1(networkTablesAgent, drivetrain, stateManager));
 
    new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N") && networkTablesAgent.triggerValue.get() != 1)
-   .whileTrue(new AutoBranchandShootL23(networkTablesAgent, drivetrain));
+   .whileTrue(new AutoBranchandShootL23(networkTablesAgent, drivetrain, stateManager));
 
     new NetworkButton("Arduino", "Override")
-      .onTrue(new InstantCommand(() -> {
+      .whileTrue(new InstantCommand(() -> {
           double trigger = networkTablesAgent.triggerValue.get();
           switch ((int) trigger) {
               case 1:
@@ -166,6 +169,8 @@ public class RobotContainer {
               break;
           }
       }));
+      
+      new NetworkButton("Arduino", "Override").onFalse(stateManager.setStateCommand(State.IDLE));
     
     }
 
@@ -186,11 +191,13 @@ public class RobotContainer {
     networkTablesAgent = new NetworkTablesAgent();
 
     if (Robot.isReal()) {
-      new AprilTagVision(drivetrain::addVisionMeasurement,
+      new AprilTagVision(drivetrain,
                        new RealPhotonVision("Arducam_OV9281_USB_Camera_001", VisionConstants.kRobotToCam1),
-                       new RealPhotonVision("Arducam_OV9281_USB_Camera_002", VisionConstants.kRobotToCam2));
+                       new RealPhotonVision("Arducam_OV9281_USB_Camera_002", VisionConstants.kRobotToCam2),
+                       new RealPhotonVision("Arducam_OV9281_USB_Camera_03", VisionConstants.kRobotToCam3),
+                       new RealPhotonVision("Arducam_OV9281_USB_Camera_04", VisionConstants.kRobotToCam4));
     } else {
-      new AprilTagVision(drivetrain::addVisionMeasurement,
+      new AprilTagVision(drivetrain,
                        new SimPhotonVision("Arducam_OV9281_USB_Camera_001", VisionConstants.kRobotToCam1, () -> drivetrain.getState().Pose),
                        new SimPhotonVision("Arducam_OV9281_USB_Camera_002", VisionConstants.kRobotToCam2, () -> drivetrain.getState().Pose));
     }
@@ -198,9 +205,6 @@ public class RobotContainer {
     configureBindings();
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-    for (int i = 0; i < FieldConstants.Reef.scoringPositions2d.size(); i++) {
-      Logger.recordOutput("scoring" + i, FieldConstants.Reef.scoringPositions2d.get(i).get(ReefLevel.L23));
-  }
   }
 
   private void updateControlStyle() {

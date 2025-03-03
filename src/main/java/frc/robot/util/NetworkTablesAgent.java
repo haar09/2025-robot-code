@@ -20,8 +20,8 @@ public class NetworkTablesAgent extends SubsystemBase {
     public NetworkTablesAgent() {
          NetworkTableInstance inst = NetworkTableInstance.getDefault();
          NetworkTable datatable = inst.getTable("Arduino");
-         buttonSub = datatable.getStringTopic("Button").subscribe("N");
-         triggerSub = datatable.getDoubleTopic("Trigger").subscribe(0);
+         buttonSub = datatable.getStringTopic("Reef").subscribe("N");
+         triggerSub = datatable.getDoubleTopic("Level").subscribe(0);
 
          inst.addListener(buttonSub, EnumSet.of(NetworkTableEvent.Kind.kValueAll), event -> {
             buttonValue.set(event.valueData.value.getString());
