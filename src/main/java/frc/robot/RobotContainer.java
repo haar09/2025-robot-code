@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.NetworkButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.commands.AlgMechanismCmd;
 import frc.robot.commands.AutoBranchandShootL1;
 import frc.robot.commands.AutoBranchandShootL23;
 import frc.robot.commands.DpadBranchandShootL23;
@@ -40,9 +41,11 @@ import frc.robot.subsystems.apriltagvision.RealPhotonVision;
 import frc.robot.subsystems.apriltagvision.SimPhotonVision;
 import frc.robot.subsystems.superstructure.StateManager;
 import frc.robot.subsystems.superstructure.StateManager.State;
+import frc.robot.subsystems.superstructure.algMechanism.AlgMechanism;
 import frc.robot.subsystems.superstructure.deployer.Deployer;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.intake.Intake;
+import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.NetworkTablesAgent;
 
 public class RobotContainer {
@@ -74,8 +77,8 @@ public class RobotContainer {
 
     new NetworkButton(NetworkTableInstance.getDefault().getTable("SmartDashboard"), "Reset Pigeon").onTrue(drivetrain.resetPigeon());
  
-    joystick.x().onTrue(stateManager.setStateCommand(State.TEST));
-    joystick.x().onFalse(stateManager.setStateCommand(State.IDLE));
+    joystick.y().onTrue(stateManager.setStateCommand(State.TEST));
+    joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.a().onTrue(stateManager.setStateCommand(State.FEED));
     joystick.a().onFalse(stateManager.setStateCommand(State.IDLE));
@@ -104,10 +107,10 @@ public class RobotContainer {
 
     // HALILI TESTLER
     
-    /*joystick.pov(0).whileTrue(intake.intakePivot.sysIdQuasistatic(Direction.kForward));
-    joystick.pov(90).whileTrue(intake.intakePivot.sysIdQuasistatic(Direction.kReverse));
-    joystick.pov(180).whileTrue(intake.intakePivot.sysIdDynamic(Direction.kForward));
-    joystick.pov(270).whileTrue(intake.intakePivot.sysIdDynamic(Direction.kReverse));*/
+    /*joystick.pov(0).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+    joystick.pov(90).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+    joystick.pov(180).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+    joystick.pov(270).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));*/
     //joystick.back().whileTrue(new SwerveWheelCalibration(drivetrain));
     // HALILI TESTLER BİTİŞ
 
@@ -180,6 +183,7 @@ public class RobotContainer {
   private Deployer deployer;
   private StateManager stateManager;
   private NetworkTablesAgent networkTablesAgent;
+  private AlgMechanism algMechanism;
 
   public RobotContainer() {
     new LEDSubsystem();
@@ -189,6 +193,7 @@ public class RobotContainer {
     deployer = new Deployer();
     stateManager = new StateManager(deployer, intake, elevator);
     networkTablesAgent = new NetworkTablesAgent();
+    algMechanism = AlgMechanism.create();
 
     if (Robot.isReal()) {
       new AprilTagVision(drivetrain,
@@ -202,7 +207,12 @@ public class RobotContainer {
                        new SimPhotonVision("Arducam_OV9281_USB_Camera_002", VisionConstants.kRobotToCam2, () -> drivetrain.getState().Pose));
     }
 
+    algMechanism.setDefaultCommand(
+      new AlgMechanismCmd(algMechanism, () -> joystick.povUp().getAsBoolean(), () -> joystick.povDown().getAsBoolean()));
+
     configureBindings();
+
+    Logger.recordOutput("ScoringPosition", AllianceFlipUtil.apply(FieldConstants.Reef.scoringPositions2d.get(1).get(FieldConstants.ReefLevel.L23)));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
   }

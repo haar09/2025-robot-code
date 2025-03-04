@@ -35,29 +35,29 @@ public final class Constants {
     public static final double kMOI = 0;
 
     public static final double kMaxSpeedMetersPerSecond = 4.5;
-    public static final double kPXYController = 15;
-    public static final double kPThetaController = 12;
+    public static final double kPXYController = 8;
+    public static final double kPThetaController = 10;
 
     public static final PathConstraints kPathConstraints = new PathConstraints(
-      kMaxSpeedMetersPerSecond, 3, Math.toRadians(540), Math.toRadians(720));
+      kMaxSpeedMetersPerSecond, 5, Math.toRadians(540), Math.toRadians(720));
   }
 
   public static class VisionConstants {
     public static final Transform3d kRobotToCam1 = //OV9281 001
-                new Transform3d(new Translation3d(0.035, 0.21743, 0.415225),
-                                new Rotation3d(0, Math.toRadians(9.9), Math.toRadians(90))
+                new Transform3d(new Translation3d(0.035, -0.21743, 0.415225),
+                                new Rotation3d(0, Math.toRadians(14.975), Math.toRadians(-90))
                                 );
     public static final Transform3d kRobotToCam2 = //OV9281 002
-                new Transform3d(new Translation3d(0.035, -0.21743, 0.415225),
-                                new Rotation3d(0, Math.toRadians(9.9), Math.toRadians(-90))
+                new Transform3d(new Translation3d(0.035, 0.21743, 0.415225),
+                                new Rotation3d(0, Math.toRadians(14.975), Math.toRadians(90))
                                 );
     public static final Transform3d kRobotToCam3 = //OV9281 003
                 new Transform3d(new Translation3d(0.231514, -0.274479, 0.189142),
-                                new Rotation3d(0, Math.toRadians(9.9), Math.toRadians(-90))
+                                new Rotation3d(0, Math.toRadians(-20), Math.toRadians(30))
                                 );
     public static final Transform3d kRobotToCam4 = //OV9281 004
                 new Transform3d(new Translation3d(0.231514, 0.274479, 0.189142),
-                                new Rotation3d(0, Math.toRadians(9.9), Math.toRadians(-90))
+                                new Rotation3d(0, Math.toRadians(-20), Math.toRadians(-30))
                                 );
 
     public static final AprilTagFieldLayout kTagLayout =
@@ -120,13 +120,13 @@ public final class Constants {
 
     public static final Angle kAngleTolerance = Degrees.of(3);
 
-    public static final Angle idleAngle = Degrees.of(113);
-    public static final Angle initialAngle = Degrees.of(16.2);
-    public static final Angle intakeAngle = Degrees.of(-1.5);
-    public static final Angle feedAngle = Degrees.of(113);
-    public static final Angle shootAngle = Degrees.of(100);
-    public static final Angle algaeAngle = Degrees.of(73);
-    public static final Angle elevatorAngle = Degrees.of(86);
+    public static final LoggedTunableNumber idleAngle = new LoggedTunableNumber("Intake/Idle", 113);
+    public static final LoggedTunableNumber initialAngle = new LoggedTunableNumber("Intake/Initial", 16.2);
+    public static final LoggedTunableNumber intakeAngle = new LoggedTunableNumber("Intake/Intake", -1.5);
+    public static final LoggedTunableNumber feedAngle = new LoggedTunableNumber("Intake/Feed", 113);
+    public static final LoggedTunableNumber shootAngle = new LoggedTunableNumber("Intake/Shoot", 100);
+    public static final LoggedTunableNumber algaeAngle = new LoggedTunableNumber("Intake/Algae", 73);
+    public static final LoggedTunableNumber elevatorAngle = new LoggedTunableNumber("Intake/Elevator", 86);    
 
     /* PIVOT END ROLLER START */
 
@@ -180,12 +180,17 @@ public final class Constants {
     }
 
     public static final LoggedTunableNumber IDLE = new LoggedTunableNumber("Elevator/Idle", 0);
-    public static final LoggedTunableNumber CORAL_L2_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L2_HEIGHT", 0);
-    public static final LoggedTunableNumber CORAL_L3_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L3_HEIGHT", 0);
+    public static final LoggedTunableNumber CORAL_L2_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L2_HEIGHT", 28);
+    public static final LoggedTunableNumber CORAL_L3_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L3_HEIGHT", 49.5);
     public static final LoggedTunableNumber INTAKE_HEIGHT = new LoggedTunableNumber("Elevator/INTAKE_HEIGHT", 3);
     
     public static final Distance kDistanceTolerance = Centimeters.of(1.5);
   
     public static final Distance MAX_HEIGHT = Centimeters.of(53);
   }
-} 
+
+  public static class AlgMechanismConstants{
+    public static final int kRackMotorId = 31;
+    public static final int kRollerMotorId = 32;
+  } 
+}

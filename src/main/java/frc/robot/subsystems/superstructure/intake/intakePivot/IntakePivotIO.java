@@ -8,7 +8,6 @@ import edu.wpi.first.units.measure.Voltage;
 
 public interface IntakePivotIO {
     public void setDesiredAngle(Angle angle);
-    public void setSlowAngle(Angle angle);
     public void stop();
     public Angle getAngle();
     public void setNeutralMode(NeutralModeValue neutralModeValue);

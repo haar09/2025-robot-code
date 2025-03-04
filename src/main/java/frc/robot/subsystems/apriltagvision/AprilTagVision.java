@@ -96,13 +96,13 @@ public class AprilTagVision extends SubsystemBase{
                     continue;
                 }
 
-                double stDevFactor = Math.pow(observation.averageTagDistance(), 2) / observation.tagCount();
-                double linearStdDev = VisionConstants.linearStdDevBaseline * stDevFactor;
-                double angularStdDev = VisionConstants.angularStdDevBaseline * stDevFactor;
+                //double stDevFactor = Math.pow(observation.averageTagDistance(), 2) / observation.tagCount();
+                //double linearStdDev = VisionConstants.linearStdDevBaseline * stDevFactor;
+                //double angularStdDev = VisionConstants.angularStdDevBaseline * stDevFactor;
 
                 drivetrain.addVisionMeasurement(observation.estPose().estimatedPose.toPose2d(),
                 observation.estPose().timestampSeconds,
-                VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
+                VecBuilder.fill(VisionConstants.linearStdDevBaseline, VisionConstants.linearStdDevBaseline, VisionConstants.angularStdDevBaseline));
             }
 
             Logger.recordOutput(

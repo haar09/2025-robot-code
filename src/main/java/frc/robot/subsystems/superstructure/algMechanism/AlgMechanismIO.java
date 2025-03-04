@@ -1,4 +1,4 @@
-package frc.robot.subsystems.algMechanism;
+package frc.robot.subsystems.superstructure.algMechanism;
 
 import org.littletonrobotics.junction.AutoLog;
 

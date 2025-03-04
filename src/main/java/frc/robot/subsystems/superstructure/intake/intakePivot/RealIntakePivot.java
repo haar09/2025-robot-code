@@ -88,11 +88,6 @@ public class RealIntakePivot implements IntakePivotIO {
     }
 
     @Override
-    public void setSlowAngle(Angle angle){
-        pivotMotor.setVoltage(controller.update(angle.in(Degrees), getAngle().in(Degrees)));
-    }
-
-    @Override
     public Angle getAngle(){
         return Rotations.of(throughBoreQuadrature.getDistance()/2048).plus(encoderOffset);
     }

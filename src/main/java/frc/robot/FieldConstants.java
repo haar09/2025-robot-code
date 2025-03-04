@@ -92,16 +92,16 @@ public class FieldConstants {
         for (var level : ReefLevel.values()) {
           Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
           double adjustX = level.xModifier;
-          double adjustY = Units.inchesToMeters(6.469);
+          double adjustY = 0.1643;
 
           var rightScoringPose =
               new Pose3d(
                   new Translation3d(
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, adjustY+level.yModifier, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, adjustY-level.yModifier, new Rotation2d()))
                           .getX(),
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, adjustY+level.yModifier, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, adjustY-level.yModifier, new Rotation2d()))
                           .getY(),
                       1),
                   new Rotation3d(
@@ -112,10 +112,10 @@ public class FieldConstants {
               new Pose3d(
                   new Translation3d(
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, -adjustY+level.yModifier, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, -adjustY-level.yModifier, new Rotation2d()))
                           .getX(),
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, -adjustY+level.yModifier, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, -adjustY-level.yModifier, new Rotation2d()))
                           .getY(),
                       1),
                   new Rotation3d(
@@ -149,7 +149,7 @@ public class FieldConstants {
 
   public enum ReefLevel {
     L1(1, 0, 0),
-    L23(1, 0, -90);
+    L23(1.25, 0.06, -90);
 
     ReefLevel(double xModifier, double yModifier, double angleModifier) {
       this.xModifier = xModifier;

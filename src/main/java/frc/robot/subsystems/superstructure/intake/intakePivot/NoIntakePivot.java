@@ -22,11 +22,6 @@ public class NoIntakePivot implements IntakePivotIO {
     }
 
     @Override
-    public void setSlowAngle(Angle angle){
-        m_angle = Degrees.of(limiter.calculate(angle.in(Degrees)));
-    }
-
-    @Override
     public Angle getAngle(){
         return m_angle;
     }

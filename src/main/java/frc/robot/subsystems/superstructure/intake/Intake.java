@@ -1,5 +1,7 @@
 package frc.robot.subsystems.superstructure.intake;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,7 +43,7 @@ public class Intake extends SubsystemBase{
         switch (state) {
             case IDLE:
                 intakePivot.setBrake();
-                intakePivot.setDesiredAngle(IntakeConstants.idleAngle);
+                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.idleAngle.get()));
                 intakeRollers.stop();
                 if (intakePivot.isAtDesiredAngle()) {
                     hasSeen = false;
@@ -58,8 +60,8 @@ public class Intake extends SubsystemBase{
                     state = IntakeState.IDLE;
                     break;
                 }
-                intakePivot.setDesiredAngle(IntakeConstants.initialAngle);
-                intakeRollers.setOutputPercentage(-0.4,-0.2);   
+                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.initialAngle.get()));
+                intakeRollers.setOutputPercentage(-0.3,-0.15);   
                 break;
             case FLOOR_INTAKE:
                 if (intakeBeamBreak.upper_value) {
@@ -67,17 +69,17 @@ public class Intake extends SubsystemBase{
                     hasSeen = false;
                     break;
                 }
-                intakePivot.setDesiredAngle(IntakeConstants.intakeAngle);
-                intakeRollers.setOutputPercentage(-0.1, -0.09);
+                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.intakeAngle.get()));
+                intakeRollers.setOutputPercentage(-0.09, -0.08);
                 break;
             case BEFORE_FEED:
                 intakeRollers.setOutputPercentage(0, 0);
                 intakePivot.setBrake();
-                intakePivot.setSlowAngle(IntakeConstants.idleAngle);
+                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.idleAngle.get()));
                 break;
             case FEED:
                 intakePivot.setBrake();
-                intakePivot.setDesiredAngle(IntakeConstants.feedAngle); 
+                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.feedAngle.get())); 
                 if (intakePivot.isAtDesiredAngle()) {
                     intakeRollers.setOutputPercentage(-0.3, 0);
                 } else {
@@ -86,12 +88,12 @@ public class Intake extends SubsystemBase{
                 break;
             case ALGAE:
                 intakePivot.setCoast();
-                intakePivot.setDesiredAngle(IntakeConstants.algaeAngle);
+                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.algaeAngle.get()));
                 intakeRollers.setOutputPercentage(0, 0.6); 
                 break;
             case SHOOT:
                 intakePivot.setBrake();
-                intakePivot.setDesiredAngle(IntakeConstants.shootAngle);
+                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.shootAngle.get()));
                 if  (intakePivot.isAtDesiredAngle()) {
                     intakeRollers.setOutputPercentage(0.9, 0.9);
                 } else {
@@ -100,7 +102,7 @@ public class Intake extends SubsystemBase{
                 break;
             case ELEVATOR:
                 intakePivot.setBrake();
-                intakePivot.setDesiredAngle(IntakeConstants.elevatorAngle);
+                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.elevatorAngle.get()));
                 intakeRollers.setOutputPercentage(0, 0);
         }
         Logger.recordOutput("Intake/State", state.toString());
@@ -111,7 +113,7 @@ public class Intake extends SubsystemBase{
     }
 
     public boolean elevatorClearance(){
-        return intakePivot.getAngle().lte(IntakeConstants.elevatorAngle);
+        return intakePivot.getAngle().lte(Degrees.of(IntakeConstants.elevatorAngle.get()));
     }
 
     public Command setStatecCommand(IntakeState state) {

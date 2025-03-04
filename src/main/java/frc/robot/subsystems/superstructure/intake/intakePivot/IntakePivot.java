@@ -44,7 +44,7 @@ public class IntakePivot extends SubsystemBase{
         () -> inputs.velocityRotsPerSec*360, ()-> inputs.appliedVolts, this);
 
         setPointVisualizer.setState(0);
-        lastDesiredAngle = IntakeConstants.idleAngle;
+        lastDesiredAngle = Degrees.of(IntakeConstants.idleAngle.get());
     }
 
     @Override
@@ -72,12 +72,6 @@ public class IntakePivot extends SubsystemBase{
 
     public void setDesiredAngle(Angle angle) {
         pivot.setDesiredAngle(angle);
-        setPointVisualizer.setState(angle.in(Radians));
-        lastDesiredAngle = angle.copy();
-    }
-
-    public void setSlowAngle(Angle angle) {
-        pivot.setSlowAngle(angle);
         setPointVisualizer.setState(angle.in(Radians));
         lastDesiredAngle = angle.copy();
     }
