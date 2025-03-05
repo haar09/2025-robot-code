@@ -8,11 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2200976396757612,
-        "y": 3.2966651642025684
+        "x": 2.222047923693844,
+        "y": 3.0184712809857666
       },
       "isLocked": false,
-      "linkedName": "B Atis Alternative"
+      "linkedName": "B Atis"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 2.352640845070421
       },
       "prevControl": {
-        "x": 2.384119409629321,
-        "y": 3.012585303825923
+        "x": 2.4372209125426396,
+        "y": 2.9412286036465844
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,7 +55,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

@@ -3,35 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4024394924785546,
-        "y": 5.55038802321678
+        "x": 3.245061872572839,
+        "y": 3.962047498523895
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1769759346833446,
-        "y": 4.8230344025308085
+        "x": 3.7088454490554064,
+        "y": 3.9525193520818167
       },
       "isLocked": false,
-      "linkedName": "G3"
+      "linkedName": "AB Alternative"
     },
     {
       "anchor": {
-        "x": 3.245061872572839,
-        "y": 3.849868308916231
+        "x": 1.6377996575342464,
+        "y": 4.002461472602739
       },
       "prevControl": {
-        "x": 2.6999188509256884,
-        "y": 4.325355608520264
+        "x": 1.3915575138114948,
+        "y": 3.9592780654325805
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "G22"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4323651452282154,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.5,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.2,
     "maxAcceleration": 9.0,
@@ -42,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -58.6735030267389
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

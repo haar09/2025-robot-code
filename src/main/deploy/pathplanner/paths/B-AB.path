@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4024394924785546,
-        "y": 5.55038802321678
+        "x": 3.245061872572839,
+        "y": 3.849868308916231
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1769759346833446,
-        "y": 4.8230344025308085
+        "x": 3.267976467244267,
+        "y": 4.152913605576363
       },
       "isLocked": false,
-      "linkedName": "G3"
+      "linkedName": "B Atis 2"
     },
     {
       "anchor": {
         "x": 3.245061872572839,
-        "y": 3.849868308916231
+        "y": 3.962047498523895
       },
       "prevControl": {
-        "x": 2.6999188509256884,
-        "y": 4.325355608520264
+        "x": 3.3418913094794576,
+        "y": 4.192534071122707
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AB Alternative"
     }
   ],
   "rotationTargets": [],
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -58.6735030267389
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
