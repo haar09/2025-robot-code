@@ -1,0 +1,109 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Asagi - CD"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae Removal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CD-D"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D-G1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G1-C"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C-G2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G2-AB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae Removal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AB-B Alternative"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B-G3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G3-A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A-Source"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "CD Start",
+  "choreoAuto": false
+}

@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.6227739726027397,
+        "y": 5.700363869863013
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.520409609600968,
+        "y": 5.002921382774935
+      },
+      "isLocked": false,
+      "linkedName": "G32"
+    },
+    {
+      "anchor": {
+        "x": 3.245061872572839,
+        "y": 3.962047498523895
+      },
+      "prevControl": {
+        "x": 2.583298671326488,
+        "y": 4.588135492851345
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "AB Alternative"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.2,
+    "maxAcceleration": 9.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -15.422161318738622
+  },
+  "useDefaultConstraints": true
+}

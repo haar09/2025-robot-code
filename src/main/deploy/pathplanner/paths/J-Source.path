@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.99620446113641,
+        "y": 5.181268523590917
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.377662397983843,
+        "y": 5.629435677854125
+      },
+      "isLocked": false,
+      "linkedName": "J Atis"
+    },
+    {
+      "anchor": {
+        "x": 1.3202464788712482,
+        "y": 6.8595070422604785
+      },
+      "prevControl": {
+        "x": 1.530176905525184,
+        "y": 6.723752793837468
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Ust Source"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.6,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.2,
+    "maxAcceleration": 9.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.85590079949303
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -29.999999999999996
+  },
+  "useDefaultConstraints": true
+}

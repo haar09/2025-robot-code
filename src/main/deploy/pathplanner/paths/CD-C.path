@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.8696142553775195,
+        "y": 2.9431487785414983
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.6441954262053278,
+        "y": 3.0512522079720124
+      },
+      "isLocked": false,
+      "linkedName": "CD Alternative"
+    },
+    {
+      "anchor": {
+        "x": 3.7295774647887314,
+        "y": 3.018749999999999
+      },
+      "prevControl": {
+        "x": 3.9683926819066535,
+        "y": 2.9038208584834027
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "C Atis"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.2,
+    "maxAcceleration": 9.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -29.999999999999996
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -29.999999999999996
+  },
+  "useDefaultConstraints": true
+}

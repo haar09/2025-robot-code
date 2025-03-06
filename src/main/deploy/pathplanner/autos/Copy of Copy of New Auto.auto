@@ -1,0 +1,91 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Alt-E"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E-Source"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source-B 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B-AB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae Removal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AB-G2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G2-A Alternative"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A-G3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G3-A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "EF Start",
+  "choreoAuto": false
+}

@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.7225315690942065,
+        "y": 5.030772742209331
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.9350159680660752,
+        "y": 5.714872619783539
+      },
+      "isLocked": false,
+      "linkedName": "L Atis 2"
+    },
+    {
+      "anchor": {
+        "x": 1.3202464788712482,
+        "y": 6.8595070422604785
+      },
+      "prevControl": {
+        "x": 1.6018969575301552,
+        "y": 6.599570774064812
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Ust Source"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.5,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.2,
+    "maxAcceleration": 9.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.85590079949303
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -150.0
+  },
+  "useDefaultConstraints": true
+}

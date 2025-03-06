@@ -197,6 +197,16 @@ public final class Constants {
     public static final Distance MAX_HEIGHT = Centimeters.of(53);
   }
 
+
+  public static class ClimbConstants{
+    public static final int kClimbMotorId = 1;
+    public static final TalonFXConfiguration climbMotorConfig = new TalonFXConfiguration();
+    static {
+      climbMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+      climbMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    }
+  }
+
   public static class AlgMechanismConstants{
     public static final int kRackMotorId = 31;
     //public static final int kRollerMotorId = 32;
