@@ -5,26 +5,23 @@ import java.util.List;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class AprilTagVision extends SubsystemBase{
-    private final AprilTagVisionConsumer consumer;
+    private final CommandSwerveDrivetrain drivetrain;
     private final AprilTagVisionIO[] io;
     private final AprilTagVisionIOInputsAutoLogged[] inputs;
     private final Alert[] disconnectedAlerts;
 
-    public AprilTagVision(AprilTagVisionConsumer consumer, AprilTagVisionIO... io){
-        this.consumer = consumer;
+    public AprilTagVision(CommandSwerveDrivetrain drivetrain, AprilTagVisionIO... io){
+        this.drivetrain = drivetrain;
         this.io = io;
 
         this.inputs = new AprilTagVisionIOInputsAutoLogged[io.length];
@@ -99,13 +96,13 @@ public class AprilTagVision extends SubsystemBase{
                     continue;
                 }
 
-                double stDevFactor = Math.pow(observation.averageTagDistance(), 2) / observation.tagCount();
-                double linearStdDev = VisionConstants.linearStdDevBaseline * stDevFactor;
-                double angularStdDev = VisionConstants.angularStdDevBaseline * stDevFactor;
+                //double stDevFactor = Math.pow(observation.averageTagDistance(), 2) / observation.tagCount();
+                //double linearStdDev = VisionConstants.linearStdDevBaseline * stDevFactor;
+                //double angularStdDev = VisionConstants.angularStdDevBaseline * stDevFactor;
 
-                consumer.accept(observation.estPose().estimatedPose.toPose2d(),
+                drivetrain.addVisionMeasurement(observation.estPose().estimatedPose.toPose2d(),
                 observation.estPose().timestampSeconds,
-                VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
+                VecBuilder.fill(VisionConstants.linearStdDevBaseline, VisionConstants.linearStdDevBaseline, VisionConstants.angularStdDevBaseline));
             }
 
             Logger.recordOutput(
@@ -116,12 +113,4 @@ public class AprilTagVision extends SubsystemBase{
             robotPosesRejected.toArray(new Pose3d[robotPosesRejected.size()]));  
         }
     }
-
-  @FunctionalInterface
-  public static interface AprilTagVisionConsumer {
-    public void accept(
-        Pose2d visionRobotPoseMeters,
-        double timestampSeconds,
-        Matrix<N3, N1> visionMeasurementStdDevs);
-  }
 }

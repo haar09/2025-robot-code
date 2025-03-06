@@ -34,6 +34,7 @@ public class RealPhotonVision implements AprilTagVisionIO{
         Set<Short> tagIds = new HashSet<>();
         List<PoseObservation> poseObservations = new LinkedList<>();
         for (var result : camera.getAllUnreadResults()) {
+
             if (result.multitagResult.isPresent()) {
                 var multitagResult = result.multitagResult.get();
                 
@@ -50,6 +51,22 @@ public class RealPhotonVision implements AprilTagVisionIO{
                     multitagResult.fiducialIDsUsed.size(),
                     totalTagDistance / multitagResult.fiducialIDsUsed.size()
                 ));
+            } else if (!result.targets.isEmpty()) {
+                 var target = result.targets.get(0);
+        
+                // Calculate robot pose
+                var tagPose = VisionConstants.kTagLayout.getTagPose(target.fiducialId);
+                if (tagPose.isPresent()) {
+                Transform3d cameraToTarget = target.bestCameraToTarget;
+
+                tagIds.add((short) target.fiducialId);
+
+                poseObservations.add(new PoseObservation(
+                    poseEstimator.update(result).orElse(null),
+                    target.poseAmbiguity,
+                    1,
+                    cameraToTarget.getTranslation().getNorm()
+                ));
             }
         }
 
@@ -64,4 +81,5 @@ public class RealPhotonVision implements AprilTagVisionIO{
           inputs.tagIds[i++] = id;
         }
     }
+}
 }

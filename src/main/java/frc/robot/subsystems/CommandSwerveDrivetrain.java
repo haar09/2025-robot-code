@@ -12,25 +12,24 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.config.ModuleConfig;
-import com.pathplanner.lib.config.PIDConstants;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
@@ -49,11 +48,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final Rotation2d RedAlliancePerspectiveRotation = Rotation2d.k180deg;
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean hasAppliedOperatorPerspective = false;
-
-    private GenericEntry resetPigeon = Shuffleboard.getTab("TabName")
-    .add("Reset Pigeon", false)
-    .withWidget(BuiltInWidgets.kToggleButton)
-    .getEntry(); 
 
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
@@ -86,6 +80,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     @Override
     public void periodic() {
+        Logger.recordOutput("distanceto7", VisionConstants.kTagLayout.getTagPose(7).get().toPose2d().getX()-this.getState().Pose.getX());
+
         if (!hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent((allianceColor) -> {
                 this.setOperatorPerspectiveForward(
@@ -94,12 +90,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 hasAppliedOperatorPerspective = true;
             });
         }
-
-        if (resetPigeon.getBoolean(false)) {
-            this.getPigeon2().setYaw(0);
-            resetPigeon.setBoolean(false);
-        }
-
+        
         Logger.recordOutput("Drive/Pose", this.getState().Pose);
         Logger.recordOutput("Drive/Speeds", this.getState().Speeds);
         Logger.recordOutput("Drive/BackRightAmp", this.getModule(2).getDriveMotor().getStatorCurrent().getValueAsDouble());
@@ -138,12 +129,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                         .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
                         .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
                 ),
-                new PPHolonomicDriveController(
-                    // PID constants for translation
-                    new PIDConstants(AutoConstants.kPXYController, 0, 0),
-                    // PID constants for rotation
-                    new PIDConstants(AutoConstants.kPThetaController, 0, 0)
-                ),
+                AutoConstants.kDriveController,
                 kPathPlannerConfig,
                 // Assume the path needs to be flipped for Red vs Blue, this is normally the case
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
@@ -156,6 +142,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     }
                 }
             );
+    }
+
+    public final Command resetPigeon(){
+        return runOnce(() -> this.getPigeon2().setYaw(0));
+    }
+
+    @Override
+    public void addVisionMeasurement(
+        Pose2d visionRobotPoseMeters,
+        double timestampSeconds,
+        Matrix<N3, N1> visionMeasurementStdDevs
+    ) {
+        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
     /* Swerve requests to apply during SysId characterization */
