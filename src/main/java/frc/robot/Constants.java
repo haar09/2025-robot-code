@@ -12,6 +12,8 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -31,15 +33,21 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kRobotWeight = 0;
-    public static final double kMOI = 0;
+    public static final double kRobotWeight = 65;
+    public static final double kMOI = 5.3;
 
-    public static final double kMaxSpeedMetersPerSecond = 4.5;
-    public static final double kPXYController = 8;
-    public static final double kPThetaController = 10;
+    public static final double kMaxSpeedMetersPerSecond = 4.2;
+    public static final double kPXYController = 5.05;
+    public static final double kPThetaController = 5.8;
 
     public static final PathConstraints kPathConstraints = new PathConstraints(
-      kMaxSpeedMetersPerSecond, 5, Math.toRadians(540), Math.toRadians(720));
+      kMaxSpeedMetersPerSecond, 6, Math.toRadians(540), Math.toRadians(720));
+    public static final PPHolonomicDriveController kDriveController = new PPHolonomicDriveController(
+                    // PID constants for translation
+                    new PIDConstants(kPXYController, 0, 0),
+                    // PID constants for rotation
+                    new PIDConstants(kPThetaController, 0, 0)
+                );
   }
 
   public static class VisionConstants {
@@ -191,6 +199,6 @@ public final class Constants {
 
   public static class AlgMechanismConstants{
     public static final int kRackMotorId = 31;
-    public static final int kRollerMotorId = 32;
+    //public static final int kRollerMotorId = 32;
   } 
 }

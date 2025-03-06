@@ -23,12 +23,12 @@ public class AlgMechanismCmd extends Command{
 
         if (extendButton) {
             algMechanism.setDesiredExtension(0.35);
-            algMechanism.setOutputPercentage(1);
+            //algMechanism.setOutputPercentage(1);
         } else if (retractButton) {
             algMechanism.setDesiredExtension(-0.35);
         } else {
             algMechanism.setDesiredExtension(0);
-            algMechanism.setOutputPercentage(0);
+            //algMechanism.setOutputPercentage(0);
         }
     }
 }

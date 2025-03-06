@@ -9,9 +9,9 @@ public class NoAlgMechanism implements AlgMechanismIO{
     public void setDesiredExtension(double extension){
     }
 
-    @Override
+    /*@Override
     public void setOutputPercentage(double percentage){
-    }
+    }*/
 
     @Override
     public void updateInputs(AlgMechanismIOInputs inputs){

@@ -32,6 +32,7 @@ import frc.robot.commands.AlgMechanismCmd;
 import frc.robot.commands.AutoBranchandShootL1;
 import frc.robot.commands.AutoBranchandShootL23;
 import frc.robot.commands.DpadBranchandShootL23;
+import frc.robot.commands.ElevatorCmd;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.LEDSubsystem;
@@ -154,6 +155,9 @@ public class RobotContainer {
 
    new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N") && networkTablesAgent.triggerValue.get() != 1)
    .whileTrue(new AutoBranchandShootL23(networkTablesAgent, drivetrain, stateManager));
+   
+  new Trigger(() -> !networkTablesAgent.upDownValue.get().contentEquals("N") && networkTablesAgent.elevatorClimbSwitchValue.get().contentEquals("E"))
+  .whileTrue(new ElevatorCmd(elevator, networkTablesAgent.upDownValue));
 
     new NetworkButton("Arduino", "Override")
       .whileTrue(new InstantCommand(() -> {

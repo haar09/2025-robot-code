@@ -92,4 +92,7 @@ public class Elevator extends SubsystemBase{
         return sysIdRoutine.dynamic(direction);
     }
 
+    public void setVoltage(double voltage) {
+        io.setSysIdVoltage(Volts.of(voltage));
+    }
 }

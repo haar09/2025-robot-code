@@ -149,7 +149,7 @@ public class FieldConstants {
 
   public enum ReefLevel {
     L1(1, 0, 0),
-    L23(1.25, 0.06, -90);
+    L23(1.25, 0.115, -90);
 
     ReefLevel(double xModifier, double yModifier, double angleModifier) {
       this.xModifier = xModifier;

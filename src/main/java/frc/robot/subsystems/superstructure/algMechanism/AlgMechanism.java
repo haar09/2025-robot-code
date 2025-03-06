@@ -10,11 +10,11 @@ import frc.robot.Constants.AlgMechanismConstants;
 public class AlgMechanism extends SubsystemBase{
     private final AlgMechanismIO io;
     private final AlgMechanismIOInputsAutoLogged inputs = new AlgMechanismIOInputsAutoLogged();
-    private final Alert disconnectedAlertRack, disconnectedAlertRoller;
+    private final Alert disconnectedAlertRack/*, disconnectedAlertRoller*/;
 
     public static AlgMechanism create() {
         if (Robot.isReal()){
-            return new AlgMechanism(new RealAlgMechanism(AlgMechanismConstants.kRackMotorId, AlgMechanismConstants.kRollerMotorId));
+            return new AlgMechanism(new RealAlgMechanism(AlgMechanismConstants.kRackMotorId/*, AlgMechanismConstants.kRollerMotorId*/));
         } else {
             return new AlgMechanism(new NoAlgMechanism());
         }
@@ -23,7 +23,7 @@ public class AlgMechanism extends SubsystemBase{
     public AlgMechanism(AlgMechanismIO io) {
         this.io = io;
         this.disconnectedAlertRack = new Alert("Alg Rack is disconnected.", Alert.AlertType.kWarning);
-        this.disconnectedAlertRoller = new Alert("Alg Roller is disconnected.", Alert.AlertType.kWarning);
+        //this.disconnectedAlertRoller = new Alert("Alg Roller is disconnected.", Alert.AlertType.kWarning);
     }
 
     @Override
@@ -31,13 +31,13 @@ public class AlgMechanism extends SubsystemBase{
         io.updateInputs(inputs);
         Logger.processInputs("AlgMechansim", inputs);
         disconnectedAlertRack.set(!inputs.rackMotorConnected);
-        disconnectedAlertRoller.set(!inputs.rollerMotorConnected);
+        //disconnectedAlertRoller.set(!inputs.rollerMotorConnected);
     }
 
     public void setDesiredExtension(double extension) {
         io.setDesiredExtension(extension);
     }
-    public void setOutputPercentage(double percentage) {
+    /*public void setOutputPercentage(double percentage) {
         io.setOutputPercentage(percentage);
-    }
+    }*/
 }

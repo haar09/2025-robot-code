@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,7 +21,6 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.superstructure.StateManager;
 import frc.robot.util.AlignUtil;
 import frc.robot.util.AllianceFlipUtil;
-import frc.robot.util.AlignUtil.ControllerOutput;
 
 public class DpadBranchandShootL23 extends Command{
     private final CommandSwerveDrivetrain drivetrain;
@@ -44,7 +44,7 @@ public class DpadBranchandShootL23 extends Command{
         state = State.TRAVELLING;
         Pose2d currentPose = drivetrain.getState().Pose;
 
-        alignUtil.resetControllers(currentPose);
+        alignUtil.resetControllers(currentPose, drivetrain.getState().Speeds);
 
         if (!leftBranch) {
             goalPosition = Reef.scoringPositions2d.get(FieldConstants.findClosestReefside(currentPose)*2).get(ReefLevel.L23);
@@ -68,7 +68,7 @@ public class DpadBranchandShootL23 extends Command{
             Logger.recordOutput("AutoShoot/Goal Position", goalPosition);
         }
 
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+    private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric()
         .withDeadband(0).withRotationalDeadband(0) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
@@ -85,13 +85,13 @@ public class DpadBranchandShootL23 extends Command{
             case TRAVELLING:
         Pose2d  currentPose = drivetrain.getState().Pose;
 
-        ControllerOutput output = alignUtil.calculate(currentPose, goalPosition);
-
-        drivetrain.setControl(drive.withVelocityX(-output.xVel).withVelocityY(-output.yVel).withRotationalRate(output.rotVel));
-
+            ChassisSpeeds output = alignUtil.calculate(currentPose, goalPosition);
+    
+            drivetrain.setControl(drive.withVelocityX(output.vxMetersPerSecond).withVelocityY(output.vyMetersPerSecond).withRotationalRate(output.omegaRadiansPerSecond));
+    
         if (Math.abs(currentPose.getX() - goalPosition.getX()) < 0.025
         && Math.abs(currentPose.getY() - goalPosition.getY()) < 0.025
-        && Math.abs(currentPose.getRotation().minus(goalPosition.getRotation()).getDegrees()) < 5){
+        && Math.abs(currentPose.getRotation().minus(goalPosition.getRotation()).getDegrees()) < 3){
             setState(State.READY);
         }
         break;
