@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.416767138011199,
-        "y": 1.7576693958010994
+        "x": 1.91593778402099,
+        "y": 1.8506832649548406
       },
       "isLocked": false,
       "linkedName": "Source"
@@ -20,15 +20,20 @@
         "y": 3.018749999999999
       },
       "prevControl": {
-        "x": 3.0614549694070323,
-        "y": 2.2677304252582267
+        "x": 2.8321592802850923,
+        "y": 2.215441173932638
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "C Atis"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": -29.999999999999996
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 150.0
+    "rotation": -29.999999999999996
   },
   "reversed": false,
   "folder": null,

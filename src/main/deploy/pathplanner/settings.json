@@ -3,7 +3,12 @@
   "robotLength": 0.75,
   "holonomicMode": true,
   "pathFolders": [],
-  "autoFolders": [],
+  "autoFolders": [
+    "CD Start",
+    "Mid Start",
+    "EF Start",
+    "üst olup çöpe giden babayiğitler"
+  ],
   "defaultMaxVel": 4.2,
   "defaultMaxAccel": 9.0,
   "defaultMaxAngVel": 540.0,

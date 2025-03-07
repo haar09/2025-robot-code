@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.55262123563687,
-        "y": 2.748690920508295
+        "x": 2.013906877049938,
+        "y": 1.1575883463707446
       },
       "isLocked": false,
       "linkedName": "D Atis"
@@ -20,8 +20,8 @@
         "y": 0.8503521126760551
       },
       "prevControl": {
-        "x": 1.047082388287404,
-        "y": 0.41003196605125886
+        "x": 1.8984348164369684,
+        "y": 1.0061342148081973
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,8 +30,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.6,
-      "rotationDegrees": 45.0
+      "waypointRelativePos": 0.5684647302904559,
+      "rotationDegrees": 55.0
     }
   ],
   "constraintZones": [],
@@ -60,7 +60,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 150.0
+    "rotation": -29.999999999999996
   },
   "useDefaultConstraints": true
 }

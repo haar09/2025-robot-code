@@ -1,0 +1,91 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Ust-KL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae Removal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "KL-K 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "K-Source"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source-L2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L-Source"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source-A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A-G3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G3-B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "üst olup çöpe giden babayiğitler",
+  "choreoAuto": false
+}

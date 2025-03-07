@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8105617835860048,
-        "y": 2.00744089562948
+        "x": 1.2354500586190345,
+        "y": 2.2777237453645136
       },
       "isLocked": false,
       "linkedName": "Source yakin"
@@ -20,15 +20,20 @@
         "y": 4.179190169827501
       },
       "prevControl": {
-        "x": 2.9841391489388767,
-        "y": 3.856310184750246
+        "x": 2.930235926694959,
+        "y": 3.533738627132032
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

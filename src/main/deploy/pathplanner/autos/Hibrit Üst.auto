@@ -1,0 +1,109 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Ust-KL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae Removal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "KL-K 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "K2-Source"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source-L2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L2-G3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G3-AB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae Removal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AB-A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A-G2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G2-B2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B-G1"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "üst olup çöpe giden babayiğitler",
+  "choreoAuto": false
+}
