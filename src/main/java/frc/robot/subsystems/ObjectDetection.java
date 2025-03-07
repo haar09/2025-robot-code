@@ -49,6 +49,7 @@ public class ObjectDetection extends SubsystemBase{
         }
         Logger.recordOutput("Vision/ar0234/Target Valid", hasTargets);
         Logger.recordOutput("Vision/ar0234/Object TX", tx);
+        Logger.recordOutput("Vision/ar0234/Object Ratio", ratio);
         Logger.recordOutput("Vision/ar0234/Connected", camera.isConnected());
         disconnectedAlert.set(!camera.isConnected());
     }

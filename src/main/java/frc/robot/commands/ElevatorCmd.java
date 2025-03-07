@@ -1,17 +1,17 @@
 package frc.robot.commands;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 
 public class ElevatorCmd extends Command {
     private final Elevator elevator;
-    private final AtomicReference<String> upDownInput;
+    private final Supplier<String> upDownInput;
 
-    public ElevatorCmd(Elevator elevator, AtomicReference<String> upDownInput) {
+    public ElevatorCmd(Elevator elevator, Supplier<String> upDownInput) {
         this.elevator = elevator;
         this.upDownInput = upDownInput;
-        addRequirements(elevator);
     }
 
     @Override

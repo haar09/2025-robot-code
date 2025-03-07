@@ -11,8 +11,8 @@ public interface IntakePivotIO {
     public void stop();
     public Angle getAngle();
     public void setNeutralMode(NeutralModeValue neutralModeValue);
-    public void resetEncoders();
     public Angle getAbsolutePosition();
+    public void manualEncoderReset();
 
     default void updateInputs(IntakePivotIOInputs inputs) {}
 

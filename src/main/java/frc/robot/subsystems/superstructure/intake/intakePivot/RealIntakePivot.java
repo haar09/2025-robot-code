@@ -99,9 +99,13 @@ public class RealIntakePivot implements IntakePivotIO {
 
     private Angle encoderOffset = Degrees.of(0);
 
-    @Override
     public void resetEncoders(){
        encoderOffset = getAbsolutePosition();
+    }
+
+    @Override
+    public void manualEncoderReset(){
+        encoderOffset = Degrees.of(122);
     }
 
     @Override

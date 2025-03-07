@@ -51,7 +51,7 @@ public class Elevator extends SubsystemBase{
             this
         )
         );
-        SmartDashboard.putNumber("asansoryukseklik", 0);
+        SmartDashboard.putNumber("asansoryukseklik", 50);
     }
 
     @Override

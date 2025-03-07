@@ -93,6 +93,10 @@ public class IntakePivot extends SubsystemBase{
         pivot.stop();
     }
 
+    public void manualEncoderReset(){
+        pivot.manualEncoderReset();
+    }
+
     public Angle getAngle() {
         return pivot.getAngle();
     }

@@ -17,7 +17,6 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -75,8 +74,6 @@ public class RobotContainer {
 
   private void configureBindings() {
     updateControlStyle();
-
-    new NetworkButton(NetworkTableInstance.getDefault().getTable("SmartDashboard"), "Reset Pigeon").onTrue(drivetrain.resetPigeon());
  
     joystick.y().onTrue(stateManager.setStateCommand(State.TEST));
     joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
@@ -117,7 +114,8 @@ public class RobotContainer {
 
 
     // reset the field-centric heading on menu button
-    joystick.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+    joystick.start().onTrue(runOnce(() -> drivetrain.seedFieldCentric()));
+    joystick.back().onTrue(runOnce(() -> intake.intakePivot.manualEncoderReset()));
 
     drivetrain.registerTelemetry(state -> logger.telemeterize(state));
 
@@ -157,7 +155,10 @@ public class RobotContainer {
    .whileTrue(new AutoBranchandShootL23(networkTablesAgent, drivetrain, stateManager));
    
   new Trigger(() -> !networkTablesAgent.upDownValue.get().contentEquals("N") && networkTablesAgent.elevatorClimbSwitchValue.get().contentEquals("E"))
-  .whileTrue(new ElevatorCmd(elevator, networkTablesAgent.upDownValue));
+  .whileTrue(new ElevatorCmd(elevator, () -> networkTablesAgent.upDownValue.get()));
+
+  operator.povUp().whileTrue(new ElevatorCmd(elevator, () -> "U"));
+  operator.povDown().whileTrue(new ElevatorCmd(elevator, () -> "D"));
 
     new NetworkButton("Arduino", "Override")
       .whileTrue(new InstantCommand(() -> {

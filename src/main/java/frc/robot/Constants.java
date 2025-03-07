@@ -52,12 +52,12 @@ public final class Constants {
 
   public static class VisionConstants {
     public static final Transform3d kRobotToCam1 = //OV9281 001
-                new Transform3d(new Translation3d(0.035, -0.21743, 0.415225),
-                                new Rotation3d(0, Math.toRadians(14.975), Math.toRadians(-90))
-                                );
-    public static final Transform3d kRobotToCam2 = //OV9281 002
                 new Transform3d(new Translation3d(0.035, 0.21743, 0.415225),
                                 new Rotation3d(0, Math.toRadians(14.975), Math.toRadians(90))
+                                );
+    public static final Transform3d kRobotToCam2 = //OV9281 002
+                new Transform3d(new Translation3d(0.035, -0.21743, 0.415225),
+                                new Rotation3d(0, Math.toRadians(14.975), Math.toRadians(-90))
                                 );
     public static final Transform3d kRobotToCam3 = //OV9281 003
                 new Transform3d(new Translation3d(0.231514, -0.274479, 0.189142),

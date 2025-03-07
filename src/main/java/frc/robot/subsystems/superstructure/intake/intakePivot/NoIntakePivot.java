@@ -35,12 +35,12 @@ public class NoIntakePivot implements IntakePivotIO {
     }
 
     @Override
-    public void setNeutralMode(NeutralModeValue neutralModeValue){
+    public void manualEncoderReset(){
+        
     }
 
     @Override
-    public void resetEncoders(){
-        
+    public void setNeutralMode(NeutralModeValue neutralModeValue){
     }
 
     @Override

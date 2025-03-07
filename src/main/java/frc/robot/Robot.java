@@ -94,6 +94,8 @@ public class Robot extends LoggedRobot {
 
     SmartDashboard.putBoolean("Flip Horizontally", false);
     SmartDashboard.putBoolean("Reset Pigeon", false);
+    SmartDashboard.putNumber("atisoffset", 0);
+    SmartDashboard.putNumber("sagsolaynalamamiktarioffset", 0);
     m_robotContainer = new RobotContainer();
   }
 
