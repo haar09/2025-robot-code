@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -96,13 +97,25 @@ public class AprilTagVision extends SubsystemBase{
                     continue;
                 }
 
-                //double stDevFactor = Math.pow(observation.averageTagDistance(), 2) / observation.tagCount();
-                //double linearStdDev = VisionConstants.linearStdDevBaseline * stDevFactor;
-                //double angularStdDev = VisionConstants.angularStdDevBaseline * stDevFactor;
+                double linearStdDev, stDevFactor, angularStdDev;
+
+                if (DriverStation.isEnabled()) {
+                stDevFactor = Math.pow(observation.averageTagDistance(), 2) / observation.tagCount();
+                linearStdDev = VisionConstants.linearStdDevBaseline * stDevFactor;
+                angularStdDev = VisionConstants.angularStdDevBaseline * stDevFactor;
+
+                if (cameraIndex < VisionConstants.cameraStdDevFactors.length){
+                    linearStdDev *= VisionConstants.cameraStdDevFactors[cameraIndex];
+                    angularStdDev *= VisionConstants.cameraStdDevFactors[cameraIndex];
+                }
+                } else {
+                    linearStdDev = VisionConstants.linearStdDevBaseline;
+                    angularStdDev = VisionConstants.angularStdDevBaseline;
+                }
 
                 drivetrain.addVisionMeasurement(observation.estPose().estimatedPose.toPose2d(),
                 observation.estPose().timestampSeconds,
-                VecBuilder.fill(VisionConstants.linearStdDevBaseline, VisionConstants.linearStdDevBaseline, VisionConstants.angularStdDevBaseline));
+                VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
             }
 
             Logger.recordOutput(

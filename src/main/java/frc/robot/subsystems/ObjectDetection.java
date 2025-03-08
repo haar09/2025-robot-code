@@ -1,3 +1,4 @@
+//2.4 ratiodan sonra alignlı oluyor
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Alert;
@@ -37,15 +38,19 @@ public class ObjectDetection extends SubsystemBase{
         hasTargets = result.hasTargets();
         if (result.hasTargets()) {
             var target = result.getBestTarget();
-            var dimensions = getTargetDimensions(target);
-            ratio = dimensions[0] / dimensions[1];
-            tx = result.getBestTarget().getYaw();
+            if (target.getDetectedObjectClassID() == 1){
+                var dimensions = getTargetDimensions(target);
+                ratio = dimensions[0] / dimensions[1];
+                tx = result.getBestTarget().getYaw();
+            }
         } else {
             tx = 0;
+            ratio = 0;
         }
         } else {
             hasTargets = false;
             tx = 0;
+            ratio = 0;
         }
         Logger.recordOutput("Vision/ar0234/Target Valid", hasTargets);
         Logger.recordOutput("Vision/ar0234/Object TX", tx);

@@ -34,11 +34,11 @@ public final class Constants {
 
   public static final class AutoConstants {
     public static final double kRobotWeight = 65;
-    public static final double kMOI = 5.3;
+    public static final double kMOI = 4.8;
 
     public static final double kMaxSpeedMetersPerSecond = 4.2;
-    public static final double kPXYController = 5.05;
-    public static final double kPThetaController = 5.8;
+    public static final double kPXYController = 4.7;
+    public static final double kPThetaController = 6;
 
     public static final PathConstraints kPathConstraints = new PathConstraints(
       kMaxSpeedMetersPerSecond, 6, Math.toRadians(540), Math.toRadians(720));
@@ -71,8 +71,16 @@ public final class Constants {
     public static final AprilTagFieldLayout kTagLayout =
                 AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
-    public static double linearStdDevBaseline = 0.02; // Centimeters
+    public static double linearStdDevBaseline = 0.04; // Centimeters
     public static double angularStdDevBaseline = 0.06; // Radians
+
+    public static double[] cameraStdDevFactors =
+    new double[] {
+      1.0,
+      1.0,
+      1.5,
+      1.5
+    };
 
     public static final double kMaxAmbiguity = 0.3;
     public static final double kMaxZError = 0.75;
@@ -188,18 +196,17 @@ public final class Constants {
     }
 
     public static final LoggedTunableNumber IDLE = new LoggedTunableNumber("Elevator/Idle", 0);
-    public static final LoggedTunableNumber CORAL_L2_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L2_HEIGHT", 28);
-    public static final LoggedTunableNumber CORAL_L3_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L3_HEIGHT", 49.5);
+    public static final LoggedTunableNumber CORAL_L2_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L2_HEIGHT", 30);
+    public static final LoggedTunableNumber CORAL_L3_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L3_HEIGHT", 49.25);
     public static final LoggedTunableNumber INTAKE_HEIGHT = new LoggedTunableNumber("Elevator/INTAKE_HEIGHT", 3);
     
-    public static final Distance kDistanceTolerance = Centimeters.of(1.5);
-  
+    public static final Distance kDistanceTolerance = Centimeters.of(1);
     public static final Distance MAX_HEIGHT = Centimeters.of(53);
   }
 
 
   public static class ClimbConstants{
-    public static final int kClimbMotorId = 1;
+    public static final int kClimbMotorId = 40;
     public static final TalonFXConfiguration climbMotorConfig = new TalonFXConfiguration();
     static {
       climbMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;

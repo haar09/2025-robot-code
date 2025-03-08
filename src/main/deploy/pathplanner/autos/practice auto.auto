@@ -7,55 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Mid-GH"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Algae Removal"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HG-G"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "G-AltSource"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "AltAltSource-F"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "AltaltSource-E"
+            "pathName": "Alt-E"
           }
         },
         {
@@ -71,9 +23,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Source"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Source-B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B - Source"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source - A"
           }
         },
         {
@@ -86,6 +62,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Mid Start",
+  "folder": null,
   "choreoAuto": false
 }

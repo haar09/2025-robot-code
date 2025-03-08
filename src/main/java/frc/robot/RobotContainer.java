@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
@@ -31,10 +32,9 @@ import frc.robot.commands.AlgMechanismCmd;
 import frc.robot.commands.AutoBranchandShootL1;
 import frc.robot.commands.AutoBranchandShootL23;
 import frc.robot.commands.DpadBranchandShootL23;
-import frc.robot.commands.ElevatorCmd;
+import frc.robot.commands.ClimbCmd;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ObjectDetection;
 import frc.robot.subsystems.apriltagvision.AprilTagVision;
 import frc.robot.subsystems.apriltagvision.RealPhotonVision;
@@ -45,6 +45,7 @@ import frc.robot.subsystems.superstructure.algMechanism.AlgMechanism;
 import frc.robot.subsystems.superstructure.deployer.Deployer;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.intake.Intake;
+import frc.robot.subsystems.climb.Climb;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.NetworkTablesAgent;
 
@@ -83,6 +84,9 @@ public class RobotContainer {
 
     joystick.b().onTrue(stateManager.setStateCommand(State.L1));
     joystick.b().onFalse(stateManager.setStateCommand(State.IDLE));
+
+    joystick.x().onTrue(stateManager.setStateCommand(State.SOURCE_INTAKE));
+    joystick.x().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.leftBumper().onTrue(runOnce(() -> controlMode = 1).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
     joystick.leftBumper().onFalse(runOnce(() -> controlMode = 0).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
@@ -154,13 +158,13 @@ public class RobotContainer {
    new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N") && networkTablesAgent.triggerValue.get() != 1)
    .whileTrue(new AutoBranchandShootL23(networkTablesAgent, drivetrain, stateManager));
    
-  new Trigger(() -> !networkTablesAgent.upDownValue.get().contentEquals("N") && networkTablesAgent.elevatorClimbSwitchValue.get().contentEquals("E"))
+ /*new Trigger(() -> !networkTablesAgent.upDownValue.get().contentEquals("N") && networkTablesAgent.elevatorClimbSwitchValue.get().contentEquals("E"))
   .whileTrue(new ElevatorCmd(elevator, () -> networkTablesAgent.upDownValue.get()));
 
-  operator.povUp().whileTrue(new ElevatorCmd(elevator, () -> "U"));
-  operator.povDown().whileTrue(new ElevatorCmd(elevator, () -> "D"));
+  operator.povUp().whileTrue(new ElevatorCmd(elevator, () -> "U", intake).alongWith(intake.setStatecCommand(IntakeState.ELEVATOR)));
+  operator.povDown().whileTrue(new ElevatorCmd(elevator, () -> "D", intake).alongWith(intake.setStatecCommand(IntakeState.ELEVATOR)));*/
 
-    new NetworkButton("Arduino", "Override")
+  new NetworkButton("Arduino", "Override")
       .whileTrue(new InstantCommand(() -> {
           double trigger = networkTablesAgent.triggerValue.get();
           switch ((int) trigger) {
@@ -189,9 +193,9 @@ public class RobotContainer {
   private StateManager stateManager;
   private NetworkTablesAgent networkTablesAgent;
   private AlgMechanism algMechanism;
+  private Climb climb;
 
   public RobotContainer() {
-    new LEDSubsystem();
     new ObjectDetection();
     intake = new Intake();
     elevator = Elevator.create();
@@ -199,6 +203,7 @@ public class RobotContainer {
     stateManager = new StateManager(deployer, intake, elevator);
     networkTablesAgent = new NetworkTablesAgent();
     algMechanism = AlgMechanism.create();
+    climb = Climb.create();
 
     if (Robot.isReal()) {
       new AprilTagVision(drivetrain,
@@ -214,6 +219,13 @@ public class RobotContainer {
 
     algMechanism.setDefaultCommand(
       new AlgMechanismCmd(algMechanism, () -> joystick.povUp().getAsBoolean(), () -> joystick.povDown().getAsBoolean()));
+    climb.setDefaultCommand(
+        new ClimbCmd(() -> operator.povRight().getAsBoolean(), () -> operator.povLeft().getAsBoolean(), climb));
+    
+    NamedCommands.registerCommand("L1", stateManager.setStateCommand(State.L1)); //YAZ L1
+    NamedCommands.registerCommand("Source", stateManager.setStateCommand(State.SOURCE_INTAKE).until(()->SmartDashboard.getBoolean("Deployer Ready", false))
+    .withTimeout(3)
+    .andThen(stateManager.setStateCommand(State.IDLE)));
 
     configureBindings();
 

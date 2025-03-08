@@ -29,6 +29,7 @@ public class StateManager extends SubsystemBase{
         IDLE,
         CORAL_INTAKE,
         ALGAE_INTAKE,
+        SOURCE_INTAKE,
         FEED,
         L1,
         L2_RIGHT,
@@ -61,6 +62,11 @@ public class StateManager extends SubsystemBase{
                 intake.setState(IntakeState.ALGAE);
                 deployer.setState(DeployerState.IDLE);
                 elevator.setPosition(Centimeters.of(ElevatorConstants.IDLE.get()));
+                break;
+            case SOURCE_INTAKE:
+                deployer.setState(DeployerState.CENTER);
+                elevator.setPosition(Centimeters.of(ElevatorConstants.INTAKE_HEIGHT.get()));
+                intake.setState(IntakeState.SOURCE);
                 break;
             case FEED:
                 deployer.setState(DeployerState.CENTER);

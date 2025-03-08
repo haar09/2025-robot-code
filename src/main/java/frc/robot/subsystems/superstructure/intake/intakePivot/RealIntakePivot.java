@@ -105,7 +105,7 @@ public class RealIntakePivot implements IntakePivotIO {
 
     @Override
     public void manualEncoderReset(){
-        encoderOffset = Degrees.of(122);
+        encoderOffset = Degrees.of(127);
     }
 
     @Override

@@ -23,6 +23,7 @@ public class Deployer extends  SubsystemBase {
     }
 
     public DeployerState state = DeployerState.IDLE;
+    //private boolean nomore = false;
 
     @Override
     public void periodic() {
@@ -32,6 +33,7 @@ public class Deployer extends  SubsystemBase {
             case IDLE:
                 deployerOmnis.setOutputPercentage(0);
                 deployerRollers.setOutputPercentage(0);
+                //nomore = false;
                 break;
             case CENTER: 
                 deployerOmnis.setOutputPercentage(0.2);
@@ -53,19 +55,21 @@ public class Deployer extends  SubsystemBase {
                 break;
             case SHOOT_RIGHT:
                 deployerOmnis.stop();
-                if (deployerBeamBreak.right_value) {
+                /*if (deployerBeamBreak.right_value && !nomore) {
                     deployerRollers.setOutputPercentage(-0.1);
                 } else {
-                    deployerRollers.setOutputPercentage(0.9);
-                }
+                    nomore = true;*/
+                    deployerRollers.setOutputPercentage(0.20);
+                //}
                 break;
             case SHOOT_LEFT:
                 deployerOmnis.stop();
-                if (deployerBeamBreak.left_value) {
+                /*if (deployerBeamBreak.left_value && !nomore) {
                     deployerRollers.setOutputPercentage(0.1);
                 } else {
-                    deployerRollers.setOutputPercentage(-0.9);
-                }
+                    nomore = true;*/
+                    deployerRollers.setOutputPercentage(-0.20);
+                //}
                 break;
         }
     }

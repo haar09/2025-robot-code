@@ -12,7 +12,7 @@
         "y": 1.1575883463707446
       },
       "isLocked": false,
-      "linkedName": "D Atis"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5684647302904559,
+      "waypointRelativePos": 0.3963494132985663,
       "rotationDegrees": 55.0
     }
   ],
@@ -38,7 +38,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Source",
+      "name": "Intake",
       "waypointRelativePos": 0.6029850746268662,
       "endWaypointRelativePos": null,
       "command": null
@@ -60,7 +60,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

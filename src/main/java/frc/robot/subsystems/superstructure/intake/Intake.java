@@ -28,6 +28,7 @@ public class Intake extends SubsystemBase{
         FEED,
         SHOOT,
         ALGAE,
+        SOURCE,
         ELEVATOR,
         BEFORE_FEED
     }
@@ -91,11 +92,16 @@ public class Intake extends SubsystemBase{
                 intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.algaeAngle.get()));
                 intakeRollers.setOutputPercentage(0, 0.6); 
                 break;
+            case SOURCE:
+                intakePivot.setCoast();
+                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.shootAngle.get()));
+                intakeRollers.setOutputPercentage(0.6, 0); 
+                break;
             case SHOOT:
                 intakePivot.setBrake();
                 intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.shootAngle.get()));
                 if  (intakePivot.isAtDesiredAngle()) {
-                    intakeRollers.setOutputPercentage(0.9, 0.9);
+                    intakeRollers.setOutputPercentage(0.8, 0.8);
                 } else {
                     intakeRollers.setOutputPercentage(0, 0);
                 }

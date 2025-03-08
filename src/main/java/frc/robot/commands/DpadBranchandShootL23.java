@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.FieldConstants;
 import frc.robot.GlobalVariables;
-import frc.robot.Constants.Robotconstants;
 import frc.robot.FieldConstants.Reef;
 import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -54,16 +53,12 @@ public class DpadBranchandShootL23 extends Command{
             goalPosition = Reef.scoringPositions2d.get(FieldConstants.findClosestReefside(currentPose)*2+1).get(ReefLevel.L23);
         }
 
-        if (Robotconstants.kTuningMode) {
-            goalPosition.transformBy(new Transform2d(SmartDashboard.getNumber("atisoffset", 0) , 0, new Rotation2d(0)));       
-        }
-
         double angleDifference = goalPosition.getRotation().plus(Rotation2d.kCCW_90deg).minus(currentPose.getRotation()).getDegrees();
 
             if ((GlobalVariables.getInstance().alliance == Alliance.Blue && angleDifference < 0) ||
             (GlobalVariables.getInstance().alliance != Alliance.Blue && angleDifference > 0)) {
                 leftInstead = true;
-                goalPosition = goalPosition.transformBy(new Transform2d(-0.21+SmartDashboard.getNumber("sagsolaynalamamiktarioffset", 0), 0, new Rotation2d(Units.degreesToRadians(180))));
+                goalPosition = goalPosition.transformBy(new Transform2d(-0.21, 0, new Rotation2d(Units.degreesToRadians(180))));
             } else {
                 leftInstead = false;
             }
@@ -94,9 +89,9 @@ public class DpadBranchandShootL23 extends Command{
     
             drivetrain.setControl(drive.withVelocityX(output.vxMetersPerSecond).withVelocityY(output.vyMetersPerSecond).withRotationalRate(output.omegaRadiansPerSecond));
     
-        if (Math.abs(currentPose.getX() - goalPosition.getX()) < 0.025
-        && Math.abs(currentPose.getY() - goalPosition.getY()) < 0.025
-        && Math.abs(currentPose.getRotation().minus(goalPosition.getRotation()).getDegrees()) < 3){
+        if (Math.abs(currentPose.getX() - goalPosition.getX()) < 0.03
+        && Math.abs(currentPose.getY() - goalPosition.getY()) < 0.03
+        && Math.abs(currentPose.getRotation().minus(goalPosition.getRotation()).getDegrees()) < 5){
             setState(State.READY);
         }
         break;

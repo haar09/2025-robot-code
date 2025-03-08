@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.058600133552968,
-        "y": 2.83295624099105
+        "x": 5.638322368421052,
+        "y": 4.005756578947368
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.013906877049938,
-        "y": 1.1575883463707446
+        "x": 6.629358552631579,
+        "y": 2.764555921052631
       },
       "isLocked": false,
-      "linkedName": "D Atis"
+      "linkedName": "GH-L1"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 0.6517337328767121
       },
       "prevControl": {
-        "x": 1.487738790969094,
-        "y": 0.8075158350088543
+        "x": 1.7445671324268621,
+        "y": 0.7570559623059205
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5684647302904559,
+      "waypointRelativePos": 0.2,
       "rotationDegrees": 55.0
     }
   ],
@@ -39,7 +39,7 @@
   "eventMarkers": [
     {
       "name": "Source",
-      "waypointRelativePos": 0.6029850746268662,
+      "waypointRelativePos": 0.800872093023256,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -60,7 +60,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

@@ -10,7 +10,7 @@ public interface ClimbIO {
     default void updateInputs(ClimbIOInputs inputs) {}
     @AutoLog
     class ClimbIOInputs {
-        public boolean climbMotorMotorConnected = true;
+        public boolean motorConnected = true;
     
         public double climbMotorVelocityRps = 0.0;
         public double climbMotorAppliedVolts = 0.0;

@@ -3,47 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.058600133552968,
-        "y": 2.83295624099105
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 2.013906877049938,
-        "y": 1.1575883463707446
-      },
-      "isLocked": false,
-      "linkedName": "D Atis"
-    },
-    {
-      "anchor": {
         "x": 1.292208904109589,
         "y": 0.6517337328767121
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.244706667013755,
+        "y": 0.8753705051599106
+      },
+      "isLocked": false,
+      "linkedName": "Source"
+    },
+    {
+      "anchor": {
+        "x": 4.979987377281951,
+        "y": 2.866750772256357
+      },
       "prevControl": {
-        "x": 1.487738790969094,
-        "y": 0.8075158350088543
+        "x": 3.846224302488775,
+        "y": 2.1559077224040055
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5684647302904559,
-      "rotationDegrees": 55.0
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": -59.99999999999999
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Source",
-      "waypointRelativePos": 0.6029850746268662,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.2,
     "maxAcceleration": 9.0,
@@ -54,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": 55.0
   },
   "useDefaultConstraints": true
 }

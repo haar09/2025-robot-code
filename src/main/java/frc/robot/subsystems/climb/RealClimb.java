@@ -27,9 +27,7 @@ public class RealClimb implements ClimbIO{
 
             BaseStatusSignal.setUpdateFrequencyForAll(100,
             climbMotorVelocity,
-            climbMotorVoltage);
-
-            BaseStatusSignal.setUpdateFrequencyForAll(250, 
+            climbMotorVoltage,
             climbMotorTemp,
             climbMotorSupplyCurrent);
 
@@ -38,7 +36,7 @@ public class RealClimb implements ClimbIO{
 
         @Override
         public void updateInputs(ClimbIOInputs inputs){
-            inputs.climbMotorMotorConnected = BaseStatusSignal.refreshAll(climbMotorVelocity,
+            inputs.motorConnected = BaseStatusSignal.refreshAll(climbMotorVelocity,
             climbMotorVoltage,
             climbMotorTemp,
             climbMotorSupplyCurrent).isOK();
