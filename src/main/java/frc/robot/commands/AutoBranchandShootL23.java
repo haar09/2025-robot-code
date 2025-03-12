@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -80,12 +82,14 @@ public class AutoBranchandShootL23 extends Command{
             if ((GlobalVariables.getInstance().alliance == Alliance.Blue && angleDifference < 0) ||
             (GlobalVariables.getInstance().alliance != Alliance.Blue && angleDifference > 0)) {
                 leftInstead = true;
-                goalPosition = goalPosition.transformBy(new Transform2d(-0.115*2, 0, new Rotation2d(Units.degreesToRadians(180))));
+                goalPosition = goalPosition.transformBy(new Transform2d(-0.21, 0, new Rotation2d(Units.degreesToRadians(180))));
             } else {
                 leftInstead = false;
             }
 
             goalPosition = AllianceFlipUtil.apply(goalPosition);
+
+            Logger.recordOutput("AutoShoot/Goal Position", goalPosition);
         }
 
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric()
@@ -109,8 +113,8 @@ public class AutoBranchandShootL23 extends Command{
     
             drivetrain.setControl(drive.withVelocityX(output.vxMetersPerSecond).withVelocityY(output.vyMetersPerSecond).withRotationalRate(output.omegaRadiansPerSecond));
     
-            if (Math.abs(currentPose.getX() - goalPosition.getX()) < 0.025
-            && Math.abs(currentPose.getY() - goalPosition.getY()) < 0.025
+            if (Math.abs(currentPose.getX() - goalPosition.getX()) < 0.02
+            && Math.abs(currentPose.getY() - goalPosition.getY()) < 0.022
             && Math.abs(currentPose.getRotation().minus(goalPosition.getRotation()).getDegrees()) < 3){
                 setState(State.READY);
             }

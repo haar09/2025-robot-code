@@ -1,5 +1,6 @@
 package frc.robot.subsystems.apriltagvision;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,6 +39,8 @@ public class AprilTagVision extends SubsystemBase{
                 "Vision camera " + Integer.toString(i) + " is disconnected.", AlertType.kWarning);
         }
     }
+
+    List<Integer> tagsToReject = Arrays.asList();
 
     @Override
     public void periodic(){
@@ -74,10 +78,30 @@ public class AprilTagVision extends SubsystemBase{
                 if (observation.estPose() == null) {
                     continue;
                 }
+
+                DriverStation.getAlliance().ifPresent((allianceColor) -> {
+                    if (allianceColor == Alliance.Red) {
+                        tagsToReject = Arrays.asList(17,18,19,20,21,22);
+                        } else {
+                        tagsToReject = Arrays.asList(6,7,8,9,10,11);
+                        }
+                    });
+
+                boolean hasRejectedTag = false;
+                if (cameraIndex>1) {
+                for (var target : observation.estPose().targetsUsed) {
+                    if (tagsToReject.contains(target.fiducialId)) {
+                        hasRejectedTag = true;
+                        break;
+                    }
+                }}
+
                 boolean rejectPose =
-                observation.estPose().targetsUsed.size() == 0 // Must have at least one tag
+                    observation.estPose().targetsUsed.size() == 0 // Must have at least one tag
+
                     || (observation.tagCount() == 1
                         && observation.ambiguity() > VisionConstants.kMaxAmbiguity) // Cannot be high ambiguity
+
                     || Math.abs(observation.estPose().estimatedPose.getZ())
                         > VisionConstants.kMaxZError // Must have realistic Z coordinate
     
@@ -85,7 +109,8 @@ public class AprilTagVision extends SubsystemBase{
                     || observation.estPose().estimatedPose.getX() < 0.0
                     || observation.estPose().estimatedPose.getX() > VisionConstants.kTagLayout.getFieldLength()
                     || observation.estPose().estimatedPose.getY() < 0.0
-                    || observation.estPose().estimatedPose.getY() > VisionConstants.kTagLayout.getFieldWidth();
+                    || observation.estPose().estimatedPose.getY() > VisionConstants.kTagLayout.getFieldWidth()
+                    || hasRejectedTag;
 
                 if (rejectPose) {
                 robotPosesRejected.add(observation.estPose().estimatedPose);

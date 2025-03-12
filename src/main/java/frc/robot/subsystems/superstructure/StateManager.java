@@ -36,7 +36,8 @@ public class StateManager extends SubsystemBase{
         L2_LEFT,
         L3_RIGHT,
         L3_LEFT,
-        TEST
+        TEST,
+        RESCUE
     }
     
     @AutoLogOutput public State state = State.IDLE;
@@ -65,8 +66,10 @@ public class StateManager extends SubsystemBase{
                 break;
             case SOURCE_INTAKE:
                 deployer.setState(DeployerState.CENTER);
-                elevator.setPosition(Centimeters.of(ElevatorConstants.INTAKE_HEIGHT.get()));
-                intake.setState(IntakeState.SOURCE);
+                elevator.setPosition(Centimeters.of(ElevatorConstants.SOURCE_HEIGHT.get()));
+                if (elevator.isAtSetpoint()) {
+                    intake.setState(IntakeState.SOURCE);
+                }
                 break;
             case FEED:
                 deployer.setState(DeployerState.CENTER);
@@ -134,7 +137,11 @@ public class StateManager extends SubsystemBase{
                     deployer.setState(DeployerState.SHOOT_RIGHT);
                 }
                 }
-                break;   
+                break;
+            case RESCUE:
+                intake.setState(IntakeState.FLOOR_INITIAL);
+                elevator.setPosition(Centimeters.of(SmartDashboard.getNumber("asansoryukseklik", 0)));
+                break;
         }
     }
 

@@ -29,13 +29,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.AlgMechanismCmd;
-import frc.robot.commands.AutoBranchandShootL1;
 import frc.robot.commands.AutoBranchandShootL23;
 import frc.robot.commands.DpadBranchandShootL23;
 import frc.robot.commands.ClimbCmd;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.ObjectDetection;
 import frc.robot.subsystems.apriltagvision.AprilTagVision;
 import frc.robot.subsystems.apriltagvision.RealPhotonVision;
 import frc.robot.subsystems.apriltagvision.SimPhotonVision;
@@ -52,7 +50,9 @@ import frc.robot.util.NetworkTablesAgent;
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  private double IntakeSpeed = 0.5;
   private double SlowSpeed = 0.1;
+  private double IntakeAngularRate = 0.75 * Math.PI;
   private double SlowAngularRate = 0.25 * Math.PI;
   private double AngularRate = MaxAngularRate;
   private int controlMode = 0;
@@ -101,6 +101,13 @@ public class RobotContainer {
     joystick.leftTrigger(IntakeConstants.kIntakeDeadband).whileTrue(stateManager.setStateCommand(State.CORAL_INTAKE));
     joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(stateManager.setStateCommand(State.IDLE));
 
+    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onTrue(runOnce(() -> MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * IntakeSpeed).andThen(() -> AngularRate = IntakeAngularRate)
+    .andThen(() -> drive.withDeadband(0.0).withRotationalDeadband(0.0)).andThen(
+      () -> robotOriented.withDeadband(0.0).withRotationalDeadband(0.0)));
+    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(runOnce(() -> MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)).andThen(() -> AngularRate = MaxAngularRate)
+    .andThen(() -> drive.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1))
+    .andThen(() -> robotOriented.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1)));
+
     joystick.rightTrigger(IntakeConstants.kIntakeDeadband).whileTrue(stateManager.setStateCommand(State.ALGAE_INTAKE));
     joystick.rightTrigger(IntakeConstants.kIntakeDeadband).onFalse(stateManager.setStateCommand(State.IDLE));
 
@@ -118,7 +125,8 @@ public class RobotContainer {
 
 
     // reset the field-centric heading on menu button
-    joystick.start().onTrue(runOnce(() -> drivetrain.seedFieldCentric()));
+    joystick.start().onTrue(stateManager.setStateCommand(State.RESCUE));
+    joystick.rightStick().onTrue(runOnce(()->drivetrain.seedFieldCentric()));
     joystick.back().onTrue(runOnce(() -> intake.intakePivot.manualEncoderReset()));
 
     drivetrain.registerTelemetry(state -> logger.telemeterize(state));
@@ -152,17 +160,11 @@ public class RobotContainer {
       }
     });
   
-   new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N") && networkTablesAgent.triggerValue.get() == 1)
-   .whileTrue(new AutoBranchandShootL1(networkTablesAgent, drivetrain, stateManager));
+   /*new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N") && networkTablesAgent.triggerValue.get() == 1)
+   .whileTrue(new AutoBranchandShootL1(networkTablesAgent, drivetrain, stateManager));*/
 
-   new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N") && networkTablesAgent.triggerValue.get() != 1)
+   new Trigger(() -> !networkTablesAgent.buttonValue.get().contentEquals("N")/*&& networkTablesAgent.triggerValue.get() != 1*/)
    .whileTrue(new AutoBranchandShootL23(networkTablesAgent, drivetrain, stateManager));
-   
- /*new Trigger(() -> !networkTablesAgent.upDownValue.get().contentEquals("N") && networkTablesAgent.elevatorClimbSwitchValue.get().contentEquals("E"))
-  .whileTrue(new ElevatorCmd(elevator, () -> networkTablesAgent.upDownValue.get()));
-
-  operator.povUp().whileTrue(new ElevatorCmd(elevator, () -> "U", intake).alongWith(intake.setStatecCommand(IntakeState.ELEVATOR)));
-  operator.povDown().whileTrue(new ElevatorCmd(elevator, () -> "D", intake).alongWith(intake.setStatecCommand(IntakeState.ELEVATOR)));*/
 
   new NetworkButton("Arduino", "Override")
       .whileTrue(new InstantCommand(() -> {
@@ -196,7 +198,6 @@ public class RobotContainer {
   private Climb climb;
 
   public RobotContainer() {
-    new ObjectDetection();
     intake = new Intake();
     elevator = Elevator.create();
     deployer = new Deployer();
@@ -220,12 +221,14 @@ public class RobotContainer {
     algMechanism.setDefaultCommand(
       new AlgMechanismCmd(algMechanism, () -> joystick.povUp().getAsBoolean(), () -> joystick.povDown().getAsBoolean()));
     climb.setDefaultCommand(
-        new ClimbCmd(() -> operator.povRight().getAsBoolean(), () -> operator.povLeft().getAsBoolean(), climb));
+        new ClimbCmd(() -> operator.povRight().getAsBoolean() || networkTablesAgent.upDownValue.get().contentEquals("U"),
+         () -> operator.povLeft().getAsBoolean() || networkTablesAgent.upDownValue.get().contentEquals("D"),
+          climb));
     
     NamedCommands.registerCommand("L1", stateManager.setStateCommand(State.L1)); //YAZ L1
-    NamedCommands.registerCommand("Source", stateManager.setStateCommand(State.SOURCE_INTAKE).until(()->SmartDashboard.getBoolean("Deployer Ready", false))
+    /*NamedCommands.registerCommand("Source", stateManager.setStateCommand(State.SOURCE_INTAKE).until(()->SmartDashboard.getBoolean("Deployer Ready", false))
     .withTimeout(3)
-    .andThen(stateManager.setStateCommand(State.IDLE)));
+    .andThen(stateManager.setStateCommand(State.IDLE)));*/
 
     configureBindings();
 

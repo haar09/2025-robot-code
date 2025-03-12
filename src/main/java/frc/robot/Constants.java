@@ -71,19 +71,19 @@ public final class Constants {
     public static final AprilTagFieldLayout kTagLayout =
                 AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
-    public static double linearStdDevBaseline = 0.04; // Centimeters
-    public static double angularStdDevBaseline = 0.06; // Radians
+    public static double linearStdDevBaseline = 0.08; // Centimeters
+    public static double angularStdDevBaseline = Math.toRadians(4.5); // Radians
 
     public static double[] cameraStdDevFactors =
     new double[] {
       1.0,
       1.0,
-      1.5,
-      1.5
+      2,
+      2
     };
 
     public static final double kMaxAmbiguity = 0.3;
-    public static final double kMaxZError = 0.75;
+    public static final double kMaxZError = 0.15;
 
     public static final Translation2d kReefCenter =
         new Translation2d(Units.inchesToMeters(176.746), kTagLayout.getFieldWidth() / 2.0);
@@ -197,8 +197,9 @@ public final class Constants {
 
     public static final LoggedTunableNumber IDLE = new LoggedTunableNumber("Elevator/Idle", 0);
     public static final LoggedTunableNumber CORAL_L2_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L2_HEIGHT", 30);
-    public static final LoggedTunableNumber CORAL_L3_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L3_HEIGHT", 49.25);
+    public static final LoggedTunableNumber CORAL_L3_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L3_HEIGHT", 49);
     public static final LoggedTunableNumber INTAKE_HEIGHT = new LoggedTunableNumber("Elevator/INTAKE_HEIGHT", 3);
+    public static final LoggedTunableNumber SOURCE_HEIGHT = new LoggedTunableNumber("Elevator/SOURCE_HEIGHT", 5.4);
     
     public static final Distance kDistanceTolerance = Centimeters.of(1);
     public static final Distance MAX_HEIGHT = Centimeters.of(53);

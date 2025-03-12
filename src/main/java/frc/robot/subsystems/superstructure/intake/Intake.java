@@ -122,7 +122,7 @@ public class Intake extends SubsystemBase{
         return intakePivot.getAngle().lte(Degrees.of(IntakeConstants.elevatorAngle.get()));
     }
 
-    public Command setStatecCommand(IntakeState state) {
+    public Command setStateCommand(IntakeState state) {
         return runOnce(() -> this.state = state).withName("Intake "+state.toString());
     }
 

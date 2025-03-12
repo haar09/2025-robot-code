@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.FieldConstants;
@@ -89,9 +88,9 @@ public class DpadBranchandShootL23 extends Command{
     
             drivetrain.setControl(drive.withVelocityX(output.vxMetersPerSecond).withVelocityY(output.vyMetersPerSecond).withRotationalRate(output.omegaRadiansPerSecond));
     
-        if (Math.abs(currentPose.getX() - goalPosition.getX()) < 0.03
-        && Math.abs(currentPose.getY() - goalPosition.getY()) < 0.03
-        && Math.abs(currentPose.getRotation().minus(goalPosition.getRotation()).getDegrees()) < 5){
+        if (Math.abs(currentPose.getX() - goalPosition.getX()) < 0.02
+        && Math.abs(currentPose.getY() - goalPosition.getY()) < 0.02
+        && Math.abs(currentPose.getRotation().minus(goalPosition.getRotation()).getDegrees()) < 3){
             setState(State.READY);
         }
         break;
