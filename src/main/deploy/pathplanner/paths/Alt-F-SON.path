@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.27094254925011,
-        "y": 3.037197941899481
+        "x": 8.277750000000001,
+        "y": 1.8604999999999996
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.917862980251942,
-        "y": 3.4565087588240875
+        "x": 9.280035772276594,
+        "y": 1.8433703422806391
       },
       "isLocked": false,
-      "linkedName": "F Atis"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.292208904109589,
-        "y": 0.6517337328767121
+        "x": 5.34,
+        "y": 3.04
       },
       "prevControl": {
-        "x": 1.0893438013687724,
-        "y": 0.5056318845312584
+        "x": 4.989789562803047,
+        "y": 3.108985319544497
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source"
+      "linkedName": "F-Atis-SON"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 28.142277057401213
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": 178.58557678859788
   },
   "useDefaultConstraints": true
 }
