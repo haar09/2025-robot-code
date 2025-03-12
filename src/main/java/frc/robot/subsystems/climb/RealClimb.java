@@ -7,7 +7,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants.ClimbConstants;
 
 public class RealClimb implements ClimbIO{
-        private final TalonFX climbMotor = new TalonFX(40);
+        private final TalonFX climbMotor = new TalonFX(ClimbConstants.kClimbMotorId);
 
         private final BaseStatusSignal
          climbMotorVelocity,

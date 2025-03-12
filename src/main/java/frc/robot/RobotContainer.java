@@ -18,8 +18,11 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -31,6 +34,7 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.AlgMechanismCmd;
 import frc.robot.commands.AutoBranchandShootL23;
 import frc.robot.commands.DpadBranchandShootL23;
+import frc.robot.commands.AutoCommands.Drive1Meter;
 import frc.robot.commands.ClimbCmd;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -50,9 +54,9 @@ import frc.robot.util.NetworkTablesAgent;
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
-  private double IntakeSpeed = 0.5;
+  //private double IntakeSpeed = 0.5;
   private double SlowSpeed = 0.1;
-  private double IntakeAngularRate = 0.75 * Math.PI;
+  //private double IntakeAngularRate = 0.75 * Math.PI;
   private double SlowAngularRate = 0.25 * Math.PI;
   private double AngularRate = MaxAngularRate;
   private int controlMode = 0;
@@ -70,20 +74,29 @@ public class RobotContainer {
       .withDeadband(MaxSpeed * 0.1)
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want r-centric driving in open loop
 
+  private final SwerveRequest.FieldCentricFacingAngle facingSource = new SwerveRequest.FieldCentricFacingAngle()
+  .withDeadband(MaxSpeed * 0.1)
+  .withRotationalDeadband(MaxAngularRate * 0.1)
+  .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
   private final Telemetry logger = new Telemetry(drivetrain.getState());
   private Supplier<SwerveRequest> controlStyle;
 
   private void configureBindings() {
     updateControlStyle();
  
+    facingSource.HeadingController.setPID(6.1, 0, 0);
+
+    joystick.b().whileTrue(new Drive1Meter(drivetrain));
+
     joystick.y().onTrue(stateManager.setStateCommand(State.TEST));
     joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.a().onTrue(stateManager.setStateCommand(State.FEED));
     joystick.a().onFalse(stateManager.setStateCommand(State.IDLE));
 
-    joystick.b().onTrue(stateManager.setStateCommand(State.L1));
-    joystick.b().onFalse(stateManager.setStateCommand(State.IDLE));
+    /*joystick.b().onTrue(stateManager.setStateCommand(State.L1));
+    joystick.b().onFalse(stateManager.setStateCommand(State.IDLE));*/
 
     joystick.x().onTrue(stateManager.setStateCommand(State.SOURCE_INTAKE));
     joystick.x().onFalse(stateManager.setStateCommand(State.IDLE));
@@ -98,15 +111,18 @@ public class RobotContainer {
     .andThen(() -> drive.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1))
     .andThen(() -> robotOriented.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1)));
 
-    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).whileTrue(stateManager.setStateCommand(State.CORAL_INTAKE));
-    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(stateManager.setStateCommand(State.IDLE));
+    /*joystick.leftTrigger(IntakeConstants.kIntakeDeadband).whileTrue(stateManager.setStateCommand(State.CORAL_INTAKE));
+    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(stateManager.setStateCommand(State.IDLE));*/
 
-    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onTrue(runOnce(() -> MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * IntakeSpeed).andThen(() -> AngularRate = IntakeAngularRate)
+    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onTrue(runOnce(() -> controlMode = 2).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
+    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(runOnce(() -> controlMode = 0).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
+
+    /*joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onTrue(runOnce(() -> MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * IntakeSpeed).andThen(() -> AngularRate = IntakeAngularRate)
     .andThen(() -> drive.withDeadband(0.0).withRotationalDeadband(0.0)).andThen(
       () -> robotOriented.withDeadband(0.0).withRotationalDeadband(0.0)));
     joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(runOnce(() -> MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)).andThen(() -> AngularRate = MaxAngularRate)
     .andThen(() -> drive.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1))
-    .andThen(() -> robotOriented.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1)));
+    .andThen(() -> robotOriented.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1)));*/
 
     joystick.rightTrigger(IntakeConstants.kIntakeDeadband).whileTrue(stateManager.setStateCommand(State.ALGAE_INTAKE));
     joystick.rightTrigger(IntakeConstants.kIntakeDeadband).onFalse(stateManager.setStateCommand(State.IDLE));
@@ -251,11 +267,31 @@ public class RobotContainer {
         .withVelocityY(-joystick.getLeftX() * MaxSpeed)
         .withRotationalRate(-joystick.getRightX() * AngularRate);
         break;
+      case 2:
+       controlStyle = () -> facingSource.withVelocityX(-joystick.getLeftY() * MaxSpeed)
+       .withVelocityY(-joystick.getLeftX() * MaxSpeed)
+       .withTargetDirection(calculateSourceAngle());
     }
     try {
         drivetrain.getDefaultCommand().cancel();
     } catch(Exception e) {}
     drivetrain.setDefaultCommand(drivetrain.applyRequest(controlStyle).ignoringDisable(true).withName("Swerve Command "+controlMode));
+  }
+
+  private Rotation2d calculateSourceAngle(){
+    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red){
+    if (drivetrain.getState().Pose.getY()>VisionConstants.kTagLayout.getFieldWidth()/2){
+      return Rotation2d.fromDegrees(-306);
+    } else {
+      return Rotation2d.fromDegrees(-54);
+    }
+  } else {
+    if (drivetrain.getState().Pose.getY()>VisionConstants.kTagLayout.getFieldWidth()/2){
+      return Rotation2d.fromDegrees(-234);
+    } else {
+      return Rotation2d.fromDegrees(-126);
+    }
+  }
   }
 
   public Command getAutonomousCommand() {

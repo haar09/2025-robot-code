@@ -4,21 +4,18 @@ import static edu.wpi.first.units.Units.Degrees;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 
 public class NoIntakePivot implements IntakePivotIO {
     private Angle m_angle = Degrees.of(0);
-    private SlewRateLimiter limiter = new SlewRateLimiter(90);
 
     public NoIntakePivot() {
-        limiter.reset(0);
     }
 
     @Override
     public void setDesiredAngle(Angle angle){
-        m_angle = Degrees.of(limiter.calculate(angle.in(Degrees)));
+        m_angle = angle;
     }
 
     @Override

@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.util.SysId;
 
@@ -32,7 +31,8 @@ public class IntakePivot extends SubsystemBase{
     private final IntakePivotVisualizer setPointVisualizer = new IntakePivotVisualizer(new Color8Bit(0, 0, 255));
 
     public static IntakePivot create() {
-        return new IntakePivot(Robot.isReal() ? new RealIntakePivot() : new NoIntakePivot());
+        return new IntakePivot(new NoIntakePivot());
+        //return new IntakePivot(Robot.isReal() ? new RealIntakePivot() : new NoIntakePivot());
     }
 
     public IntakePivot(IntakePivotIO pivot) {

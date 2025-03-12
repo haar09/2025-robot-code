@@ -4,8 +4,6 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import frc.robot.Robot;
-import frc.robot.Constants.IntakeConstants;
 
 public class IntakeRollers{
     private final IntakeRollersIO ioLeft;
@@ -15,13 +13,13 @@ public class IntakeRollers{
     private final Alert disconnectedAlertLeft, disconnectedAlertRight;
 
     public static IntakeRollers create() {
-        if (Robot.isReal()) {
+        /*if (Robot.isReal()) {
             return new IntakeRollers(
                 new RealIntakeRollers(IntakeConstants.kRollerLeftMotorId, IntakeConstants.kRollerLeftMotorReversed),
                 new RealIntakeRollers(IntakeConstants.kRollerRightMotorId, IntakeConstants.kRollerRightMotorReversed));
-        } else {
+        } else {*/
             return new IntakeRollers(new NoIntakeRollers(), new NoIntakeRollers());
-        }
+        //}
     }
 
     public IntakeRollers(IntakeRollersIO ioLeft, IntakeRollersIO ioRight) {
