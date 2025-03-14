@@ -7,7 +7,7 @@ import frc.robot.subsystems.superstructure.deployer.deployerRollers.DeployerRoll
 public class Deployer extends  SubsystemBase {
     private final DeployerOmnis deployerOmnis;
     private final DeployerRollers deployerRollers;
-    private final DeployerBeamBreak deployerBeamBreak;
+    public final DeployerBeamBreak deployerBeamBreak;
 
     public Deployer(){
         this.deployerOmnis = DeployerOmnis.create();

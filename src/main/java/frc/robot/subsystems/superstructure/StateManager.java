@@ -15,9 +15,9 @@ import frc.robot.subsystems.superstructure.intake.Intake;
 import frc.robot.subsystems.superstructure.intake.Intake.IntakeState;
 
 public class StateManager extends SubsystemBase{
-    private final Deployer deployer;
-    private final Intake intake;
-    private final Elevator elevator;
+    public final Deployer deployer;
+    public final Intake intake;
+    public final Elevator elevator;
 
     public StateManager(Deployer deployer, Intake intake, Elevator elevator){
         this.deployer = deployer;
@@ -37,7 +37,8 @@ public class StateManager extends SubsystemBase{
         L3_RIGHT,
         L3_LEFT,
         TEST,
-        RESCUE
+        RESCUE,
+        ALGAE_REMOVAL
     }
     
     @AutoLogOutput public State state = State.IDLE;
@@ -142,6 +143,11 @@ public class StateManager extends SubsystemBase{
                 intake.setState(IntakeState.FLOOR_INITIAL);
                 elevator.setPosition(Centimeters.of(SmartDashboard.getNumber("asansoryukseklik", 0)));
                 break;
+            case ALGAE_REMOVAL:
+                intake.setState(IntakeState.ELEVATOR);
+                if (intake.elevatorClearance()){
+                    elevator.setPosition(Centimeters.of(50)); 
+                } 
         }
     }
 

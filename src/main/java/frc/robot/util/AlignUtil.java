@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class AlignUtil {
-    private PPHolonomicDriveController mDriveController = AutoConstants.kDriveController;
+    private PPHolonomicDriveController mDriveController = AutoConstants.kAlignController;
 
     public AlignUtil() {
     }

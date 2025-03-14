@@ -34,7 +34,8 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.AlgMechanismCmd;
 import frc.robot.commands.AutoBranchandShootL23;
 import frc.robot.commands.DpadBranchandShootL23;
-import frc.robot.commands.AutoCommands.Drive1Meter;
+import frc.robot.commands.AutoCommands.L2Auto;
+import frc.robot.commands.AutoCommands.SourceAuto;
 import frc.robot.commands.ClimbCmd;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -87,7 +88,7 @@ public class RobotContainer {
  
     facingSource.HeadingController.setPID(6.1, 0, 0);
 
-    joystick.b().whileTrue(new Drive1Meter(drivetrain));
+    //joystick.b().whileTrue(new Drive1Meter(drivetrain));
 
     joystick.y().onTrue(stateManager.setStateCommand(State.TEST));
     joystick.y().onFalse(stateManager.setStateCommand(State.IDLE));
@@ -95,11 +96,14 @@ public class RobotContainer {
     joystick.a().onTrue(stateManager.setStateCommand(State.FEED));
     joystick.a().onFalse(stateManager.setStateCommand(State.IDLE));
 
-    /*joystick.b().onTrue(stateManager.setStateCommand(State.L1));
-    joystick.b().onFalse(stateManager.setStateCommand(State.IDLE));*/
+    joystick.b().onTrue(stateManager.setStateCommand(State.ALGAE_REMOVAL));
+    joystick.b().onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.x().onTrue(stateManager.setStateCommand(State.SOURCE_INTAKE));
     joystick.x().onFalse(stateManager.setStateCommand(State.IDLE));
+
+    joystick.rightTrigger(IntakeConstants.kIntakeDeadband).whileTrue(stateManager.setStateCommand(State.SOURCE_INTAKE));
+    joystick.rightTrigger(IntakeConstants.kIntakeDeadband).onFalse(stateManager.setStateCommand(State.IDLE));
 
     joystick.leftBumper().onTrue(runOnce(() -> controlMode = 1).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
     joystick.leftBumper().onFalse(runOnce(() -> controlMode = 0).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
@@ -124,9 +128,6 @@ public class RobotContainer {
     .andThen(() -> drive.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1))
     .andThen(() -> robotOriented.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1)));*/
 
-    joystick.rightTrigger(IntakeConstants.kIntakeDeadband).whileTrue(stateManager.setStateCommand(State.ALGAE_INTAKE));
-    joystick.rightTrigger(IntakeConstants.kIntakeDeadband).onFalse(stateManager.setStateCommand(State.IDLE));
-
     joystick.povRight().whileTrue(new DpadBranchandShootL23(false, drivetrain, stateManager, operator));
     joystick.povLeft().whileTrue(new DpadBranchandShootL23(true, drivetrain, stateManager, operator));
 
@@ -136,14 +137,13 @@ public class RobotContainer {
     joystick.pov(90).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
     joystick.pov(180).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
     joystick.pov(270).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));*/
-    //joystick.back().whileTrue(new SwerveWheelCalibration(drivetrain));
+    //joystick.rightStick().whileTrue(new SwerveWheelCalibration(drivetrain));
     // HALILI TESTLER BİTİŞ
 
-
+    //this.configNeutralMode(NeutralModeValue.Coast)
     // reset the field-centric heading on menu button
-    joystick.start().onTrue(stateManager.setStateCommand(State.RESCUE));
-    joystick.rightStick().onTrue(runOnce(()->drivetrain.seedFieldCentric()));
-    joystick.back().onTrue(runOnce(() -> intake.intakePivot.manualEncoderReset()));
+    joystick.back().onTrue(stateManager.setStateCommand(State.RESCUE));
+    joystick.start().onTrue(runOnce(()->drivetrain.seedFieldCentric()));
 
     drivetrain.registerTelemetry(state -> logger.telemeterize(state));
 
@@ -241,10 +241,9 @@ public class RobotContainer {
          () -> operator.povLeft().getAsBoolean() || networkTablesAgent.upDownValue.get().contentEquals("D"),
           climb));
     
-    NamedCommands.registerCommand("L1", stateManager.setStateCommand(State.L1)); //YAZ L1
-    /*NamedCommands.registerCommand("Source", stateManager.setStateCommand(State.SOURCE_INTAKE).until(()->SmartDashboard.getBoolean("Deployer Ready", false))
-    .withTimeout(3)
-    .andThen(stateManager.setStateCommand(State.IDLE)));*/
+    //NamedCommands.registerCommand("L1", stateManager.setStateCommand(State.L1)); //YAZ L1
+    NamedCommands.registerCommand("Source", new SourceAuto(stateManager).withTimeout(3));
+    NamedCommands.registerCommand("L2", new L2Auto(stateManager, drivetrain).withTimeout(5));
 
     configureBindings();
 

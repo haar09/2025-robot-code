@@ -88,8 +88,8 @@ public class DpadBranchandShootL23 extends Command{
     
             drivetrain.setControl(drive.withVelocityX(output.vxMetersPerSecond).withVelocityY(output.vyMetersPerSecond).withRotationalRate(output.omegaRadiansPerSecond));
     
-        if (Math.abs(currentPose.getX() - goalPosition.getX()) < 0.03
-        && Math.abs(currentPose.getY() - goalPosition.getY()) < 0.03
+        Logger.recordOutput("AutoShoot/Left Distance", currentPose.minus(goalPosition).getTranslation().getNorm());
+        if (currentPose.minus(goalPosition).getTranslation().getNorm() < 0.03
         && Math.abs(currentPose.getRotation().minus(goalPosition.getRotation()).getDegrees()) < 3){
             setState(State.READY);
         }

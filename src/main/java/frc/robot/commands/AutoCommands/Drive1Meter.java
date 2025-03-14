@@ -26,11 +26,11 @@ public class Drive1Meter extends Command {
         Pose2d currentPose = drivetrain.getState().Pose;
                 alignUtil.resetControllers(currentPose, drivetrain.getState().Speeds);
 
-        goalPosition = currentPose.transformBy(new Transform2d(1, 0, new Rotation2d(0)));
+        goalPosition = currentPose.transformBy(new Transform2d(0, 0, Rotation2d.kCCW_90deg));
     }
 
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric()
-        .withDeadband(0).withRotationalDeadband(0) // Add a 10% deadband
+        .withDeadband(0).withRotationalDeadband(0)
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
     @Override
@@ -41,11 +41,5 @@ public class Drive1Meter extends Command {
             ChassisSpeeds output = alignUtil.calculate(currentPose, goalPosition);
     
             drivetrain.setControl(drive.withVelocityX(output.vxMetersPerSecond).withVelocityY(output.vyMetersPerSecond).withRotationalRate(output.omegaRadiansPerSecond));
-    
-            if (Math.abs(currentPose.getX() - goalPosition.getX()) < 0.02
-            && Math.abs(currentPose.getY() - goalPosition.getY()) < 0.02
-            && Math.abs(currentPose.getRotation().minus(goalPosition.getRotation()).getDegrees()) < 3){
-                SmartDashboard.putBoolean("aligned", true);
-            }
     }
 }
