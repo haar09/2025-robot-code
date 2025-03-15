@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.34,
-        "y": 3.04
+        "x": 5.373,
+        "y": 3.062
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.357448630136987,
-        "y": 1.8838398972602741
+        "x": 4.390448630136987,
+        "y": 1.905839897260274
       },
       "isLocked": false,
       "linkedName": "F-Atis-SON"
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 28.142277057401216
+    "rotation": 29.999999999999996
   },
   "useDefaultConstraints": true
 }

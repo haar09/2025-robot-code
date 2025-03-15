@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.277750000000001,
-        "y": 1.8604999999999996
+        "x": 8.207319078947368,
+        "y": 1.1192434210526312
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.138651315789473,
-        "y": 1.4944901315789478
+        "x": 7.418338815789473,
+        "y": 0.522697368421053
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.373,
-        "y": 3.062
+        "x": 5.06,
+        "y": 2.85
       },
       "prevControl": {
-        "x": 5.528256574763928,
-        "y": 2.8660525682929907
+        "x": 6.28297697368421,
+        "y": 1.0326480263157896
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "F-Atis-SON"
+      "linkedName": "E-Atis-SON"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": 29.999999999999996
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -48,7 +53,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -3.988142180595485
+    "rotation": 175.07289005235097
   },
   "useDefaultConstraints": true
 }
