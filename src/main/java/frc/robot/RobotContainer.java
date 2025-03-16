@@ -99,6 +99,9 @@ public class RobotContainer {
     joystick.b().onTrue(stateManager.setStateCommand(State.ALGAE_REMOVAL));
     joystick.b().onFalse(stateManager.setStateCommand(State.IDLE));
 
+    joystick.leftTrigger(0.5).onTrue(stateManager.setStateCommand(State.ALGAE_REMOVAL));
+    joystick.leftTrigger(0.5).onFalse(stateManager.setStateCommand(State.IDLE));
+
     joystick.x().onTrue(stateManager.setStateCommand(State.SOURCE_INTAKE));
     joystick.x().onFalse(stateManager.setStateCommand(State.IDLE));
 
@@ -117,10 +120,6 @@ public class RobotContainer {
 
     /*joystick.leftTrigger(IntakeConstants.kIntakeDeadband).whileTrue(stateManager.setStateCommand(State.CORAL_INTAKE));
     joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(stateManager.setStateCommand(State.IDLE));*/
-
-    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onTrue(runOnce(() -> controlMode = 2).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
-    joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onFalse(runOnce(() -> controlMode = 0).andThen(() -> updateControlStyle()).withName("controlStyleUpdate"));
-
     /*joystick.leftTrigger(IntakeConstants.kIntakeDeadband).onTrue(runOnce(() -> MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * IntakeSpeed).andThen(() -> AngularRate = IntakeAngularRate)
     .andThen(() -> drive.withDeadband(0.0).withRotationalDeadband(0.0)).andThen(
       () -> robotOriented.withDeadband(0.0).withRotationalDeadband(0.0)));

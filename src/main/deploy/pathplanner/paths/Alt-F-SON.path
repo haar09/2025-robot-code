@@ -16,20 +16,39 @@
     },
     {
       "anchor": {
-        "x": 5.34,
-        "y": 3.04
+        "x": 5.32,
+        "y": 3.03
       },
       "prevControl": {
-        "x": 5.4952565747639275,
-        "y": 2.844052568292991
+        "x": 6.311842105263157,
+        "y": 1.2539473684210531
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "F-Atis-SON"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": 29.999999999999996
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8575581395348837,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -42,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 28.142277057401216
+    "rotation": 29.999999999999996
   },
   "reversed": false,
   "folder": null,

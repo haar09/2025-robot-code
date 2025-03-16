@@ -81,9 +81,9 @@ public class AprilTagVision extends SubsystemBase{
 
                 DriverStation.getAlliance().ifPresent((allianceColor) -> {
                     if (allianceColor == Alliance.Red) {
-                        tagsToReject = Arrays.asList(17,18,19,20,21,22);
+                        tagsToReject = Arrays.asList(17,18,19,20,21,22,4,5);
                         } else {
-                        tagsToReject = Arrays.asList(6,7,8,9,10,11);
+                        tagsToReject = Arrays.asList(6,7,8,9,10,11,14,15);
                         }
                     });
 

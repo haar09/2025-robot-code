@@ -88,7 +88,7 @@ public final class Constants {
     };
 
     public static final double kMaxAmbiguity = 0.3;
-    public static final double kMaxZError = 0.15;
+    public static final double kMaxZError = 0.12;
 
     public static final Translation2d kReefCenter =
         new Translation2d(Units.inchesToMeters(176.746), kTagLayout.getFieldWidth() / 2.0);
@@ -201,7 +201,7 @@ public final class Constants {
     }
 
     public static final LoggedTunableNumber IDLE = new LoggedTunableNumber("Elevator/Idle", 0);
-    public static final LoggedTunableNumber CORAL_L2_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L2_HEIGHT", 30);
+    public static final LoggedTunableNumber CORAL_L2_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L2_HEIGHT", 28.5);
     public static final LoggedTunableNumber CORAL_L3_HEIGHT = new LoggedTunableNumber("Elevator/CORAL_L3_HEIGHT", 49);
     public static final LoggedTunableNumber INTAKE_HEIGHT = new LoggedTunableNumber("Elevator/INTAKE_HEIGHT", 3);
     public static final LoggedTunableNumber SOURCE_HEIGHT = new LoggedTunableNumber("Elevator/SOURCE_HEIGHT", 14);

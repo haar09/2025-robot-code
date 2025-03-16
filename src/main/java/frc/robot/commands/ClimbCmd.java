@@ -27,7 +27,7 @@ public class ClimbCmd extends Command{
         boolean outSpeed = out.get();
 
         if (takeSpeed) {
-            climb.setOutputPercentage(0.35);
+            climb.setOutputPercentage(0.6);
         } else if (outSpeed) {
                 climb.setOutputPercentage(-0.35);
         } else {
