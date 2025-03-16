@@ -16,19 +16,24 @@
     },
     {
       "anchor": {
-        "x": 3.2,
-        "y": 3.99
+        "x": 3.21,
+        "y": 3.78
       },
       "prevControl": {
-        "x": 1.8954769736842103,
-        "y": 4.044243421052631
+        "x": 1.90547697368421,
+        "y": 3.8342434210526304
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "B-Atis-SON"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

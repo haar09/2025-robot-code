@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.32,
-        "y": 3.03
+        "x": 5.373,
+        "y": 3.062
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.337448630136987,
-        "y": 1.873839897260274
+        "x": 4.390448630136987,
+        "y": 1.905839897260274
       },
       "isLocked": false,
       "linkedName": "F-Atis-SON"
