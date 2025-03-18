@@ -54,7 +54,7 @@ import frc.robot.util.NetworkTablesAgent;
 
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12VoltsMps desired top speed
-  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  private double MaxAngularRate = 2 * Math.PI; // 3/4 of a rotation per second max angular velocity
   //private double IntakeSpeed = 0.5;
   private double SlowSpeed = 0.1;
   //private double IntakeAngularRate = 0.75 * Math.PI;
