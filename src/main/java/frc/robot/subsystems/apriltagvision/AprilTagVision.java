@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.GlobalVariables;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -60,7 +61,17 @@ public class AprilTagVision extends SubsystemBase{
             List<Pose3d> tagPoses = new LinkedList<>();
             List<Pose3d> robotPosesAccepted = new LinkedList<>();
             List<Pose3d> robotPosesRejected = new LinkedList<>();
-            
+
+            if (GlobalVariables.getInstance().alignStatus == 1){
+                if (cameraIndex != 1){ //SAYILAR DEĞİŞECEK
+                    continue;
+                }
+            } else if (GlobalVariables.getInstance().alignStatus == 2){
+                if (cameraIndex != 2){ //SAYILAR DEĞİŞECEK
+                    continue;
+                }
+            }
+
             // Add tag poses
             for (int tagId : inputs[cameraIndex].tagIds) {
                 var tagPose = VisionConstants.kTagLayout.getTagPose(tagId);

@@ -42,17 +42,23 @@ public final class Constants {
 
     public static final PathConstraints kPathConstraints = new PathConstraints(
       kMaxSpeedMetersPerSecond, 4, Math.toRadians(540), Math.toRadians(720));
-      public static final PPHolonomicDriveController kAutoController = new PPHolonomicDriveController(
+      
+    public static final PPHolonomicDriveController kAutoController = new PPHolonomicDriveController(
         // PID constants for translation
         new PIDConstants(4, 0, 0),
         // PID constants for rotation
         new PIDConstants(6, 0, 0)
-    );    public static final PPHolonomicDriveController kAlignController = new PPHolonomicDriveController(
+    );    
+    
+    public static final PPHolonomicDriveController kAlignController = new PPHolonomicDriveController(
       // PID constants for translation
       new PIDConstants(kPXYController, 0, 0.3),
       // PID constants for rotation
       new PIDConstants(kPThetaController, 0, 0)
-  );
+    );
+
+    public static final double maxDistanceReefLineup = 1.5;
+    
   }
 
   public static class VisionConstants {

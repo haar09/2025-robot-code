@@ -57,14 +57,16 @@ public class DpadBranchandShootL23 extends Command{
             if ((GlobalVariables.getInstance().alliance == Alliance.Blue && angleDifference < 0) ||
             (GlobalVariables.getInstance().alliance != Alliance.Blue && angleDifference > 0)) {
                 leftInstead = true;
+                GlobalVariables.getInstance().alignStatus = 2;
                 goalPosition = goalPosition.transformBy(new Transform2d(-0.21, 0, new Rotation2d(Units.degreesToRadians(180))));
             } else {
                 leftInstead = false;
+                GlobalVariables.getInstance().alignStatus = 1;
             }
 
             goalPosition = AllianceFlipUtil.apply(goalPosition);
 
-            Logger.recordOutput("AutoShoot/Goal Position", goalPosition);
+            
         }
 
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric()
@@ -84,7 +86,7 @@ public class DpadBranchandShootL23 extends Command{
             case TRAVELLING:
         Pose2d  currentPose = drivetrain.getState().Pose;
 
-            ChassisSpeeds output = alignUtil.calculate(currentPose, goalPosition);
+            ChassisSpeeds output = alignUtil.calculate(currentPose, goalPosition, leftInstead);
     
             drivetrain.setControl(drive.withVelocityX(output.vxMetersPerSecond).withVelocityY(output.vyMetersPerSecond).withRotationalRate(output.omegaRadiansPerSecond));
     
@@ -115,6 +117,7 @@ public class DpadBranchandShootL23 extends Command{
     @Override
     public void end(boolean interrupted) {
         stateManager.state = StateManager.State.IDLE;
+        GlobalVariables.getInstance().alignStatus = 0;
     }
 
     private void setState(State state){

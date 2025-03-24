@@ -109,7 +109,7 @@ public class AutoBranchandShootL23 extends Command{
             case TRAVELLING:
             Pose2d  currentPose = drivetrain.getState().Pose;
 
-            ChassisSpeeds output = alignUtil.calculate(currentPose, goalPosition);
+            ChassisSpeeds output = alignUtil.calculate(currentPose, goalPosition, leftInstead);
     
             drivetrain.setControl(drive.withVelocityX(output.vxMetersPerSecond).withVelocityY(output.vyMetersPerSecond).withRotationalRate(output.omegaRadiansPerSecond));
     

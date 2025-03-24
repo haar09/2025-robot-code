@@ -38,7 +38,7 @@ public class Drive1Meter extends Command {
         SmartDashboard.putBoolean("aligned", false);
         Pose2d  currentPose = drivetrain.getState().Pose;
 
-            ChassisSpeeds output = alignUtil.calculate(currentPose, goalPosition);
+            ChassisSpeeds output = alignUtil.calculateVanilla(currentPose, goalPosition);
     
             drivetrain.setControl(drive.withVelocityX(output.vxMetersPerSecond).withVelocityY(output.vyMetersPerSecond).withRotationalRate(output.omegaRadiansPerSecond));
     }

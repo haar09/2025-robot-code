@@ -34,6 +34,7 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.AlgMechanismCmd;
 import frc.robot.commands.AutoBranchandShootL23;
 import frc.robot.commands.DpadBranchandShootL23;
+import frc.robot.commands.SwerveWheelCalibration;
 import frc.robot.commands.AutoCommands.L2Auto;
 import frc.robot.commands.AutoCommands.SourceAuto;
 import frc.robot.commands.ClimbCmd;
@@ -136,7 +137,7 @@ public class RobotContainer {
     joystick.pov(90).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
     joystick.pov(180).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
     joystick.pov(270).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));*/
-    //joystick.rightStick().whileTrue(new SwerveWheelCalibration(drivetrain));
+    joystick.rightStick().whileTrue(new SwerveWheelCalibration(drivetrain));
     // HALILI TESTLER BİTİŞ
 
     //this.configNeutralMode(NeutralModeValue.Coast)
