@@ -13,29 +13,24 @@ import frc.robot.subsystems.superstructure.intake.intakeRollers.IntakeRollers;
 public class Intake extends SubsystemBase{
     public final IntakePivot intakePivot;
     private final IntakeRollers intakeRollers;
-    private final IntakeBeamBreak intakeBeamBreak;
 
     public Intake() {
         this.intakePivot = IntakePivot.create();
         this.intakeRollers = IntakeRollers.create();
-        this.intakeBeamBreak = new IntakeBeamBreak();
     }
 
     public enum IntakeState {
         IDLE,
-        FLOOR_INITIAL,
         FLOOR_INTAKE,
+        DAYA,
         FEED,
         SHOOT,
         ALGAE,
         SOURCE,
-        ELEVATOR,
-        BEFORE_FEED
+        ELEVATOR
     }
 
     public IntakeState state = IntakeState.IDLE;
-
-    private boolean hasSeen = false;
 
     @Override
     public void periodic() {
@@ -43,73 +38,46 @@ public class Intake extends SubsystemBase{
         intakeRollers.periodic();
         switch (state) {
             case IDLE:
-                intakePivot.setBrake();
                 intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.idleAngle.get()));
                 intakeRollers.stop();
-                if (intakePivot.isAtDesiredAngle()) {
-                    hasSeen = false;
-                }
-                break;
-            case FLOOR_INITIAL:
-                intakePivot.setCoast();
-                if (intakeBeamBreak.lower_value || hasSeen) {
-                    state = IntakeState.FLOOR_INTAKE;
-                    hasSeen = true;
-                    break;
-                }
-                if (intakeBeamBreak.upper_value) {
-                    state = IntakeState.IDLE;
-                    break;
-                }
-                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.initialAngle.get()));
-                intakeRollers.setOutputPercentage(-0.3,-0.15);   
                 break;
             case FLOOR_INTAKE:
-                if (intakeBeamBreak.upper_value) {
-                    state = IntakeState.BEFORE_FEED;
-                    hasSeen = false;
-                    break;
-                }
                 intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.intakeAngle.get()));
-                intakeRollers.setOutputPercentage(-0.09, -0.08);
+                if (intakePivot.isAtDesiredAngle()) {
+                    state = IntakeState.DAYA;
+                }
+                intakeRollers.setOutputPercentage(0.65);
                 break;
-            case BEFORE_FEED:
-                intakeRollers.setOutputPercentage(0, 0);
-                intakePivot.setBrake();
-                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.idleAngle.get()));
-                break;
+            case DAYA:
+                intakePivot.setVoltage(-0.4);
+                intakeRollers.setOutputPercentage(0.65);
             case FEED:
-                intakePivot.setBrake();
                 intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.feedAngle.get())); 
                 if (intakePivot.isAtDesiredAngle()) {
-                    intakeRollers.setOutputPercentage(-0.3, 0);
+                    intakeRollers.setOutputPercentage(0.9);
                 } else {
-                    intakeRollers.setOutputPercentage(0, 0);
+                    intakeRollers.setOutputPercentage(0);
                 }
                 break;
             case ALGAE:
-                intakePivot.setCoast();
                 intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.algaeAngle.get()));
-                intakeRollers.setOutputPercentage(0, 0.6); 
+                intakeRollers.setOutputPercentage(-0.6); 
                 break;
             case SOURCE:
-                intakePivot.setCoast();
-                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.shootAngle.get()));
-                intakeRollers.setOutputPercentage(0.6, 0); 
+                intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.elevatorAngle.get()));
+                //intakeRollers.setOutputPercentage(-0.6); 
                 break;
             case SHOOT:
-                intakePivot.setBrake();
                 intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.shootAngle.get()));
                 if  (intakePivot.isAtDesiredAngle()) {
-                    intakeRollers.setOutputPercentage(0.8, 0.8);
+                    intakeRollers.setOutputPercentage(-0.8);
                 } else {
-                    intakeRollers.setOutputPercentage(0, 0);
+                    intakeRollers.setOutputPercentage(0);
                 }
                 break;
             case ELEVATOR:
-                intakePivot.setBrake();
                 intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.elevatorAngle.get()));
-                intakeRollers.setOutputPercentage(0, 0);
+                intakeRollers.setOutputPercentage(0);
         }
         Logger.recordOutput("Intake/State", state.toString());
     }
@@ -124,15 +92,6 @@ public class Intake extends SubsystemBase{
 
     public Command setStateCommand(IntakeState state) {
         return runOnce(() -> this.state = state).withName("Intake "+state.toString());
-    }
-
-    public void setStateifNotBusy(IntakeState state) {
-        if (intakeBeamBreak.upper_value) {
-            return;
-        }
-        if (this.state == IntakeState.IDLE) {
-            this.state = state;
-        }
     }
 
     public void setState(IntakeState state) {

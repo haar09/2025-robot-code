@@ -39,7 +39,7 @@ public class AlignUtil {
         Logger.recordOutput("AutoShoot/xDistance", offset.getX());
         double shiftIleriGeri =
             MathUtil.clamp(
-                (xDistance / (Reef.faceLength * 2)) + ((yDistance - 0.3) / (Reef.faceLength * 4)),
+                (xDistance / (Reef.faceLength * 2)) + ((yDistance - 0.3) / (Reef.faceLength * 3)),
                 0.0,
                 1.0);
         Logger.recordOutput("AutoShoot/shiftIleriGeri", shiftIleriGeri);

@@ -13,7 +13,6 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotController;
@@ -95,7 +94,6 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putBoolean("Flip Horizontally", false);
     m_robotContainer = new RobotContainer();
   }
-
 
   @Override
   public void robotPeriodic() {

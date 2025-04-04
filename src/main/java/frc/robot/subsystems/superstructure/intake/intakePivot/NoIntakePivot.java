@@ -30,12 +30,7 @@ public class NoIntakePivot implements IntakePivotIO {
     @Override
     public void setSysIdVoltage(Voltage volts){
     }
-
-    @Override
-    public void manualEncoderReset(){
-        
-    }
-
+    
     @Override
     public void setNeutralMode(NeutralModeValue neutralModeValue){
     }

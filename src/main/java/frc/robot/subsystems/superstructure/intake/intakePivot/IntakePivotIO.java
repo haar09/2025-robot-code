@@ -12,7 +12,6 @@ public interface IntakePivotIO {
     public Angle getAngle();
     public void setNeutralMode(NeutralModeValue neutralModeValue);
     public Angle getAbsolutePosition();
-    public void manualEncoderReset();
 
     default void updateInputs(IntakePivotIOInputs inputs) {}
 
@@ -28,7 +27,6 @@ public interface IntakePivotIO {
         public double supplyCurrentAmps = 0.0;
         public double tempCelcius = 0.0;
         public boolean absoluteEncoderConnected = true;
-        public double closedLoopError = 0.0;
     }
 
     public void setSysIdVoltage(Voltage volts);

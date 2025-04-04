@@ -26,7 +26,7 @@ public class RealPhotonVision implements AprilTagVisionIO{
 
         this.robotToCamera = robotToCamera;
     }
-
+    
     @Override
     public void updateInputs(AprilTagVisionIOInputs inputs) {
         inputs.connected = camera.isConnected();
@@ -34,7 +34,6 @@ public class RealPhotonVision implements AprilTagVisionIO{
         Set<Short> tagIds = new HashSet<>();
         List<PoseObservation> poseObservations = new LinkedList<>();
         for (var result : camera.getAllUnreadResults()) {
-
             if (result.multitagResult.isPresent()) {
                 var multitagResult = result.multitagResult.get();
                 

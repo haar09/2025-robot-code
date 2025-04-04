@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Robot;
 import frc.robot.util.SysId;
 
 public class IntakePivot extends SubsystemBase{
@@ -31,16 +32,15 @@ public class IntakePivot extends SubsystemBase{
     private final IntakePivotVisualizer setPointVisualizer = new IntakePivotVisualizer(new Color8Bit(0, 0, 255));
 
     public static IntakePivot create() {
-        return new IntakePivot(new NoIntakePivot());
-        //return new IntakePivot(Robot.isReal() ? new RealIntakePivot() : new NoIntakePivot());
+        return new IntakePivot(Robot.isReal() ? new RealIntakePivot() : new NoIntakePivot());
     }
 
     public IntakePivot(IntakePivotIO pivot) {
         this.pivot = pivot;
         this.disconnectedAlert = new Alert("IntakePivot is disconnected.", AlertType.kWarning);
 
-        sysIdRoutine = SysId.getRoutine(1, 1.4, 2.5, "Intake",
-        volts -> pivot.setSysIdVoltage(Volts.of(volts)), ()-> pivot.getAngle().in(Degrees), 
+        sysIdRoutine = SysId.getRoutine(2.5, 3, 1.8, "Intake",
+        volts -> pivot.setSysIdVoltage(Volts.of(volts)), ()-> inputs.positionRots*360, 
         () -> inputs.velocityRotsPerSec*360, ()-> inputs.appliedVolts, this);
 
         setPointVisualizer.setState(0);
@@ -93,10 +93,6 @@ public class IntakePivot extends SubsystemBase{
         pivot.stop();
     }
 
-    public void manualEncoderReset(){
-        pivot.manualEncoderReset();
-    }
-
     public Angle getAngle() {
         return pivot.getAngle();
     }
@@ -107,6 +103,10 @@ public class IntakePivot extends SubsystemBase{
 
     public double getVelocity() {
         return inputs.velocityRotsPerSec;
+    }
+
+    public void setVoltage(double volts) {
+        pivot.setSysIdVoltage(Volts.of(volts));
     }
 
     private final SysIdRoutine sysIdRoutine;

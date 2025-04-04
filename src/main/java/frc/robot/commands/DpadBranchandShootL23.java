@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.FieldConstants;
 import frc.robot.GlobalVariables;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.FieldConstants.Reef;
 import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -39,8 +40,11 @@ public class DpadBranchandShootL23 extends Command{
         this.operator = operator;
     }
 
+    private boolean isMovedforL3 = false;
+
     @Override
     public void initialize() {
+        isMovedforL3 = false;
         state = State.TRAVELLING;
         Pose2d currentPose = drivetrain.getState().Pose;
 
@@ -64,9 +68,12 @@ public class DpadBranchandShootL23 extends Command{
                 GlobalVariables.getInstance().alignStatus = 1;
             }
 
-            goalPosition = AllianceFlipUtil.apply(goalPosition);
+            if (operator.getHID().getYButton()){
+                goalPosition = goalPosition.transformBy(new Transform2d(ElevatorConstants.kL3Offset, 0 , new Rotation2d(Units.degreesToRadians(0))));
+                isMovedforL3 = true;
+            }
 
-            
+            goalPosition = AllianceFlipUtil.apply(goalPosition);
         }
 
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric()
@@ -82,6 +89,17 @@ public class DpadBranchandShootL23 extends Command{
 
     @Override
     public void execute() {
+        Logger.recordOutput("AutoShoot/L3 Offset", isMovedforL3);
+        if (operator.getHID().getYButton() && !isMovedforL3){
+            goalPosition = goalPosition.transformBy(new Transform2d(ElevatorConstants.kL3Offset, 0 , new Rotation2d(Units.degreesToRadians(0))));
+            state = State.TRAVELLING;
+            isMovedforL3 = true;
+        } else if (!operator.getHID().getYButton() && isMovedforL3){
+            goalPosition = goalPosition.transformBy(new Transform2d(-ElevatorConstants.kL3Offset, 0 , new Rotation2d(Units.degreesToRadians(0))));
+            state = State.TRAVELLING;
+            isMovedforL3 = false;
+        }
+
         switch (state){
             case TRAVELLING:
         Pose2d  currentPose = drivetrain.getState().Pose;

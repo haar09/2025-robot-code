@@ -5,7 +5,6 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.units.measure.Distance;
@@ -26,7 +25,7 @@ public class Elevator extends SubsystemBase{
     
     private final Alert disconnectedAlertLeft, disconnectedAlertRight;
 
-    @AutoLogOutput private Distance lastDesiredPosition = Centimeters.of(0);
+    private Distance lastDesiredPosition = Centimeters.of(0);
 
     private ElevatorVisualizer elevatorPositionVisualizer = new ElevatorVisualizer();
 
@@ -39,8 +38,8 @@ public class Elevator extends SubsystemBase{
         this.disconnectedAlertLeft = new Alert("Elevator Left is disconnected.", AlertType.kWarning);
         this.disconnectedAlertRight = new Alert("Elevator Right is disconnected.", AlertType.kWarning);
         sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(Volts.of(0.5).div(Seconds.of(1)),        // Use default ramp rate (1 V/s)
-        Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
+        new SysIdRoutine.Config(Volts.of(1.5).div(Seconds.of(1)),        // Use default ramp rate (1 V/s)
+        Volts.of(3), // Reduce dynamic step voltage to 4 V to prevent brownout
         Seconds.of(3),        // Use default timeout (10 s)
         // Log state with SignalLogger class
         ModifiedSignalLogger.logState()
@@ -76,6 +75,7 @@ public class Elevator extends SubsystemBase{
         io.setPosition(height.in(Centimeters)/ElevatorConstants.kElevatorRotToCm);
         elevatorPositionVisualizer.setState(height.in(Meters));
         lastDesiredPosition = height.copy();
+        Logger.recordOutput("Elevator/Last Desired Position", lastDesiredPosition.in(Centimeters));
     }
 
     public void stop() {

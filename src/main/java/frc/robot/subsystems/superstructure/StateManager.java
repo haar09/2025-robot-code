@@ -7,7 +7,10 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.FieldConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.superstructure.algMechanism.AlgMechanism;
 import frc.robot.subsystems.superstructure.deployer.Deployer;
 import frc.robot.subsystems.superstructure.deployer.Deployer.DeployerState;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
@@ -18,11 +21,15 @@ public class StateManager extends SubsystemBase{
     public final Deployer deployer;
     public final Intake intake;
     public final Elevator elevator;
+    public final AlgMechanism algMechanism;
+    public final CommandSwerveDrivetrain drivetrain;
 
-    public StateManager(Deployer deployer, Intake intake, Elevator elevator){
+    public StateManager(Deployer deployer, Intake intake, Elevator elevator, AlgMechanism algMechanism, CommandSwerveDrivetrain drivetrain) {
         this.deployer = deployer;
         this.intake = intake;
         this.elevator = elevator;
+        this.algMechanism = algMechanism;
+        this.drivetrain = drivetrain;
     }
 
     public enum State {
@@ -47,14 +54,14 @@ public class StateManager extends SubsystemBase{
     public void periodic() {
         switch (state) {
             case IDLE:
-            deployer.setState(DeployerState.IDLE);
-            elevator.setPosition(Centimeters.of(ElevatorConstants.IDLE.get()));
+                deployer.setState(DeployerState.IDLE);
+                elevator.setPosition(Centimeters.of(ElevatorConstants.IDLE.get()));
                 if (elevator.isAtSetpoint()) {
                     intake.setState(IntakeState.IDLE);
                 }
                 break;
             case CORAL_INTAKE:
-                intake.setStateifNotBusy(IntakeState.FLOOR_INITIAL);
+                intake.setState(IntakeState.FLOOR_INTAKE);
                 deployer.setState(DeployerState.IDLE);
                 if (intake.elevatorClearance()){
                     elevator.setPosition(Centimeters.of(ElevatorConstants.IDLE.get()));
@@ -67,9 +74,9 @@ public class StateManager extends SubsystemBase{
                 break;
             case SOURCE_INTAKE:
                 deployer.setState(DeployerState.CENTER);
-                elevator.setPosition(Centimeters.of(ElevatorConstants.SOURCE_HEIGHT.get()));
-                if (elevator.isAtSetpoint()) {
-                    intake.setState(IntakeState.SOURCE);
+                intake.setState(IntakeState.SOURCE);
+                if (intake.elevatorClearance()) {
+                    elevator.setPosition(Centimeters.of(ElevatorConstants.SOURCE_HEIGHT.get()));
                 }
                 break;
             case FEED:
@@ -140,14 +147,22 @@ public class StateManager extends SubsystemBase{
                 }
                 break;
             case RESCUE:
-                intake.setState(IntakeState.FLOOR_INITIAL);
+                intake.setState(IntakeState.FLOOR_INTAKE);
                 elevator.setPosition(Centimeters.of(SmartDashboard.getNumber("asansoryukseklik", 0)));
                 break;
             case ALGAE_REMOVAL:
-                intake.setState(IntakeState.ELEVATOR);
+                algMechanism.setDesiredExtension(0.27);
+                if (FieldConstants.findClosestReefside(drivetrain.getState().Pose) % 2 == 0) {
+                    intake.setState(IntakeState.ELEVATOR);
                 if (intake.elevatorClearance()){
                     elevator.setPosition(Centimeters.of(50)); 
                 } 
+                } else {
+                    elevator.setPosition(Centimeters.of(ElevatorConstants.IDLE.get()));
+                    if (elevator.isAtSetpoint()) {
+                        intake.setState(IntakeState.IDLE);
+                    }
+                }
         }
     }
 
