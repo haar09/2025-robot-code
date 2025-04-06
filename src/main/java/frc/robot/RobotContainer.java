@@ -23,13 +23,14 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.DpadBranchandShootL23;
 import frc.robot.commands.ObjectDetectionCmd;
 import frc.robot.commands.SwerveWheelCalibration;
+import frc.robot.commands.AutoCommands.AutoBranchandShootL2;
 import frc.robot.commands.AutoCommands.L2Auto;
+import frc.robot.commands.AutoCommands.L3Auto;
 import frc.robot.commands.AutoCommands.SourceAuto;
 import frc.robot.commands.AlgRetract;
 import frc.robot.commands.ClimbCmd;
@@ -117,8 +118,8 @@ public class RobotContainer {
     /*joystick.pov(0).whileTrue(elevator.sysIdQuasistatic(Direction.kForward));
     joystick.pov(90).whileTrue(elevator.sysIdQuasistatic(Direction.kReverse));
     joystick.pov(180).whileTrue(elevator.sysIdDynamic(Direction.kForward));
-    joystick.pov(270).whileTrue(elevator.sysIdDynamic(Direction.kReverse));
-    joystick.rightStick().whileTrue(new SwerveWheelCalibration(drivetrain));*/
+    joystick.pov(270).whileTrue(elevator.sysIdDynamic(Direction.kReverse));*/
+    joystick.rightStick().whileTrue(new SwerveWheelCalibration(drivetrain));
     // HALILI TESTLER BİTİŞ
 
     //this.configNeutralMode(NeutralModeValue.Coast)
@@ -228,7 +229,10 @@ public class RobotContainer {
     //NamedCommands.registerCommand("L1", stateManager.setStateCommand(State.L1)); //YAZ L1
     NamedCommands.registerCommand("Source", new SourceAuto(stateManager).withTimeout(3));
     NamedCommands.registerCommand("L2", new L2Auto(stateManager, drivetrain).withTimeout(5));
-
+    NamedCommands.registerCommand("L3", new L3Auto(stateManager, drivetrain).withTimeout(5));
+    NamedCommands.registerCommand("Algae Removal", stateManager.setStateCommand(State.ALGAE_REMOVAL).finallyDo(x -> new AlgRetract(algMechanism).withTimeout(1.2)));
+    NamedCommands.registerCommand("LeftBranch", new AutoBranchandShootL2(true, drivetrain, stateManager).withTimeout(5));
+    NamedCommands.registerCommand("RightBranch", new AutoBranchandShootL2(false, drivetrain, stateManager).withTimeout(5));
     configureBindings();
 
     Logger.recordOutput("ScoringPosition", AllianceFlipUtil.apply(FieldConstants.Reef.scoringPositions2d.get(1).get(FieldConstants.ReefLevel.L23)));

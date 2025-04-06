@@ -63,11 +63,11 @@ public class AprilTagVision extends SubsystemBase{
             List<Pose3d> robotPosesRejected = new LinkedList<>();
 
             if (GlobalVariables.getInstance().alignStatus == 1){
-                if (cameraIndex != 1){ //SAYILAR DEĞİŞECEK
+                if (cameraIndex != 0 && cameraIndex != 2){ //SAYILAR DEĞİŞECEK
                     continue;
                 }
             } else if (GlobalVariables.getInstance().alignStatus == 2){
-                if (cameraIndex != 2){ //SAYILAR DEĞİŞECEK
+                if (cameraIndex != 1 && cameraIndex != 3){ //SAYILAR DEĞİŞECEK
                     continue;
                 }
             }

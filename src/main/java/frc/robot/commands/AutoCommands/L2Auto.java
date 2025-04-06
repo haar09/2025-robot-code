@@ -38,7 +38,7 @@ public class L2Auto extends Command{
             if ((GlobalVariables.getInstance().alliance == Alliance.Blue && angleDifference < 0) ||
             (GlobalVariables.getInstance().alliance != Alliance.Blue && angleDifference > 0)) {
                 leftInstead = true;
-                goalPosition = goalPosition.transformBy(new Transform2d(-0.21, 0, new Rotation2d(Units.degreesToRadians(180))));
+                goalPosition = goalPosition.transformBy(new Transform2d(-0.36, 0, new Rotation2d(Units.degreesToRadians(180))));
             } else {
                 leftInstead = false;
             }

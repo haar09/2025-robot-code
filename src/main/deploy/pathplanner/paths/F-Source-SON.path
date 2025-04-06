@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.34,
-        "y": 3.04
+        "x": 5.388,
+        "y": 3.08
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.357448630136987,
-        "y": 1.8838398972602741
+        "x": 4.405448630136987,
+        "y": 1.9238398972602742
       },
       "isLocked": false,
       "linkedName": "F-Atis-SON"
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7892441860465116,
+      "minWaypointRelativePos": 0.7718023255813953,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.5,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

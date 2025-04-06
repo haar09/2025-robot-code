@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.21,
-        "y": 3.78
+        "x": 3.2,
+        "y": 4.058
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9960163142042298,
-        "y": 3.3841579286326375
+        "x": 2.98601631420423,
+        "y": 3.6621579286326376
       },
       "isLocked": false,
       "linkedName": "B-Atis-SON"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

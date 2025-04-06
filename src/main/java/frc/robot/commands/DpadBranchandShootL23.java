@@ -62,7 +62,7 @@ public class DpadBranchandShootL23 extends Command{
             (GlobalVariables.getInstance().alliance != Alliance.Blue && angleDifference > 0)) {
                 leftInstead = true;
                 GlobalVariables.getInstance().alignStatus = 2;
-                goalPosition = goalPosition.transformBy(new Transform2d(-0.21, 0, new Rotation2d(Units.degreesToRadians(180))));
+                goalPosition = goalPosition.transformBy(new Transform2d(-0.36, 0, new Rotation2d(Units.degreesToRadians(180))));
             } else {
                 leftInstead = false;
                 GlobalVariables.getInstance().alignStatus = 1;
@@ -109,8 +109,8 @@ public class DpadBranchandShootL23 extends Command{
             drivetrain.setControl(drive.withVelocityX(output.vxMetersPerSecond).withVelocityY(output.vyMetersPerSecond).withRotationalRate(output.omegaRadiansPerSecond));
     
         Logger.recordOutput("AutoShoot/Left Distance", currentPose.minus(goalPosition).getTranslation().getNorm());
-        if (currentPose.minus(goalPosition).getTranslation().getNorm() < 0.03
-        && Math.abs(currentPose.getRotation().minus(goalPosition.getRotation()).getDegrees()) < 3){
+        if (currentPose.minus(goalPosition).getTranslation().getNorm() < 0.02
+        && Math.abs(currentPose.getRotation().minus(goalPosition.getRotation()).getDegrees()) < 2){
             setState(State.READY);
         }
         break;

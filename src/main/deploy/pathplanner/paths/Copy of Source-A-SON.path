@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.4541940789473684,
+        "y": 2.2064967105263156
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.9923519736842104,
+        "y": 2.9377467105263158
+      },
+      "isLocked": false,
+      "linkedName": "AutoObj"
+    },
+    {
+      "anchor": {
+        "x": 3.229,
+        "y": 4.378
+      },
+      "prevControl": {
+        "x": 3.2230296052631577,
+        "y": 3.6194802631578944
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "A-Atis-Son"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 42.87890360333866
+  },
+  "useDefaultConstraints": true
+}
