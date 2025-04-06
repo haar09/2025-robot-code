@@ -1,9 +1,10 @@
 package frc.robot.commands.AutoCommands;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -23,7 +24,6 @@ public class DriveKurzWithIntake extends Command {
     public void initialize() {
         timer = Timer.getFPGATimestamp();
         indiBile = false;
-        debouncer = new Debouncer(0.25);
     }
 
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric()
@@ -32,12 +32,11 @@ public class DriveKurzWithIntake extends Command {
 
     private double timer;
     private boolean indiBile;
-    private Debouncer debouncer;
 
     @Override
     public void execute() {
             stateManager.state = State.CORAL_INTAKE;
-            if (debouncer.calculate(stateManager.intake.isAtDesiredAngle()) || indiBile){
+            if (stateManager.intake.intakePivot.getAngle().lte(Degrees.of(2)) || indiBile){
             drivetrain.setControl(drive.withVelocityX(-2).withVelocityY(0).withRotationalRate(0));
             indiBile = true;
             } else if (Timer.getFPGATimestamp()-timer > 1) {

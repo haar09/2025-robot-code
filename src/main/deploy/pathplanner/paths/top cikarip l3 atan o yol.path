@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.76986301369863,
+        "y": 3.085894691780822
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.708176369863014,
+        "y": 3.8972816780821917
+      },
+      "isLocked": false,
+      "linkedName": "topcikar2"
+    },
+    {
+      "anchor": {
+        "x": 5.75,
+        "y": 3.9
+      },
+      "prevControl": {
+        "x": 5.709760273972603,
+        "y": 4.964105308219178
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 24.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": false
+}

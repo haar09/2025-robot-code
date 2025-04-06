@@ -49,7 +49,6 @@ public class Intake extends SubsystemBase{
                 intakeRollers.setOutputPercentage(0.65);
                 break;
             case DAYA:
-                intakePivot.setVoltage(-0.4);
                 intakeRollers.setOutputPercentage(0.65);
             case FEED:
                 intakePivot.setDesiredAngle(Degrees.of(IntakeConstants.feedAngle.get())); 
