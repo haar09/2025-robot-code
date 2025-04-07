@@ -1,5 +1,7 @@
 package frc.robot.subsystems.superstructure.deployer;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.superstructure.deployer.deployerOmnis.DeployerOmnis;
 import frc.robot.subsystems.superstructure.deployer.deployerRollers.DeployerRollers;
@@ -27,6 +29,7 @@ public class Deployer extends  SubsystemBase {
 
     @Override
     public void periodic() {
+        Logger.recordOutput("Deployer/State", state.name());
         deployerOmnis.periodic();
         deployerRollers.periodic();
         switch (state) {

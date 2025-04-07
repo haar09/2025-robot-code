@@ -182,9 +182,9 @@ public final class Constants {
       //x=0.0285 y=0.0095
       elevatorMotorConfig.Slot0.kG = 0.285;
       elevatorMotorConfig.Slot0.kS = 0.095; // Add 0.25 V output to overcome static friction
-      elevatorMotorConfig.Slot0.kV = 0.155; // A velocity target of 1 rps results in 0.12 V output
+      elevatorMotorConfig.Slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
       elevatorMotorConfig.Slot0.kA = 0.002; // An acceleration of 1 rps/s requires 0.01 V output
-      elevatorMotorConfig.Slot0.kP = 0.63; // An error of 1 rps results in 0.11 V output
+      elevatorMotorConfig.Slot0.kP = 0.75; // An error of 1 rps results in 0.11 V output
       elevatorMotorConfig.Slot0.kI = 0; // no output for integrated error
       elevatorMotorConfig.Slot0.kD = 0; // no output for error derivative 
       elevatorMotorConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.99620446113641,
-        "y": 5.181268523590917
+        "x": 5.174,
+        "y": 5.092
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.128768644362453,
-        "y": 6.067214782860208
+        "x": 4.306564183225987,
+        "y": 5.977946259269291
       },
       "isLocked": false,
       "linkedName": "J Atis"
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 6.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

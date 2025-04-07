@@ -1,53 +1,26 @@
 package frc.robot.commands.AutoCommands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.FieldConstants;
-import frc.robot.FieldConstants.Reef;
-import frc.robot.FieldConstants.ReefLevel;
-import frc.robot.GlobalVariables;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.superstructure.StateManager;
 import frc.robot.subsystems.superstructure.StateManager.State;
+import frc.robot.subsystems.superstructure.deployer.Deployer.DeployerState;
 
 public class L2Auto extends Command{
     private final StateManager stateManager;
-    private final CommandSwerveDrivetrain drivetrain;
+    private final boolean leftside;
 
-    public L2Auto(StateManager stateManager, CommandSwerveDrivetrain drivetrain) {
+        public L2Auto(boolean leftside, StateManager stateManager) {
         this.stateManager = stateManager;
-        this.drivetrain = drivetrain;
+        this.leftside = leftside;
     }
-
-    private Pose2d goalPosition;
-    private boolean leftInstead = false;
 
     @Override
     public void initialize() {
-        Pose2d currentPose = drivetrain.getState().Pose;
-
-                    goalPosition = Reef.scoringPositions2d.get(FieldConstants.findClosestReefside(currentPose)*2).get(ReefLevel.L23);
-
-
-                double angleDifference = goalPosition.getRotation().plus(Rotation2d.kCCW_90deg).minus(currentPose.getRotation()).getDegrees();
-
-            if ((GlobalVariables.getInstance().alliance == Alliance.Blue && angleDifference < 0) ||
-            (GlobalVariables.getInstance().alliance != Alliance.Blue && angleDifference > 0)) {
-                leftInstead = true;
-                goalPosition = goalPosition.transformBy(new Transform2d(-0.36, 0, new Rotation2d(Units.degreesToRadians(180))));
-            } else {
-                leftInstead = false;
-            }
-
     }
 
     @Override
     public void execute() {
-        if (leftInstead){
+        if (leftside){
             stateManager.state = State.L2_LEFT;
         } else {
         stateManager.state = State.L2_RIGHT;
@@ -57,6 +30,7 @@ public class L2Auto extends Command{
     @Override
     public void end(boolean interrupted) {
         stateManager.state = State.IDLE;
+        stateManager.deployer.setState(DeployerState.IDLE);
     }
 
     @Override

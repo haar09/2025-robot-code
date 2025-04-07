@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3202464788712482,
-        "y": 6.8595070422604785
+        "x": 1.2989309210526314,
+        "y": 7.142434210526315
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1928965228277484,
-        "y": 6.188916866486214
+        "x": 2.171580965009132,
+        "y": 6.471844034752051
       },
       "isLocked": false,
       "linkedName": "Ust Source"
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 6.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.245061872572839,
-        "y": 4.177813396241986
+        "x": 3.2139,
+        "y": 4.032
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.921634580278811,
-        "y": 4.422659289660619
+        "x": 2.890472707705972,
+        "y": 4.276845893418633
       },
       "isLocked": false,
       "linkedName": "A Atis"
@@ -41,7 +41,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 6.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

@@ -28,7 +28,6 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.DpadBranchandShootL23;
 import frc.robot.commands.ObjectDetectionCmd;
 import frc.robot.commands.SwerveWheelCalibration;
-import frc.robot.commands.AutoCommands.AutoBranchandShootL2;
 import frc.robot.commands.AutoCommands.L2Auto;
 import frc.robot.commands.AutoCommands.L3Auto;
 import frc.robot.commands.AutoCommands.SourceAuto;
@@ -228,11 +227,11 @@ public class RobotContainer {
     
     //NamedCommands.registerCommand("L1", stateManager.setStateCommand(State.L1)); //YAZ L1
     NamedCommands.registerCommand("Source", new SourceAuto(stateManager).withTimeout(3));
-    NamedCommands.registerCommand("L2", new L2Auto(stateManager, drivetrain).withTimeout(5));
+    NamedCommands.registerCommand("L2_READY", stateManager.setPermState(State.L2_READY));
+    NamedCommands.registerCommand("L2Right", new L2Auto(false, stateManager).withTimeout(4));
+    NamedCommands.registerCommand("L2Left", new L2Auto(true, stateManager).withTimeout(4));
     NamedCommands.registerCommand("L3", new L3Auto(stateManager, drivetrain).withTimeout(5));
     NamedCommands.registerCommand("Algae Removal", stateManager.setStateCommand(State.ALGAE_REMOVAL).finallyDo(x -> new AlgRetract(algMechanism).withTimeout(1.2)));
-    NamedCommands.registerCommand("LeftBranch", new AutoBranchandShootL2(true, drivetrain, stateManager).withTimeout(5));
-    NamedCommands.registerCommand("RightBranch", new AutoBranchandShootL2(false, drivetrain, stateManager).withTimeout(5));
     configureBindings();
 
     Logger.recordOutput("ScoringPosition", AllianceFlipUtil.apply(FieldConstants.Reef.scoringPositions2d.get(1).get(FieldConstants.ReefLevel.L23)));

@@ -39,6 +39,7 @@ public class StateManager extends SubsystemBase{
         SOURCE_INTAKE,
         FEED,
         L1,
+        L2_READY,
         L2_RIGHT,
         L2_LEFT,
         L3_RIGHT,
@@ -90,6 +91,14 @@ public class StateManager extends SubsystemBase{
                 deployer.setState(DeployerState.IDLE);
                 elevator.setPosition(Centimeters.of(ElevatorConstants.IDLE.get()));
                 intake.setState(IntakeState.SHOOT);
+                break;
+            case L2_READY:
+                deployer.setState(DeployerState.IDLE);
+                intake.setState(IntakeState.ELEVATOR);
+                if (intake.elevatorClearance()){
+                elevator.setPosition(Centimeters.of(ElevatorConstants.CORAL_L2_HEIGHT.get()));
+                deployer.setState(DeployerState.CENTER);
+            }
                 break;
             case L2_RIGHT:
                 deployer.setState(DeployerState.IDLE); 
@@ -168,5 +177,9 @@ public class StateManager extends SubsystemBase{
 
     public Command setStateCommand(State state) {
         return startEnd(() -> this.state = state, () -> this.state = State.IDLE).withName("StateManager "+state.toString());
+    }
+
+    public Command setPermState(State state) {
+        return run(() -> this.state = state).withName("StateManager "+state.toString());
     }
 }

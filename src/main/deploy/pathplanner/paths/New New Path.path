@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.147615131578947,
-        "y": 2.668338815789474
+        "x": 5.131,
+        "y": 2.933
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.397615131578947,
-        "y": 2.668338815789474
+        "x": 5.381,
+        "y": 2.933
       },
       "isLocked": false,
       "linkedName": "E-Atis-SON"
     },
     {
       "anchor": {
-        "x": 5.147615131578947,
-        "y": 2.668338815789474
+        "x": 5.131,
+        "y": 2.933
       },
       "prevControl": {
-        "x": 4.897615131578947,
-        "y": 2.668338815789474
+        "x": 4.881,
+        "y": 2.933
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 6.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

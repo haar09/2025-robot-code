@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.99620446113641,
-        "y": 5.181268523590917
+        "x": 5.174,
+        "y": 5.092
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.377662397983843,
-        "y": 5.629435677854125
+        "x": 4.555457936847461,
+        "y": 5.540167154263208
       },
       "isLocked": false,
       "linkedName": "J Atis"
     },
     {
       "anchor": {
-        "x": 1.3202464788712482,
-        "y": 6.8595070422604785
+        "x": 1.2989309210526314,
+        "y": 7.142434210526315
       },
       "prevControl": {
-        "x": 1.5301769055251842,
-        "y": 6.723752793837468
+        "x": 1.5088613477065673,
+        "y": 7.006679962103305
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 6.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
